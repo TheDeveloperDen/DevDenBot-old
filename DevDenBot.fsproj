@@ -12,6 +12,7 @@
         <Content Include="config.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="Dockerfile" />
     </ItemGroup>
 
     <ItemGroup>
