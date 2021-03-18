@@ -13,7 +13,7 @@ let ddServerId = 821743100203368458UL
 let discordConfig =
     let mainConfig = loadConfig "config.json"
     let config = DiscordConfiguration()
-    config.set_Token mainConfig.token
+    config.set_Token (getToken mainConfig)
     config.set_TokenType TokenType.Bot
     config.set_Intents DiscordIntents.All
     config
