@@ -8,17 +8,20 @@
     <ItemGroup>
         <Compile Include="Formatting.fs" />
         <Compile Include="Configuration.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="HasteClient.fs" />
         <Content Include="config.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Dockerfile" />
+        <Compile Include="Discord.fs" />
+        <Compile Include="Program.fs" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="DSharpPlus" Version="4.0.0-rc2" />
       <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-rc2" />
       <PackageReference Include="FSharp.Json" Version="0.4.0" />
+      <PackageReference Include="Http.fs" Version="5.4.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     </ItemGroup>
 
