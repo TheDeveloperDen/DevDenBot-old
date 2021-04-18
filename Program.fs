@@ -69,7 +69,7 @@ Please use https://paste.bristermitten.me when sharing large blocks of code.
 
             return ()
     }
-
+    
 
 let mainTask =
     async {
@@ -89,6 +89,6 @@ let mainTask =
 
 
 [<EntryPoint>]
-let main argv =
+let main _ =
     Async.RunSynchronously mainTask
     0 // return an integer exit code

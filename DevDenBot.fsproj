@@ -23,6 +23,7 @@
       <PackageReference Include="FSharp.Json" Version="0.4.0" />
       <PackageReference Include="Http.fs" Version="5.4.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+      <PackageReference Include="SQLProvider" Version="1.2.1" />
     </ItemGroup>
 
 </Project>
