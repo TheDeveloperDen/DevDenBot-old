@@ -60,7 +60,7 @@ let processPasteReaction (_: DiscordClient) (event: EventArgs.MessageReactionAdd
 
                 let pasteMessage =
                     $"""
-{paste}{event.Message.Author.Mention}, an admin has converted your message to a paste to keep the channels clean.
+{paste} {event.Message.Author.Mention}, an admin has converted your message to a paste to keep the channels clean.
 Please use https://paste.bristermitten.me when sharing large blocks of code.
                     """
 
