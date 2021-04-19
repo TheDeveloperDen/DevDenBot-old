@@ -2,7 +2,6 @@ module DevDenBot.HasteClient
 open HttpFs.Client
 open Hopac
 open FSharp.Json
-
 let rawPasteUrl = "https://paste.bristermitten.me/"
 let documentsEndpoint = rawPasteUrl + "documents"
 

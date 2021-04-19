@@ -4,6 +4,7 @@ open DevDenBot.Formatting
 open System.Threading.Tasks
 open DevDenBot.HasteClient
 open Hopac
+open FSharp.Control.Tasks
 
 let welcomeChannelId = 821743171942744114UL
 let ddServerId = 821743100203368458UL
@@ -20,18 +21,20 @@ let discordConfig =
 let client = new DiscordClient(discordConfig)
 
 let onReady (client: DiscordClient) _ =
-    let user = client.CurrentUser in printfn "Successfully logged in as %s (%d)" (userAndDiscriminator user) user.Id
+    task {
+        let user = client.CurrentUser in printfn
+                                             $"Successfully logged in as %s{userAndDiscriminator user} (%d{user.Id})"
+    }
+
 
 let doJoinMessage (client: DiscordClient) (event: EventArgs.GuildMemberAddEventArgs) =
-    async {
+    task {
         let! ddServer = client.GetGuildAsync ddServerId |> Async.AwaitTask
         let welcomeChannel = ddServer.GetChannel welcomeChannelId
 
-        do! welcomeChannel.SendMessageAsync
-                (sprintf
-                    "Welcome %s to the Developer's Den! There are now %d users."
-                     (event.Member.Mention)
-                     (event.Guild.MemberCount))
+        do!
+            welcomeChannel.SendMessageAsync
+                $"Welcome %s{event.Member.Mention} to the Developer's Den! There are now %d{event.Guild.MemberCount} users."
             |> Async.AwaitTask
             |> Async.Ignore
     }
@@ -39,13 +42,11 @@ let doJoinMessage (client: DiscordClient) (event: EventArgs.GuildMemberAddEventA
 
 
 let processPasteReaction (_: DiscordClient) (event: EventArgs.MessageReactionAddEventArgs) =
-    async {
+    task {
         if event.Emoji.Id <> pasteEmojiId then
             return ()
         else
-            let! reactionMember =
-                event.Guild.GetMemberAsync(event.User.Id)
-                |> Async.AwaitTask
+            let! reactionMember = event.Guild.GetMemberAsync(event.User.Id)
 
             let permissions =
                 reactionMember.PermissionsIn(event.Channel)
@@ -53,42 +54,37 @@ let processPasteReaction (_: DiscordClient) (event: EventArgs.MessageReactionAdd
             if permissions &&& Permissions.ManageMessages = Permissions.None then
                 return ()
             else
-                let content = event.Message.Content |> trimCodeBlocks
+                let content = trimCodeBlocks event.Message.Content
                 let! paste = createPaste content |> Job.toAsync
-                do! event.Message.DeleteAsync() |> Async.AwaitTask
+                do! event.Message.DeleteAsync()
 
                 let pasteMessage =
                     $"""
-{paste}
-
-{event.Message.Author.Mention}, an admin has converted your message to a paste to keep the channels clean.
+{paste}{event.Message.Author.Mention}, an admin has converted your message to a paste to keep the channels clean.
 Please use https://paste.bristermitten.me when sharing large blocks of code.
                     """
 
-                do! event.Channel.SendMessageAsync pasteMessage
-
-            return ()
+                let! _ = event.Channel.SendMessageAsync pasteMessage
+                return ()
     }
-    
+
+let add elem f =
+    elem (fun client e -> f client e :> Task)
 
 let mainTask =
-    async {
-        client.add_Ready (fun client event ->
-            async { onReady client event }
-            |> Async.StartAsTask :> _)
+    task {
+        add client.add_Ready onReady
+        add client.add_GuildMemberAdded doJoinMessage
+        add client.add_MessageReactionAdded processPasteReaction
 
-        client.add_GuildMemberAdded (fun client e -> doJoinMessage client e |> Async.StartAsTask :> _)
-        client.add_MessageReactionAdded (fun client e -> processPasteReaction client e |> Async.StartAsTask :> _)
+        do! client.ConnectAsync()
 
-        client.ConnectAsync()
-        |> Async.AwaitTask
-        |> Async.RunSynchronously
-
-        do! Async.AwaitTask(Task.Delay(-1))
+        do! Task.Delay(-1)
     }
+
 
 
 [<EntryPoint>]
 let main _ =
-    Async.RunSynchronously mainTask
+    Async.AwaitTask mainTask |> Async.RunSynchronously
     0 // return an integer exit code
