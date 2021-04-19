@@ -22,23 +22,20 @@ let client = new DiscordClient(discordConfig)
 
 let onReady (client: DiscordClient) _ =
     task {
-        let user = client.CurrentUser in printfn
-                                             $"Successfully logged in as %s{userAndDiscriminator user} (%d{user.Id})"
+        let user = client.CurrentUser
+        printfn $"Successfully logged in as %s{userAndDiscriminator user} (%d{user.Id})"
     }
-
 
 let doJoinMessage (client: DiscordClient) (event: EventArgs.GuildMemberAddEventArgs) =
     task {
-        let! ddServer = client.GetGuildAsync ddServerId |> Async.AwaitTask
+        let! ddServer = client.GetGuildAsync ddServerId
         let welcomeChannel = ddServer.GetChannel welcomeChannelId
 
         do!
             welcomeChannel.SendMessageAsync
                 $"Welcome %s{event.Member.Mention} to the Developer's Den! There are now %d{event.Guild.MemberCount} users."
-            |> Async.AwaitTask
-            |> Async.Ignore
+            :> Task
     }
-
 
 
 let processPasteReaction (_: DiscordClient) (event: EventArgs.MessageReactionAddEventArgs) =
