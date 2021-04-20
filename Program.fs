@@ -9,6 +9,7 @@ open FSharp.Control.Tasks
 let welcomeChannelId = 821743171942744114UL
 let ddServerId = 821743100203368458UL
 let pasteEmojiId = 822217736012693575UL
+let clashRoleId = 831987774499454997UL
 
 let discordConfig =
     let mainConfig = loadConfig "config.json"
@@ -40,17 +41,15 @@ let doJoinMessage (client: DiscordClient) (event: EventArgs.GuildMemberAddEventA
 
 let processPasteReaction (_: DiscordClient) (event: EventArgs.MessageReactionAddEventArgs) =
     task {
-        if event.Emoji.Id <> pasteEmojiId then
-            return ()
-        else
+        if event.Emoji.Id = pasteEmojiId then
             let! reactionMember = event.Guild.GetMemberAsync(event.User.Id)
 
             let permissions =
                 reactionMember.PermissionsIn(event.Channel)
 
-            if permissions &&& Permissions.ManageMessages = Permissions.None then
-                return ()
-            else
+            if permissions &&& Permissions.ManageMessages
+               <> Permissions.None then
+
                 let content = trimCodeBlocks event.Message.Content
                 let! paste = createPaste content |> Job.toAsync
                 do! event.Message.DeleteAsync()
