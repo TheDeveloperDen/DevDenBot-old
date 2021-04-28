@@ -7,6 +7,9 @@ open DevDenBot.HasteClient
 open Hopac
 open FSharp.Control.Tasks
 open Experience
+open Persistence
+open Stats
+open Commands
 
 let welcomeChannelId = 821743171942744114UL
 let ddServerId = 821743100203368458UL
@@ -69,16 +72,28 @@ Please use https://paste.bristermitten.me when sharing large blocks of code.
 let add elem f =
     elem (fun client e -> f client e :> Task)
 
+
+let statsFile = "/var/data/stats.json"
+
+let saveStats =
+    saveAllStats statsFile statsMap
+    printfn "Saved stats to flatfile."
+
 let mainTask =
     task {
+        statsMap <- loadAllStats statsFile
+
         add client.add_Ready onReady
         add client.add_GuildMemberAdded doJoinMessage
         add client.add_MessageReactionAdded processPasteReaction
         add client.add_MessageCreated doExperienceMessageProcess
+        add client.add_MessageCreated handleCommand
 
         do! client.ConnectAsync()
 
-        do! Task.Delay(-1)
+        while true do
+            saveStats
+            do! Task.Delay(10000) // Save every 10 seconds
     }
 
 
@@ -86,4 +101,5 @@ let mainTask =
 [<EntryPoint>]
 let main _ =
     Async.AwaitTask mainTask |> Async.RunSynchronously
+    saveStats
     0 // return an integer exit code

@@ -8,4 +8,4 @@ let loadAllStats file =
     File.ReadAllText file
     |> Json.deserialize<Map<Snowflake, UserStats>>
 
-let saveAllStats file stats = File.WriteAllText(file, stats) 
+let saveAllStats file stats = File.WriteAllText(file, Json.serialize stats) 

@@ -14,8 +14,8 @@
         </Content>
         <Content Include="Dockerfile" />
         <Compile Include="Discord.fs" />
-        <Compile Include="Commands.fs" />
         <Compile Include="Stats.fs" />
+        <Compile Include="Commands.fs" />
         <Compile Include="Experience.fs" />
         <Compile Include="Persistence.fs" />
         <Compile Include="Program.fs" />

@@ -4,6 +4,9 @@ open System
 open DSharpPlus
 open DSharpPlus.Entities
 
+open Stats
+open FSharp.Control.Tasks
+
 let levenshtein (s1: string) (s2: string) : int =
 
     let s1' = s1.ToCharArray()
@@ -68,8 +71,6 @@ let xpForMessage previousMessages message =
         <| float rawXP
            * (0.9 ** (float <| countRepetitions message))
 
-open Stats
-open FSharp.Control.Tasks
 
 let doExperienceMessageProcess (_client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     task {
