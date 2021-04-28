@@ -58,8 +58,20 @@ let xpForLevel n =
     + (55.0 / 2.0 * n) ** 2.0
     + (755.0 / 6.0 * n)
 
+// log10(len.toDouble()).toInt() + (len / 10) + (1..3).random()
+let random = Random()
+
+let nth arr i = Array.item i arr
+
+let randFrom (arr: 'a []) (random: Random) =
+    Array.length arr |> random.Next |> nth arr
+
 let rawXPForMessage (msg: string) =
-    int <| max 1.0 (float msg.Length |> Math.Cbrt)
+    let len = float msg.Length in
+
+    log10 len
+    + (len / 10.0)
+    + float (randFrom [| 1 .. 3 |] random)
 
 let xpForMessage previousMessages message =
     let rawXP = rawXPForMessage message
@@ -74,7 +86,8 @@ let xpForMessage previousMessages message =
 
 let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     task {
-        if not <| event.Channel :? DiscordDmChannel && not event.Author.IsBot then
+        if not <| event.Channel :? DiscordDmChannel
+           && not event.Author.IsBot then
             let stats =
                 (Option.orDefault
                     (fun () ->
