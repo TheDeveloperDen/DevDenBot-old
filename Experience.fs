@@ -56,7 +56,7 @@ let xpForLevel n =
     + (755.0 / 6.0 * n)
 
 let rawXPForMessage (msg: string) =
-    int <| max 1.0 (float msg.Length |> sqrt)
+    int <| max 1.0 (float msg.Length |> Math.Cbrt)
 
 let xpForMessage previousMessages message =
     let rawXP = rawXPForMessage message
