@@ -1,13 +1,11 @@
 module DevDenBot.Commands
 
 open DSharpPlus
-open DSharpPlus.Entities
-open FSharpPlus
+open System.Threading.Tasks
+open FSharp.Control.Tasks
+open Stats
 
 let prefix = "!"
-open FSharp.Control.Tasks
-let (>>=) m f = Option.bind f m
-open Stats
 
 let handleCommand (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     task {
