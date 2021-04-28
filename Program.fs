@@ -1,10 +1,12 @@
 ﻿open DSharpPlus
+open DevDenBot
 open DevDenBot.Configuration
 open DevDenBot.Formatting
 open System.Threading.Tasks
 open DevDenBot.HasteClient
 open Hopac
 open FSharp.Control.Tasks
+open Experience
 
 let welcomeChannelId = 821743171942744114UL
 let ddServerId = 821743100203368458UL
@@ -72,6 +74,7 @@ let mainTask =
         add client.add_Ready onReady
         add client.add_GuildMemberAdded doJoinMessage
         add client.add_MessageReactionAdded processPasteReaction
+        add client.add_MessageCreated doExperienceMessageProcess
 
         do! client.ConnectAsync()
 
