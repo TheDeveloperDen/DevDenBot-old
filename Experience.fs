@@ -72,9 +72,9 @@ let xpForMessage previousMessages message =
            * (0.9 ** (float <| countRepetitions message))
 
 
-let doExperienceMessageProcess (_client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
+let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     task {
-        if not <| event.Channel :? DiscordDmChannel then
+        if not <| event.Channel :? DiscordDmChannel && not event.Author.IsBot then
             let stats =
                 (Option.orDefault
                     (fun () ->
