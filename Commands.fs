@@ -13,6 +13,8 @@ let handleCommand (client: DiscordClient) (event: EventArgs.MessageCreateEventAr
 
         if not command.Author.IsBot
            && command.Content = "!xp" then
-            let xp = statsMap.Item command.Author.Id
-            do! event.Channel.SendMessageAsync $"{command.Author.Mention}, you have %d{xp.Xp} experience." :> Task
+            let xpMaybe = statsMap.TryFind command.Author.Id
+            match xpMaybe with
+            | Some xp -> do! event.Channel.SendMessageAsync $"{command.Author.Mention}, you have %d{xp.Xp} XP" :> Task
+            | None -> do! event.Channel.SendMessageAsync $"{command.Author.Mention}, No XP found for you" :> Task
     }
