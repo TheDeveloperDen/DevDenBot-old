@@ -69,10 +69,8 @@ let randFrom (arr: 'a []) (random: Random) =
 
 let rawXPForMessage (msg: string) =
     let len = float msg.Length in
-
-    log10 len
-    + (len / 10.0)
-    + float (randFrom [| 1 .. 3 |] random)
+    3.0 * log10 (len + 2.0) ** 2.6
+    + float (randFrom [| 0 .. 3 |] random)
 
 let xpForMessage previousMessages message =
     let rawXP = rawXPForMessage message
