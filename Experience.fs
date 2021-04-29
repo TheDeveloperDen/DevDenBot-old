@@ -108,7 +108,7 @@ let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.Message
                            @ [ event.Message.Content ]) }
 
             printfn $"Gave %d{xpToAward} XP to user %u{event.Author.Id}"
-            printfn "%A" statsMap
+            printfn $"%A{statsMap}"
             statsMap <- statsMap.Add(event.Author.Id, newStats)
-
+            return ()
     }

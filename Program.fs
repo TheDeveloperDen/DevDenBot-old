@@ -87,7 +87,7 @@ let mainTask =
         add client.add_GuildMemberAdded doJoinMessage
         add client.add_MessageReactionAdded processPasteReaction
         add client.add_MessageCreated doExperienceMessageProcess
-//        add client.add_MessageCreated handleCommand
+        add client.add_MessageCreated handleCommand
 
         do! client.ConnectAsync()
 
