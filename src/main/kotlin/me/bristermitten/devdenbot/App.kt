@@ -1,12 +1,13 @@
 package me.bristermitten.devdenbot
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
-}
+import kotlin.system.measureTimeMillis
+
 
 fun main() {
-    println(App().greeting)
+    println("Bot starting!")
+
+    val time = measureTimeMillis {
+        DevDen().start()
+    }
+    println("Bot started in ${time}ms!")
 }
