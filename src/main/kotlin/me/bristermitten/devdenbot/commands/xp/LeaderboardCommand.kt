@@ -16,7 +16,7 @@ import kotlin.reflect.KProperty1
  * @author AlexL
  */
 class LeaderboardCommand @Inject constructor(
-    val jda: JDA
+    val jda: JDA,
 ) : DevDenCommand(
     name = "leaderboard",
     help = "View the leaderboard",
@@ -66,7 +66,7 @@ class LeaderboardCommand @Inject constructor(
     private suspend fun CommandEvent.sendLeaderboard(
         count: Int,
         by: KProperty1<StatsUser, BigInteger>,
-        byPrettyName: String
+        byPrettyName: String,
     ) {
         val users = StatsUsers.all
 
@@ -79,7 +79,7 @@ class LeaderboardCommand @Inject constructor(
             for ((index, elem) in sorted.withIndex()) {
                 field(
                     "#${index + 1} - ${by(elem)} $byPrettyName",
-                    jda.getUserById(elem.userId)?.asMention ?: "Unknown User",
+                    jda.getUserById(elem.userId)?.asMention ?: "Unknown User (${elem.userId})",
                 )
             }
         }

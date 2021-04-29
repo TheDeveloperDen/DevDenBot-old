@@ -7,8 +7,10 @@ val NUMERIC = Regex("[0-9]+")
 
 fun CommandEvent.arguments(): Arguments {
     val split = this.message.contentRaw.split(WHITESPACE_REGEX)
-    val args = split.subList(1, split.size).map(::Argument)
-    return Arguments(split[0].removePrefix(split[0].first().toString()), args)
+    val args = split.drop(1).map(::Argument)
+    return Arguments(
+        split.first() //This might break in future for prefixes that don't require a space. deal with it
+        , args)
 }
 
 
