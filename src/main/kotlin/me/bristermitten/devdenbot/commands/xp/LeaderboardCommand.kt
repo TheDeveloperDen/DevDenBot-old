@@ -6,9 +6,9 @@ import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.reply
 import net.dv8tion.jda.api.JDA
-import java.math.BigInteger
 import javax.inject.Inject
 import kotlin.reflect.KProperty1
 
@@ -28,7 +28,7 @@ class LeaderboardCommand @Inject constructor(
         val args = args.split(WHITESPACE_REGEX)
 
         if (args.isEmpty() || args.firstOrNull()?.isEmpty() != false) {
-            return sendLeaderboard(10, StatsUser::xp, "XP")
+            return sendLeaderboard(10, StatsUser::xp as KProperty1<StatsUser, Comparable<Any>>, "XP")
         }
 
         val firstArgAsInt = args.first().toIntOrNull()
@@ -53,20 +53,22 @@ class LeaderboardCommand @Inject constructor(
             else -> args[1]
         }.toLowerCase()
 
+
         val property = when (leaderboardBy) {
             "xp" -> StatsUser::xp
+            "level", "lvl" -> StatsUser::level
             else -> {
-                reply("Hmm, I don't recognise $leaderboardBy")
+                awaitReply("Hmm, I don't recognise $leaderboardBy")
                 return
             }
         }
 
-        sendLeaderboard(count, property, leaderboardBy.capitalize())
+        sendLeaderboard(count, property as KProperty1<StatsUser, Comparable<Any>>, leaderboardBy.capitalize())
     }
 
-    private suspend fun CommandEvent.sendLeaderboard(
+    private suspend fun <C: Comparable<Any>> CommandEvent.sendLeaderboard(
         count: Int,
-        by: KProperty1<StatsUser, BigInteger>,
+        by: KProperty1<StatsUser, C>,
         byPrettyName: String,
     ) {
         val users = StatsUsers.all

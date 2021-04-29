@@ -26,7 +26,8 @@ class ProfileCommand @Inject constructor(
 
         val action = prepareReply {
             title = "Your Statistics"
-            field("XP", statsUser.xp.toString(), false)
+            field("XP", statsUser.xp.toString(), true)
+            field("Level", statsUser.level.toString(), true)
 
             setFooter("Statistics for ${targetUser.name}")
 //            setImage("attachment://profile.png")
