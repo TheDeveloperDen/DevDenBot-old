@@ -47,7 +47,7 @@ class XPCommand @Inject constructor(
     }
 
     override suspend fun CommandEvent.execute() {
-        val targetUser = firstMentionedUser ?: event.message.author
+        val targetUser = firstMentionedUser() ?: event.message.author
         val targetStatsUser = StatsUsers[targetUser.idLong]
         val text = NumberFormat.getNumberInstance(Locale.UK).format(targetStatsUser.xp) + " XP"
 

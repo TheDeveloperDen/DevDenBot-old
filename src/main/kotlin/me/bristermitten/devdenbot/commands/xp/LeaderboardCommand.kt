@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
+import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.reply
 import net.dv8tion.jda.api.JDA
 import java.math.BigInteger
@@ -79,7 +80,7 @@ class LeaderboardCommand @Inject constructor(
             for ((index, elem) in sorted.withIndex()) {
                 field(
                     "#${index + 1} - ${by(elem)} $byPrettyName",
-                    jda.getUserById(elem.userId)?.asMention ?: "Unknown User (${elem.userId})",
+                    jda.retrieveUserById(elem.userId).await()?.asMention ?: "Unknown User (${elem.userId})",
                 )
             }
         }

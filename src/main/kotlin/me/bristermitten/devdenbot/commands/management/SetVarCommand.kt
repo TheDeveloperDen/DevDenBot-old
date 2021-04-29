@@ -34,7 +34,7 @@ class SetVarCommand @Inject constructor(
             return
         }
 
-        val targetUser = firstMentionedUser ?: event.message.author
+        val targetUser = firstMentionedUser() ?: event.message.author
 
         val field = args[1].content
 

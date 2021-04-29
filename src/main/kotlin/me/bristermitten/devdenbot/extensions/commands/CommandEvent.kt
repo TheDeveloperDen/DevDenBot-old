@@ -1,6 +1,9 @@
 package me.bristermitten.devdenbot.extensions.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
 import me.bristermitten.devdenbot.extensions.Argument
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
@@ -41,15 +44,15 @@ fun CommandEvent.tempReply(message: String, cooldown: Int) {
         }
 }
 
-val CommandEvent.firstMentionedUser: User?
-    get() {
-        if (message.mentionedUsers.isNotEmpty()) {
-            return message.mentionedUsers.first()
-        }
-        return arguments()
-            .asSequence()
-            .map(Argument::content)
-            .mapNotNull(String::toLongOrNull)
-            .mapNotNull { jda.getUserById(it) }
-            .firstOrNull()
+suspend fun CommandEvent.firstMentionedUser(): User? {
+    if (message.mentionedUsers.isNotEmpty()) {
+        return message.mentionedUsers.first()
     }
+    return arguments()
+        .asSequence()
+        .map(Argument::content)
+        .mapNotNull(String::toLongOrNull)
+        .asFlow()
+        .mapNotNull { jda.retrieveUserById(it).await() }
+        .firstOrNull()
+}
