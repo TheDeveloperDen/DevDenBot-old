@@ -96,9 +96,9 @@ let mainTask =
         async {
             while true do
                 do! saveStats
-                do! Task.Delay(10000) // Save every 10 seconds
+                do! Async.Sleep 10000 // Save every 10 seconds
         } |> Async.Start
-        do! Task.Delay(-1)
+        do! Task.Delay -1
     }
 
 
