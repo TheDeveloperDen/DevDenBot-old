@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.Activity
  */
 open class CommandCategory(
     name: String,
-    val shortName: String = name.toLowerCase(),
+    val shortName: String = name.lowercase(),
     val emoji: Activity.Emoji,
     val description: String
 ) : Command.Category(name) {

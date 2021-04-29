@@ -55,6 +55,7 @@ tasks {
     application {
         // Define the main class for the application.
         mainClass.set("me.bristermitten.devdenbot.AppKt")
+        applicationName = "DevDenBot"
     }
 
 }

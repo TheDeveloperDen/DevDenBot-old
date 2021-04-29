@@ -22,7 +22,7 @@ class JDAProvider @Inject constructor(
 
     override fun get(): JDA {
         val manager = ReactiveEventManager()
-        return JDABuilder(config.token)
+        return JDABuilder.createDefault(config.token)
             .addEventListeners(commandClient, eventWaiter, *listeners.toTypedArray())
             .setEventManager(manager)
             .build()
