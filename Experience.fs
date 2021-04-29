@@ -1,6 +1,7 @@
 module DevDenBot.Experience
 
 open System
+open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.Entities
 
@@ -83,20 +84,20 @@ let xpForMessage previousMessages message =
         <| float rawXP
            * (0.9 ** (float <| countRepetitions message))
 
+let private newUserStats id =
+    { User = id
+      Xp = 0
+      Level = 0
+      PreviousMessages = List.replicate 10 "" }
 
 let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
-    task {
+    async {
         let start = DateTime.Now
 
         if not <| event.Channel :? DiscordDmChannel
            && not event.Author.IsBot then
             let stats =
-                (Option.orDefault
-                    (fun () ->
-                        { User = event.Author.Id
-                          Xp = 0
-                          Level = 0
-                          PreviousMessages = List.replicate 10 "" })
+                (Option.orDefault (fun () -> newUserStats event.Author.Id)
                  <| statsMap.TryFind event.Author.Id)
 
             let xpToAward =
@@ -114,5 +115,4 @@ let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.Message
             statsMap <- statsMap.Add(event.Author.Id, newStats)
             let endTime = DateTime.Now - start
             printfn $"Took {endTime.Milliseconds}ms to handle"
-            return ()
-    }
+    } |> Async.StartAsTask :> Task
