@@ -73,7 +73,7 @@ let add elem f =
     elem (fun client e -> f client e :> Task)
 
 
-let statsFile = "./stats.json"
+let statsFile = "/var/data/stats.json"
 
 let saveStats =
     async {
