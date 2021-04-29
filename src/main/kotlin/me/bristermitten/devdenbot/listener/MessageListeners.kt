@@ -11,6 +11,7 @@ import org.apache.commons.text.similarity.LevenshteinDistance
 private const val MESSAGE_MIN_DELAY_MILLIS = 750
 private const val MIN_MESSAGE_LEN = 10
 private const val MAX_SIMILARITY = 0.75f
+
 private val levenshtein = LevenshteinDistance.getDefaultInstance()::apply
 
 private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length

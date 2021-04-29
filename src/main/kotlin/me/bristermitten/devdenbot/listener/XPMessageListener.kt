@@ -26,7 +26,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
 
         val message = event.message
         val len = message.contentDisplay.length
-        val gained = (3.0 * log10(len.toDouble()).pow(2.6) + +(0..3).random()).toInt()
+        val gained = (3.0 * log10(len.toDouble()).pow(2.6) + (0..3).random()).toInt()
 
         val user = StatsUsers[message.author.idLong]
         synchronized(user) {
