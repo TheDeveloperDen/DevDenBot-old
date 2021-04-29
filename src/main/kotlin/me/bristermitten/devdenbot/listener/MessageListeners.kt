@@ -1,6 +1,7 @@
 package me.bristermitten.devdenbot.listener
 
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.util.botCommandsChannelId
 import net.dv8tion.jda.api.entities.Message
 import org.apache.commons.text.similarity.LevenshteinDistance
 
@@ -16,6 +17,9 @@ private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.l
 
 fun Message.shouldCountForStats(): Boolean {
     if (author.isBot) {
+        return false
+    }
+    if (channel.idLong == botCommandsChannelId) {
         return false
     }
     val now = System.currentTimeMillis()
