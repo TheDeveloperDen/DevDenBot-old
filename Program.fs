@@ -73,11 +73,13 @@ let add elem f =
     elem (fun client e -> f client e :> Task)
 
 
-let statsFile = "/var/data/stats.json"
+let statsFile = "./stats.json"
 
 let saveStats =
-    saveAllStats statsFile statsMap
-    printfn "Saved stats to flatfile."
+    task {
+        saveAllStats statsFile statsMap
+        printfn "Saved stats to flatfile."
+    }
 
 let mainTask =
     task {
@@ -92,7 +94,7 @@ let mainTask =
         do! client.ConnectAsync()
 
         while true do
-            saveStats
+            do! saveStats
             do! Task.Delay(10000) // Save every 10 seconds
     }
 
@@ -100,6 +102,8 @@ let mainTask =
 
 [<EntryPoint>]
 let main _ =
-    Async.AwaitTask mainTask |> Async.RunSynchronously
-    saveStats
+    task {
+        do! mainTask
+        do! saveStats
+    } |> Async.AwaitTask |> Async.RunSynchronously
     0 // return an integer exit code
