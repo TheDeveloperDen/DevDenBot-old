@@ -28,8 +28,6 @@ class CommandClientProvider @Inject constructor(private val config: DDBConfig,) 
                 }?.run(it)
             }
 
-
-
         return commandClient.build()
     }
 }

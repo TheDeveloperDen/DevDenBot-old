@@ -5,6 +5,8 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
+import me.bristermitten.devdenbot.extensions.commands.tempReply
+import me.bristermitten.devdenbot.util.botCommandsChannelId
 
 /**
  * @author Alexander Wood (BristerMitten)
@@ -16,7 +18,7 @@ abstract class DevDenCommand(
     arguments: String? = null,
     ownerCommand: Boolean = false,
     cooldown: Int = 0,
-    vararg aliases: String = emptyArray()
+    vararg aliases: String = emptyArray(),
 ) : Command() {
 
     init {
@@ -33,6 +35,10 @@ abstract class DevDenCommand(
 
     final override fun execute(event: CommandEvent) {
         GlobalScope.launch {
+            if (event.channel.idLong != botCommandsChannelId) {
+                event.tempReply("Commands can only be used in<$botCommandsChannelId>.", 5)
+                return@launch
+            }
             event.execute()
         }
     }
