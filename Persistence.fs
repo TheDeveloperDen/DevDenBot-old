@@ -4,8 +4,11 @@ open Stats
 open System.IO
 open FSharp.Json
 
+type StatsMap = Map<Snowflake, UserStats>
+
 let loadAllStats file =
     File.ReadAllText file
-    |> Json.deserialize<Map<Snowflake, UserStats>>
+    |> Json.deserialize<StatsMap>
 
-let saveAllStats file stats = File.WriteAllText(file, Json.serialize stats) 
+
+let saveAllStats file (stats: StatsMap) = File.WriteAllText(file, Json.serialize stats) 

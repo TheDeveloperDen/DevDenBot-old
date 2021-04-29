@@ -73,7 +73,7 @@ let add elem f =
     elem (fun client e -> f client e :> Task)
 
 
-let statsFile = "/var/data/stats.json"
+let statsFile = "./stats.json"
 
 let saveStats =
     async {
@@ -97,7 +97,9 @@ let mainTask =
             while true do
                 do! saveStats
                 do! Async.Sleep 10000 // Save every 10 seconds
-        } |> Async.Start
+        }
+        |> Async.Start
+
         do! Task.Delay -1
     }
 

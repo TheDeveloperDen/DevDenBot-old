@@ -93,12 +93,13 @@ let private newUserStats id =
 let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     (fun () ->
         let start = DateTime.Now
-
+        
         if not <| event.Channel :? DiscordDmChannel
            && not event.Author.IsBot then
+            let snowflake = string event.Author.Id
             let stats =
-                (Option.orDefault (fun () -> newUserStats event.Author.Id)
-                 <| statsMap.TryFind event.Author.Id)
+                (Option.orDefault (fun () -> newUserStats snowflake)
+                 <| statsMap.TryFind snowflake)
 
             let xpToAward =
                 xpForMessage stats.PreviousMessages event.Message.Content
@@ -111,7 +112,7 @@ let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.Message
                            @ [ event.Message.Content ]) }
 
             printfn $"Gave %d{xpToAward} XP to user %u{event.Author.Id}"
-            statsMap <- statsMap.Add(event.Author.Id, newStats)
+            statsMap <- statsMap.Add(snowflake, newStats)
             let endTime = DateTime.Now - start
             printfn $"Took {endTime.Milliseconds}ms to handle")
     |> Task.Run

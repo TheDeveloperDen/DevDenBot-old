@@ -1,6 +1,6 @@
 module DevDenBot.Stats
 
-type Snowflake = uint64
+type Snowflake = string
 
 type UserStats =
     { User: Snowflake
