@@ -91,7 +91,7 @@ let private newUserStats id =
       PreviousMessages = List.replicate 10 "" }
 
 let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
-    async {
+    (fun () ->
         let start = DateTime.Now
 
         if not <| event.Channel :? DiscordDmChannel
@@ -114,5 +114,5 @@ let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.Message
             printfn $"%A{statsMap}"
             statsMap <- statsMap.Add(event.Author.Id, newStats)
             let endTime = DateTime.Now - start
-            printfn $"Took {endTime.Milliseconds}ms to handle"
-    } |> Async.StartAsTask :> Task
+            printfn $"Took {endTime.Milliseconds}ms to handle")
+    |> Task.Run
