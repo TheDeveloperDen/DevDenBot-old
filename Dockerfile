@@ -1,4 +1,4 @@
-FROM gradle:latest AS build
+FROM gradle:7.0.0 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 
