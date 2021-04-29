@@ -19,7 +19,7 @@ class CommandClientProvider @Inject constructor(private val config: DDBConfig,) 
             .setOwnerId(config.ownerID.toString())
             .setPrefix(config.prefix)
             .setAlternativePrefix("@mention")
-            .setActivity(Activity.playing("Coding in ${languages.random()}"))
+            .setActivity(Activity.playing("Coding in ${languages.random()} (dd help)"))
             .useHelpBuilder(true)
             .setHelpWord("")
             .setHelpConsumer {
