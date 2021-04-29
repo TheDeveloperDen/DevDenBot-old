@@ -1,7 +1,6 @@
 module DevDenBot.Experience
 
 open System
-open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.Entities
 
@@ -88,6 +87,7 @@ let xpForMessage previousMessages message =
 let doExperienceMessageProcess (client: DiscordClient) (event: EventArgs.MessageCreateEventArgs) =
     task {
         let start = DateTime.Now
+
         if not <| event.Channel :? DiscordDmChannel
            && not event.Author.IsBot then
             let stats =
