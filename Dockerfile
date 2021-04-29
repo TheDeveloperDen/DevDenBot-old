@@ -9,6 +9,6 @@ FROM neduekwunife/openjdk8-jre-alpine-with-fontconfig
 RUN mkdir /app
 VOLUME /var/data
 
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/jeeves.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-jar", "/app/jeeves.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
