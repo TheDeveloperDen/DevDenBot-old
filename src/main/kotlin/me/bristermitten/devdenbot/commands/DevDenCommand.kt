@@ -36,7 +36,7 @@ abstract class DevDenCommand(
     final override fun execute(event: CommandEvent) {
         GlobalScope.launch {
             if (event.channel.idLong != botCommandsChannelId) {
-                event.tempReply("Commands can only be used in<$botCommandsChannelId>.", 5)
+                event.tempReply("Commands can only be used in<$#botCommandsChannelId>.", 5)
                 return@launch
             }
             event.execute()

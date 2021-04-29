@@ -1,8 +1,8 @@
 package me.bristermitten.devdenbot.extensions.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
-import me.bristermitten.devdenbot.extensions.NUMERIC
-import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
+import me.bristermitten.devdenbot.extensions.Argument
+import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
@@ -46,8 +46,10 @@ val CommandEvent.firstMentionedUser: User?
         if (message.mentionedUsers.isNotEmpty()) {
             return message.mentionedUsers.first()
         }
-        return args.split(WHITESPACE_REGEX)
-            .filter(String::isNotEmpty)
-            .filter(NUMERIC::matches)
-            .mapNotNull { jda.getUserById(it) }.firstOrNull()
+        return arguments()
+            .asSequence()
+            .map(Argument::content)
+            .mapNotNull(String::toLongOrNull)
+            .mapNotNull { jda.getUserById(it) }
+            .firstOrNull()
     }
