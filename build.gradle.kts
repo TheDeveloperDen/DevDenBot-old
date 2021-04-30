@@ -61,4 +61,7 @@ tasks {
         applicationName = "DevDenBot"
     }
 
+    shadowJar {
+        isZip64 = true
+    }
 }
