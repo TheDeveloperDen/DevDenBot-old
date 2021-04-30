@@ -42,7 +42,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
             val requiredForNextLevel = xpForLevel(user.level + 1)
             if (user.xp >= requiredForNextLevel) {
                 GlobalScope.launch {
-                    sendLevelUpMessage(message.author, user.level++)
+                    sendLevelUpMessage(message.author, ++user.level)
                 }
             }
 
