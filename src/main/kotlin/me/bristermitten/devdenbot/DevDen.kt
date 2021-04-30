@@ -47,6 +47,7 @@ class DevDen {
     }
 
     private fun startTasks() {
+
         val timer = Timer()
         timer.schedule(0, TimeUnit.MINUTES.toMillis(5)) {
             saveStats()
