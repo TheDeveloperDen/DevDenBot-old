@@ -23,7 +23,8 @@ class JDAProvider @Inject constructor(
 
     override fun get(): JDA {
         val manager = ReactiveEventManager()
-        return JDABuilder.createDefault(config.token, listOf(GatewayIntent.GUILD_MEMBERS))
+        return JDABuilder.createDefault(config.token)
+            .enableIntents(listOf(GatewayIntent.GUILD_MEMBERS))
             .addEventListeners(commandClient, eventWaiter, *listeners.toTypedArray())
             .setEventManager(manager)
             .build()
