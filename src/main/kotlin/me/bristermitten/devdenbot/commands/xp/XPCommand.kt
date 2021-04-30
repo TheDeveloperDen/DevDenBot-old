@@ -34,16 +34,10 @@ class XPCommand @Inject constructor(
             0f, 0f, 0f, 100f,
             floatArrayOf(.2f, .6f),
             arrayOf(
-                Color.decode("0x9400d3"),
-                Color.decode("0xffd700")
+                Color.decode("0xA933DC"),
+                Color.decode("0xFFA500")
             )
         )
-    }
-
-    init {
-        val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
-        val stream = javaClass.classLoader.getResourceAsStream("PassionOne-Regular.ttf")
-        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, stream))
     }
 
     override suspend fun CommandEvent.execute() {
@@ -51,7 +45,7 @@ class XPCommand @Inject constructor(
         val targetStatsUser = StatsUsers[targetUser.idLong]
         val text = NumberFormat.getNumberInstance(Locale.UK).format(targetStatsUser.xp) + " XP"
 
-        val photo = createTextImage(text, fontColor = gradient, backgroundColor = Color.darkGray)
+        val photo = createTextImage(width = 400, height = 200, fontSize = 80, text = text, fontColor = gradient, backgroundColor = Color.darkGray)
         val message = prepareReply {
             title = "XP of ${targetUser.name}#${targetUser.discriminator}"
             setColor(config.colour)

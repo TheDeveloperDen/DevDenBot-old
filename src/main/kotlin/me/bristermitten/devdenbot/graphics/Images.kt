@@ -12,7 +12,8 @@ import javax.imageio.ImageIO
  * @author AlexL
  */
 
-private const val DEFAULT_FONT_NAME = "Passion One"
+private const val DEFAULT_FONT_NAME = "Horta"
+
 fun BufferedImage.toPNG(): ByteArray {
     val out = ByteArrayOutputStream()
     ImageIO.write(this, "png", out)
@@ -43,7 +44,8 @@ suspend fun createTextImage(
     height: Int = 100,
     backgroundColor: Paint,
     fontColor: Paint,
-    fontName: String = DEFAULT_FONT_NAME
+    fontName: String = DEFAULT_FONT_NAME,
+    fontSize: Int? = null
 ): ByteArray =
     withContext(Dispatchers.IO) {
         val img = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -55,7 +57,7 @@ suspend fun createTextImage(
         g2d.paint = backgroundColor
         g2d.fillRect(0, 0, img.width, img.height)
 
-        val bestSize = pickOptimalFontSize(g2d, fontName, text, img.width, img.height)
+        val bestSize = fontSize ?: pickOptimalFontSize(g2d, fontName, text, img.width, img.height)
         val font = Font(fontName, Font.PLAIN, bestSize)
 
         g2d.paint = fontColor

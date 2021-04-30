@@ -7,6 +7,7 @@ import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.ListenersModule
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.listener.VoiceChatXPTask
 import me.bristermitten.devdenbot.serialization.DDBConfig
@@ -41,10 +42,12 @@ class DevDen {
         }
 
         jda.awaitReady()
+        GraphicsContext.init()
         startTasks()
     }
 
     private fun startTasks() {
+
         val timer = Timer()
         timer.schedule(0, TimeUnit.MINUTES.toMillis(5)) {
             saveStats()

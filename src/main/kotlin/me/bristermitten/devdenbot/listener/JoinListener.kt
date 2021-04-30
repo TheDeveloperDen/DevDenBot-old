@@ -10,7 +10,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class JoinListener @Inject constructor(private val config: DDBConfig) : ListenerAdapter() {
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
-        val channel = event.jda.getGuildChannelById(welcomeChannelId) as? TextChannel
+        val channel = event.jda.getTextChannelById(welcomeChannelId)
+        println(channel)
         channel?.sendMessage("Welcome ${event.user.asMention} to the Developer's Den! There are now ${event.guild.memberCount} users.")
     }
 }

@@ -8,9 +8,12 @@ import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import java.math.BigInteger
 import javax.inject.Inject
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
+import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberProperties
 
 
@@ -18,7 +21,7 @@ import kotlin.reflect.full.memberProperties
  * @author AlexL
  */
 class SetVarCommand @Inject constructor(
-    val config: DDBConfig
+    val config: DDBConfig,
 ) : DevDenCommand(
     name = "set",
     help = "Set the data of a user",
@@ -58,12 +61,18 @@ class SetVarCommand @Inject constructor(
             return
         }
 
-        val value = amount.content.toBigInteger()
+        val value = amount.content.parseTo(stat.returnType)
 
         val statsUser = StatsUsers[targetUser.idLong]
         stat.set(statsUser, value)
         awaitReply("Successfully set value of `${stat.name}` for ${targetUser.asMention} to `$value`")
     }
 
-
+    private fun String.parseTo(type: KType) = when (type) {
+        String::class.createType() -> this
+        Int::class.createType() -> toInt()
+        Long::class.createType() -> toLong()
+        BigInteger::class.createType() -> toBigInteger()
+        else -> throw IllegalArgumentException("Cannot parse $type")
+    }
 }
