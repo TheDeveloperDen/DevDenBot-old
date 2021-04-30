@@ -40,12 +40,6 @@ class XPCommand @Inject constructor(
         )
     }
 
-    init {
-        val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
-        val stream = javaClass.classLoader.getResourceAsStream("PassionOne-Regular.ttf")
-        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, stream))
-    }
-
     override suspend fun CommandEvent.execute() {
         val targetUser = firstMentionedUser() ?: event.message.author
         val targetStatsUser = StatsUsers[targetUser.idLong]

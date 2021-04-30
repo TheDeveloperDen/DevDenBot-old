@@ -41,6 +41,8 @@ dependencies {
     implementation("io.github.classgraph:classgraph:4.8.90")
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
+
+    implementation("net.imagej:imagej:2.2.0")
 }
 
 
