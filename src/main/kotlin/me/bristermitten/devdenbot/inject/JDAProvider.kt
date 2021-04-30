@@ -9,6 +9,7 @@ import me.bristermitten.devdenbot.serialization.DDBConfig
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
 
 /**
  * @author AlexL
@@ -22,7 +23,7 @@ class JDAProvider @Inject constructor(
 
     override fun get(): JDA {
         val manager = ReactiveEventManager()
-        return JDABuilder.createDefault(config.token)
+        return JDABuilder.createDefault(config.token, listOf(GatewayIntent.GUILD_MEMBERS))
             .addEventListeners(commandClient, eventWaiter, *listeners.toTypedArray())
             .setEventManager(manager)
             .build()
