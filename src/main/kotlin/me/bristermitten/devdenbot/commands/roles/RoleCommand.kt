@@ -19,7 +19,8 @@ class RoleCommand @Inject constructor(
         val ROLES: Set<Long> = setOf(
                 837576267922538516L,
                 837576282454622218L,
-                837584481526874153
+                837584481526874153L,
+                831987774499454997L
         )
     }
 
