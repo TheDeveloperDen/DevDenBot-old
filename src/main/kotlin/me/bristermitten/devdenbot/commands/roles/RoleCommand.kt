@@ -29,7 +29,10 @@ class RoleCommand @Inject constructor(
         val roles = jda.getRolesByName(args, true)
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
         if (role == null) {
-            val suggestion = getSuggestion(args, jda.roles.map { it.name })?.let { " Do you mean '$it'?" } ?: "";
+            val suggestion = getSuggestion(
+                args,
+                ROLES.mapNotNull { jda.getRoleById(it.toString())?.name })
+                ?.let { " Do you mean '$it'?" } ?: "";
             channel.sendMessage("Invalid role!$suggestion").await()
             return
         }
