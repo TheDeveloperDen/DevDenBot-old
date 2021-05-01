@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.listener
 
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.util.botCommandsChannelId
+import me.bristermitten.devdenbot.util.levenshtein
 import net.dv8tion.jda.api.entities.Message
 import org.apache.commons.text.similarity.LevenshteinDistance
 
@@ -11,8 +12,6 @@ import org.apache.commons.text.similarity.LevenshteinDistance
 private const val MESSAGE_MIN_DELAY_MILLIS = 750
 private const val MIN_MESSAGE_LEN = 10
 private const val MAX_SIMILARITY = 0.75f
-
-private val levenshtein = LevenshteinDistance.getDefaultInstance()::apply
 
 private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length
 
