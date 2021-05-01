@@ -44,6 +44,13 @@ dependencies {
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
 
     implementation("net.imagej:imagej:2.2.0")
+
+    testImplementation(kotlin("test-junit5"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.1.0")
+
 }
 
 
@@ -63,5 +70,9 @@ tasks {
 
     shadowJar {
         isZip64 = true
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
