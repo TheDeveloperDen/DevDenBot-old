@@ -30,7 +30,7 @@ class RoleCommand @Inject constructor(
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
         if (role == null) {
             val suggestion = getSuggestion(args, jda.roles.map { it.name })?.let { " Do you mean '$it'?" } ?: "";
-            channel.sendMessage("Invalid role! $suggestion").await()
+            channel.sendMessage("Invalid role!$suggestion").await()
             return
         }
         if (message.guild.getMember(author)?.roles?.contains(role) == true) {
