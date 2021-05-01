@@ -4,7 +4,6 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.levenshtein
 import net.dv8tion.jda.api.entities.Message
-import org.apache.commons.text.similarity.LevenshteinDistance
 
 /**
  * @author AlexL

@@ -1,6 +1,5 @@
 package me.bristermitten.devdenbot.util
 
-import net.dv8tion.jda.api.entities.Role
 import org.apache.commons.text.similarity.LevenshteinDistance
 
 val levenshtein = LevenshteinDistance.getDefaultInstance()::apply

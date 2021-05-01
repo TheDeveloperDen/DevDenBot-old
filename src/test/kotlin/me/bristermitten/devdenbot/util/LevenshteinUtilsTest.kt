@@ -13,7 +13,7 @@ internal class LevenshteinUtilsTest {
     fun testGetSuggestionReturnsClosestSuggestion() {
         val input = "he/him"
         val allowedValues = pronouns
-        val suggestion = getSuggestion(input, allowedValues);
+        val suggestion = getSuggestion(input, allowedValues)
         assertNotNull(suggestion)
         assertEquals(suggestion, "(he/him)")
     }
@@ -22,7 +22,7 @@ internal class LevenshteinUtilsTest {
     fun testGetSuggestionNoneMatchReturnsNull() {
         val input = "someInput"
         val allowedValues = pronouns
-        val suggestion = getSuggestion(input, allowedValues);
+        val suggestion = getSuggestion(input, allowedValues)
         assertNull(suggestion)
     }
 
@@ -30,7 +30,7 @@ internal class LevenshteinUtilsTest {
     fun testAllowedValuesEmptyReturnsNull() {
         val input = "someInput"
         val allowedValues = listOf<String>()
-        val suggestion = getSuggestion(input, allowedValues);
+        val suggestion = getSuggestion(input, allowedValues)
         assertNull(suggestion)
     }
 
@@ -38,7 +38,7 @@ internal class LevenshteinUtilsTest {
     fun testInputEmptyReturnsNull() {
         val input = ""
         val allowedValues = pronouns
-        val suggestion = getSuggestion(input, allowedValues);
+        val suggestion = getSuggestion(input, allowedValues)
         assertNull(suggestion)
     }
 }
