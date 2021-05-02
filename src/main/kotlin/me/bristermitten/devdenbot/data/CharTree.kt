@@ -15,11 +15,11 @@ class CharTree<T> {
      * @param value The value to store
      */
     operator fun set(str: String, value: T) {
-        var node: Node<T>? = root
+        var node = root
         for (c in str.toCharArray()) {
-            node = node!!.getOrCreateNode(c)
+            node = node.getOrCreateNode(c)
         }
-        node!!.value = value
+        node.value = value
     }
 
     /**
@@ -28,23 +28,11 @@ class CharTree<T> {
      * @return The value mapped to the key, or null if it is not present
      */
     operator fun get(str: String): T? {
-        var node: Node<T>? = root
+        var node = root
         for (c in str.toCharArray()) {
-            node = node!!.getNode(c)
-            if (node == null) {
-                return null
-            }
+            node = node.getNode(c) ?: return null
         }
-        return node!!.value
-    }
-
-    /**
-     * Check if the character exists at the root level in this tree
-     * @param c The character to check
-     * @return Whether the character exists at the root level
-     */
-    fun containsFirstChar(c: Char): Boolean {
-        return root.getNode(c) != null
+        return node.value
     }
 
     /**
@@ -74,12 +62,8 @@ class CharTree<T> {
             return children[c]
         }
 
-        fun getOrCreateNode(c: Char): Node<T>? {
-
-            if (children[c] == null) {
-                children[c] = Node()
-            }
-            return children[c]
+        fun getOrCreateNode(c: Char): Node<T> {
+            return children.getOrPut(c, ::Node)
         }
     }
 }
