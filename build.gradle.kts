@@ -50,7 +50,6 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
 
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.1.0")
-
 }
 
 
@@ -60,6 +59,10 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
     application {

@@ -19,7 +19,7 @@ data class StatsUser(
     var level: Int = 0
 ) {
     @Transient
-    val recentMessages = CircularFifoQueue<String>(20)
+    val recentMessages = CircularFifoQueue<String>(5)
 
     var lastMessageSentTime: Long = -1
 }
