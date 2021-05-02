@@ -75,6 +75,10 @@ tasks {
         isZip64 = true
     }
 
+    jar {
+        enabled = false
+    }
+
     test {
         useJUnitPlatform()
     }
