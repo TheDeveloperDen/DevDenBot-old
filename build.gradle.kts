@@ -43,7 +43,6 @@ dependencies {
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
 
-    implementation("net.imagej:imagej:2.2.0")
     implementation("info.debatty:java-string-similarity:2.0.0")
 
     testImplementation(kotlin("test-junit5"))
@@ -73,6 +72,7 @@ tasks {
     }
 
     shadowJar {
+        minimize()
         isZip64 = true
     }
 
