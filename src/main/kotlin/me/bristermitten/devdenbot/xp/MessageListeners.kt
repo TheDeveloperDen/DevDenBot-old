@@ -26,7 +26,6 @@ fun Message.shouldCountForStats(): Boolean {
 
     val len = content.length
     if (len < MIN_MESSAGE_LEN) {
-        println("Message $content was below min message length")
         return false
     }
 
@@ -37,11 +36,9 @@ fun Message.shouldCountForStats(): Boolean {
     }
 
     if (content.none(Char::isLetter)) {
-        println("Message $content was discarded as it had no letters")
         return false
     }
     if (content.none(Char::isWhitespace)) {
-        println("Message $content was discarded as it had no whitespace")
         return false
     }
     if (user.recentMessages.any { similarityProportion(it, content) < MIN_DISTANCE }) {
