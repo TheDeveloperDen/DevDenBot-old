@@ -21,6 +21,11 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
 
     private val logger by log()
 
+    /**
+     * Filters out all form of discord mentions - roles, users, channels, and emotes
+     */
+    private val pingRegex = "<[a-zA-Z0-9@:&!#]+?[0-9]+>".toRegex()
+
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (event.message.contentRaw.startsWith(config.prefix)) {
             return
@@ -31,11 +36,13 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
         val message = event.message
         val member = message.member ?: return
 
-        val gained = xpForMessage(message.contentDisplay).roundToInt()
+        val strippedMessage = pingRegex.replace(message.contentStripped, "")
+
+        val gained = xpForMessage(strippedMessage).roundToInt()
         val user = StatsUsers[message.author.idLong]
 
         synchronized(user) {
-            user.recentMessages.add(message.contentDisplay)
+            user.recentMessages.add(strippedMessage)
             user.lastMessageSentTime = System.currentTimeMillis()
             user.xp += gained.toBigInteger()
             val requiredForNextLevel = xpForLevel(user.level + 1)
