@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.listener
+package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.util.botCommandsChannelId
@@ -26,22 +26,28 @@ fun Message.shouldCountForStats(): Boolean {
 
     val len = content.length
     if (len < MIN_MESSAGE_LEN) {
+        println("Message $content was below min message length")
         return false
     }
 
     val user = StatsUsers[author.idLong]
     if (now - user.lastMessageSentTime < MESSAGE_MIN_DELAY_MILLIS) {
+        println("Message $content was discarded as $user typed ${now - user.lastMessageSentTime}ms ago")
         return false
     }
 
     if (content.none(Char::isLetter)) {
+        println("Message $content was discarded as it had no letters")
         return false
     }
     if (content.none(Char::isWhitespace)) {
+        println("Message $content was discarded as it had no whitespace")
         return false
     }
-
     if (user.recentMessages.any { similarityProportion(it, content) > MAX_SIMILARITY }) {
+        println("Message $content was discarded as it was too similar to previous messages - ${
+            user.recentMessages.associateWith { similarityProportion(it, content) }
+        }")
         return false
     }
     return true
