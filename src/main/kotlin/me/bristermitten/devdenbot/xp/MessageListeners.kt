@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.Message
  */
 private const val MESSAGE_MIN_DELAY_MILLIS = 750
 private const val MIN_MESSAGE_LEN = 6
-private const val MAX_SIMILARITY = 0.5f
+private const val MAX_SIMILARITY = 0.8f
 
 private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length
 

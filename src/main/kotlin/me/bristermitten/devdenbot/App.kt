@@ -5,7 +5,6 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     println("Bot starting!")
-
     val time = measureTimeMillis {
         DevDen().start()
     }
