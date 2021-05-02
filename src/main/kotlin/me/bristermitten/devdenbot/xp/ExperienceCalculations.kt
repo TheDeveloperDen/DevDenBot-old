@@ -32,8 +32,11 @@ fun compressibility(str: String): Double {
     return cut.toDouble() * 2 / lower.length
 }
 
+private val punctuationRegex = "[.?,!\\-'`]".toRegex()
+
 fun wordiness(str: String): Double {
-    val split = str.split(" ")
+    val split = punctuationRegex.replace(str, "") // Strip punctuation to not affect the score
+        .split(" ")
     return split.sumBy { s -> if (s in words) s.length + 1 else 0 } / str.length.toDouble()
 }
 
