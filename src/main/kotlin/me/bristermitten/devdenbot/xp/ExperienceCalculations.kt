@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.math.log
 
 private val words by lazy {
-    val words = object {}.javaClass.getResourceAsStream("words.txt")
+    val words = object {}.javaClass.classLoader.getResourceAsStream("words.txt")
     requireNotNull(words)
     words.bufferedReader().useLines { lines ->
         lines.map(String::toLowerCase).toSet()

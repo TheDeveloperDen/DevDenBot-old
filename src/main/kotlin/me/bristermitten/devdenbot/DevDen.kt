@@ -59,9 +59,9 @@ class DevDen {
         timer.schedule(VoiceChatXPTask(jda), 0L, TimeUnit.SECONDS.toMillis(60))
     }
 
-
+    private val statsFilePath = "/var/data/stats.json"
     private fun loadStats() {
-        val statsFile = File("/var/data/stats.json")
+        val statsFile = File(statsFilePath)
         if (!statsFile.exists()) {
             return
         }
@@ -70,7 +70,7 @@ class DevDen {
     }
 
     private fun saveStats() {
-        val statsFile = File("/var/data/stats.json")
+        val statsFile = File(statsFilePath)
         val content = StatsUsers.saveToString()
         statsFile.writeText(content)
     }
