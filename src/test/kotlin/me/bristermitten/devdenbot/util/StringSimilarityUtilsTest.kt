@@ -1,27 +1,33 @@
 package me.bristermitten.devdenbot.util
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 internal class StringSimilarityUtilsTest {
 
-    private val pronouns = listOf("(she/her)", "(he/him)", "(they/them)")
+    private val testRoles = listOf("(she/her)", "(he/him)", "(they/them)", "Clash of Code", "Bump Notifications")
 
     @Test
     fun `test getSuggestion returns closest suggestion`() {
         val input = "he/him"
-        val allowedValues = pronouns
+        val allowedValues = testRoles
         val suggestion = getSuggestion(input, allowedValues)
         assertNotNull(suggestion)
-        assertEquals(suggestion, "(he/him)")
+        assertEquals("(he/him)", suggestion)
+    }
+
+    @Test
+    fun `test getSuggestion her returns she her`() {
+        val input = "her"
+        val allowedValues = testRoles
+        val suggestion = getSuggestion(input, allowedValues)
+        assertNotNull(suggestion)
+        assertEquals("(she/her)", suggestion)
     }
 
     @Test
     fun `test getSuggestion none match returns null`() {
         val input = "someInput"
-        val allowedValues = pronouns
+        val allowedValues = testRoles
         val suggestion = getSuggestion(input, allowedValues)
         assertNull(suggestion)
     }
@@ -37,7 +43,7 @@ internal class StringSimilarityUtilsTest {
     @Test
     fun `test getSuggestion input empty returns null`() {
         val input = ""
-        val allowedValues = pronouns
+        val allowedValues = testRoles
         val suggestion = getSuggestion(input, allowedValues)
         assertNull(suggestion)
     }
