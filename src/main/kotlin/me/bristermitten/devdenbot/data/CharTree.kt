@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.xp
+package me.bristermitten.devdenbot.data
 
 /**
  * A simple implementation of a prefix tree for better parsing
@@ -68,17 +68,18 @@ class CharTree<T> {
 
     private class Node<T> {
         var value: T? = null
-        private val children = arrayOfNulls<Node<T>>(256)
+        private val children = mutableMapOf<Char, Node<T>>()
 
         fun getNode(c: Char): Node<T>? {
-            return children[c.toInt()]
+            return children[c]
         }
 
         fun getOrCreateNode(c: Char): Node<T>? {
-            if (children[c.toInt()] == null) {
-                children[c.toInt()] = Node()
+
+            if (children[c] == null) {
+                children[c] = Node()
             }
-            return children[c.toInt()]
+            return children[c]
         }
     }
 }

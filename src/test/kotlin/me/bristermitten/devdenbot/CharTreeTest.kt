@@ -1,6 +1,6 @@
 package me.bristermitten.devdenbot
 
-import me.bristermitten.devdenbot.xp.CharTree
+import me.bristermitten.devdenbot.data.CharTree
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

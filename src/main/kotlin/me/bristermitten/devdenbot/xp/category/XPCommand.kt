@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.commands.xp
+package me.bristermitten.devdenbot.xp.category
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
@@ -9,8 +9,6 @@ import me.bristermitten.devdenbot.extensions.commands.prepareReply
 import me.bristermitten.devdenbot.graphics.createTextImage
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import java.awt.Color
-import java.awt.Font
-import java.awt.GraphicsEnvironment
 import java.awt.LinearGradientPaint
 import java.text.NumberFormat
 import java.util.*

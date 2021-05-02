@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.commands.xp
+package me.bristermitten.devdenbot.xp.category
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
@@ -23,6 +23,9 @@ class LeaderboardCommand @Inject constructor(
     help = "View the leaderboard",
     aliases = arrayOf("top", "lb")
 ) {
+    private companion object {
+        const val DEFAULT_LEADERBOARD_COUNT = 10
+    }
 
     override suspend fun CommandEvent.execute() {
         val args = args.split(WHITESPACE_REGEX)
@@ -35,13 +38,13 @@ class LeaderboardCommand @Inject constructor(
         val count = when {
             firstArgAsInt != null -> {
                 val parsedCount = args.first().toInt()
-                if (parsedCount > 10) {
-                    reply("I can only show up to 10 entries in the leaderboard")
+                if (parsedCount > DEFAULT_LEADERBOARD_COUNT) {
+                    reply("I can only show up to $DEFAULT_LEADERBOARD_COUNT entries in the leaderboard")
                     return
                 }
                 parsedCount
             }
-            else -> 10
+            else -> DEFAULT_LEADERBOARD_COUNT
         }
 
 

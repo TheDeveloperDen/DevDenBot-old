@@ -1,5 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
+import me.bristermitten.devdenbot.data.CharTree
 import java.math.BigInteger
 import java.util.*
 import kotlin.math.log
