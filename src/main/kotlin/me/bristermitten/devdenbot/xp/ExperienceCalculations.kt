@@ -3,7 +3,6 @@ package me.bristermitten.devdenbot.xp
 import me.bristermitten.devdenbot.data.CharTree
 import java.math.BigInteger
 import java.util.*
-import kotlin.math.log
 
 private val words by lazy {
     val words = object {}.javaClass.classLoader.getResourceAsStream("words.txt")
@@ -41,9 +40,7 @@ private val random = SplittableRandom()
 fun xpForMessage(message: String): Double {
     val compressibility = compressibility(message)
     val wordiness = wordiness(message)
-    return ((1 - compressibility) * 0.7 + wordiness * 0.2) *
-            (log(message.length.toDouble(), 1.5) * 2
-                    + random.nextInt(0, 3))
+    return ((1 - compressibility) * 0.7 + wordiness * 0.3) * (message.length * 0.5) + random.nextInt(0, 3)
 }
 
 fun xpForLevel(level: Int): BigInteger = level.toBigDecimal()
