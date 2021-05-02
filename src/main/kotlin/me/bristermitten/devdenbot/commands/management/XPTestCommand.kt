@@ -20,7 +20,7 @@ class XPTestCommand @Inject constructor(
 ) {
     override suspend fun CommandEvent.execute() {
         val xp = xpForMessage(args)
-        event.message.reply("This message would give **$xp** XP.")
+        event.message.reply("This message would give **$xp** XP.").await()
     }
 
 
