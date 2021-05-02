@@ -9,8 +9,8 @@ import org.apache.commons.text.similarity.LevenshteinDistance
  * @author AlexL
  */
 private const val MESSAGE_MIN_DELAY_MILLIS = 750
-private const val MIN_MESSAGE_LEN = 10
-private const val MAX_SIMILARITY = 0.75f
+private const val MIN_MESSAGE_LEN = 6
+private const val MAX_SIMILARITY = 0.5f
 
 private val levenshtein = LevenshteinDistance.getDefaultInstance()::apply
 

@@ -9,7 +9,7 @@ import me.bristermitten.devdenbot.commands.ListenersModule
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
-import me.bristermitten.devdenbot.listener.VoiceChatXPTask
+import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.getInstance
 import net.dv8tion.jda.api.JDA

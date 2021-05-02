@@ -1,22 +1,19 @@
-package me.bristermitten.devdenbot.listener
+package me.bristermitten.devdenbot.xp
 
 import com.google.inject.Inject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.listener.shouldCountForStats
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
-import me.bristermitten.devdenbot.xp.tierOf
-import me.bristermitten.devdenbot.xp.tierRole
-import me.bristermitten.devdenbot.xp.xpForLevel
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import kotlin.math.log10
-import kotlin.math.pow
+import kotlin.math.roundToInt
 
 /**
  * @author AlexL
@@ -34,9 +31,10 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
         }
         val message = event.message
         val member = message.member ?: return
-        val len = message.contentDisplay.length
-        val gained = (3.0 * log10(len.toDouble()).pow(2.6) + (0..3).random()).toInt()
+
+        val gained = xpForMessage(message.contentDisplay).roundToInt()
         val user = StatsUsers[message.author.idLong]
+
         synchronized(user) {
             user.recentMessages.add(message.contentDisplay)
             user.lastMessageSentTime = System.currentTimeMillis()

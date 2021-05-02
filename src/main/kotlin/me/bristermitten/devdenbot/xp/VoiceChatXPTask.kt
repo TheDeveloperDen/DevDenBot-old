@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.listener
+package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.util.log
