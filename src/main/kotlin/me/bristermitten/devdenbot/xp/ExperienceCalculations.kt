@@ -33,8 +33,8 @@ fun compressibility(str: String): Double {
 }
 
 fun wordiness(str: String): Double {
-    val split = str.split(" ").toTypedArray()
-    return split.sumBy { s -> if (s in words) 1 else 0 } / split.size.toDouble()
+    val split = str.split(" ")
+    return split.sumBy { s -> if (s in words) str.length + 1 else 0 } / str.length.toDouble()
 }
 
 private val random = SplittableRandom()
