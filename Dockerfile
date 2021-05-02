@@ -5,8 +5,8 @@ COPY . .
 
 RUN gradle shadowJar --no-daemon
 
-RUN mkdir /ap\data
+RUN mkdir /app/data
 
-COPY /home/gradle/src/build/libs/*.jar /app/app.jar
+COPY ./*.jar /app/app.jar
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
