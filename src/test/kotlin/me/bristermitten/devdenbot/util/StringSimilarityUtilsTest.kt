@@ -5,12 +5,12 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-internal class LevenshteinUtilsTest {
+internal class StringSimilarityUtilsTest {
 
     private val pronouns = listOf("(she/her)", "(he/him)", "(they/them)")
 
     @Test
-    fun testGetSuggestionReturnsClosestSuggestion() {
+    fun `test getSuggestion returns closest suggestion`() {
         val input = "he/him"
         val allowedValues = pronouns
         val suggestion = getSuggestion(input, allowedValues)
@@ -19,7 +19,7 @@ internal class LevenshteinUtilsTest {
     }
 
     @Test
-    fun testGetSuggestionNoneMatchReturnsNull() {
+    fun `test getSuggestion none match returns null`() {
         val input = "someInput"
         val allowedValues = pronouns
         val suggestion = getSuggestion(input, allowedValues)
@@ -27,7 +27,7 @@ internal class LevenshteinUtilsTest {
     }
 
     @Test
-    fun testAllowedValuesEmptyReturnsNull() {
+    fun `test getSuggestion allowed values empty returns null`() {
         val input = "someInput"
         val allowedValues = listOf<String>()
         val suggestion = getSuggestion(input, allowedValues)
@@ -35,7 +35,7 @@ internal class LevenshteinUtilsTest {
     }
 
     @Test
-    fun testInputEmptyReturnsNull() {
+    fun `test getSuggestion input empty returns null`() {
         val input = ""
         val allowedValues = pronouns
         val suggestion = getSuggestion(input, allowedValues)
