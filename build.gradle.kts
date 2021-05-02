@@ -71,7 +71,6 @@ tasks {
     }
 
     shadowJar {
-        minimize()
         isZip64 = true
     }
 
