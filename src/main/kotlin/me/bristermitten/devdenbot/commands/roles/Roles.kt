@@ -1,11 +1,15 @@
 package me.bristermitten.devdenbot.commands.roles
 
-import me.bristermitten.devdenbot.listener.BumpNotificationListener
-
+const val CLASH_OF_CODE_ROLE_ID = 831987774499454997
+const val SHE_HER_ROLE_ID = 837576267922538516
+const val HE_HIM_ROLE_ID = 837576282454622218
+const val THEY_THEM_ROLE_ID = 837584481526874153
+const val BUMP_NOTIFICATIONS_ROLE_ID = 838500233268691005
 
 val ROLES = setOf(
-    837576267922538516L,
-    837576282454622218L,
-    837584481526874153,
-    BumpNotificationListener.BUMP_NOTIFICATIONS_ROLE_ID
+    SHE_HER_ROLE_ID,
+    HE_HIM_ROLE_ID,
+    THEY_THEM_ROLE_ID,
+    CLASH_OF_CODE_ROLE_ID,
+    BUMP_NOTIFICATIONS_ROLE_ID
 )

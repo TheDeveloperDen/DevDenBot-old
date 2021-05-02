@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import me.bristermitten.devdenbot.commands.roles.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.data.StatsUsers
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -17,7 +18,6 @@ class BumpNotificationListener : ListenerAdapter() {
     companion object {
         private const val DISBOARD_BOT_ID = 302050872383242240
         private val BUMP_COOLDOWN = TimeUnit.HOURS.toMillis(2)
-        const val BUMP_NOTIFICATIONS_ROLE_ID = 838500233268691005
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
