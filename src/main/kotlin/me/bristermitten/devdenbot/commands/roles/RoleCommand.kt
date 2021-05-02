@@ -3,6 +3,7 @@ package me.bristermitten.devdenbot.commands.roles
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.util.getSuggestion
 import net.dv8tion.jda.api.JDA
 import javax.inject.Inject
 
@@ -28,7 +29,11 @@ class RoleCommand @Inject constructor(
         val roles = jda.getRolesByName(args, true)
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
         if (role == null) {
-            channel.sendMessage("Invalid role!").await()
+            val suggestion = getSuggestion(
+                args,
+                ROLES.mapNotNull { jda.getRoleById(it.toString())?.name })
+                ?.let { " Do you mean '$it'?" } ?: ""
+            channel.sendMessage("Invalid role!$suggestion").await()
             return
         }
         if (message.guild.getMember(author)?.roles?.contains(role) == true) {

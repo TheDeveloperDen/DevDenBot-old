@@ -38,6 +38,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
+    - name: Run tests
+      run: ./gradlew check
+
     - name: CapRover Deploy
       # You may pin to the exact commit or the version.
       # uses: AlexxNB/caprover-action@45fdf55f3213582285394908e8a3a0d2df41e21d
