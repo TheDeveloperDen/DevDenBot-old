@@ -34,7 +34,7 @@ fun compressibility(str: String): Double {
 
 fun wordiness(str: String): Double {
     val split = str.split(" ")
-    return split.sumBy { s -> if (s in words) str.length + 1 else 0 } / str.length.toDouble()
+    return split.sumBy { s -> if (s in words) s.length + 1 else 0 } / str.length.toDouble()
 }
 
 fun xpForMessage(message: String): Double {
