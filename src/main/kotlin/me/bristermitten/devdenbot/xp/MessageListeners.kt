@@ -10,9 +10,9 @@ import net.dv8tion.jda.api.entities.Message
  */
 private const val MESSAGE_MIN_DELAY_MILLIS = 750
 private const val MIN_MESSAGE_LEN = 6
-private const val MAX_SIMILARITY = 0.8f
+private const val MIN_DISTANCE = 0.8f
 
-private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length
+private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.toDouble()
 
 fun Message.shouldCountForStats(): Boolean {
     if (author.isBot) {
@@ -44,7 +44,7 @@ fun Message.shouldCountForStats(): Boolean {
         println("Message $content was discarded as it had no whitespace")
         return false
     }
-    if (user.recentMessages.any { similarityProportion(it, content) > MAX_SIMILARITY }) {
+    if (user.recentMessages.any { similarityProportion(it, content) < MIN_DISTANCE }) {
         println("Message $content was discarded as it was too similar to previous messages - ${
             user.recentMessages.associateWith { similarityProportion(it, content) }
         }")
