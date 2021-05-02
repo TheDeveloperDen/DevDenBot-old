@@ -23,7 +23,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.3")
