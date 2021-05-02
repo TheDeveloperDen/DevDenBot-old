@@ -8,6 +8,6 @@ RUN gradle shadowJar --no-daemon
 RUN mkdir /app/
 VOLUME /var/data
 
-COPY ./*.jar /app/app.jar
+COPY /home/gradle/src/build/libs/*.jar /app/app.jar
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
