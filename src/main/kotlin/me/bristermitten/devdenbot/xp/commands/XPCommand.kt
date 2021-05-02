@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.xp.category
+package me.bristermitten.devdenbot.xp.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand

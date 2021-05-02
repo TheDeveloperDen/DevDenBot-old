@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import me.bristermitten.devdenbot.data.StatsUsers
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.util.concurrent.TimeUnit
@@ -31,6 +32,7 @@ class BumpNotificationListener : ListenerAdapter() {
                 .filter { it.isNotEmpty() }
                 .filter { it.first().description?.contains(":thumbsup:") ?: false } //hacky but works
                 .collect {
+                    StatsUsers[event.author.idLong].bumps++
                     delay(BUMP_COOLDOWN)
                     val bumpNotificationRole =
                         requireNotNull(event.jda.getRoleById(BUMP_NOTIFICATIONS_ROLE_ID)) { "Bump Notifications role not found" }

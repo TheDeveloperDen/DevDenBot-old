@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.xp.category
+package me.bristermitten.devdenbot.xp.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
@@ -8,9 +8,11 @@ import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.reply
+import me.bristermitten.devdenbot.serialization.PrettyName
 import net.dv8tion.jda.api.JDA
 import javax.inject.Inject
 import kotlin.reflect.KProperty1
+import kotlin.reflect.full.findAnnotation
 
 
 /**
@@ -60,19 +62,22 @@ class LeaderboardCommand @Inject constructor(
         val property = when (leaderboardBy) {
             "xp" -> StatsUser::xp
             "level", "lvl" -> StatsUser::level
+            "bump", "bumps" -> StatsUser::bumps
             else -> {
                 awaitReply("Hmm, I don't recognise $leaderboardBy")
                 return
             }
         }
 
-        sendLeaderboard(count, property as KProperty1<StatsUser, Comparable<Any>>, leaderboardBy.capitalize())
+        val prettyName = property.findAnnotation<PrettyName>()?.prettyName ?: leaderboardBy.capitalize()
+
+        sendLeaderboard(count, property as KProperty1<StatsUser, Comparable<Any>>, prettyName)
     }
 
     private suspend fun <C: Comparable<Any>> CommandEvent.sendLeaderboard(
         count: Int,
         by: KProperty1<StatsUser, C>,
-        byPrettyName: String,
+        leaderboardName: String,
     ) {
         val users = StatsUsers.all
 
@@ -80,11 +85,11 @@ class LeaderboardCommand @Inject constructor(
             .take(count)
 
         reply {
-            title = "Top $count Users based on $byPrettyName"
+            title = "Top $count Users based on $leaderboardName"
 
             for ((index, elem) in sorted.withIndex()) {
                 field(
-                    "#${index + 1} - ${by(elem)} $byPrettyName",
+                    "#${index + 1} - ${by(elem)} $leaderboardName",
                     jda.retrieveUserById(elem.userId).await()?.asMention ?: "Unknown User (${elem.userId})",
                 )
             }

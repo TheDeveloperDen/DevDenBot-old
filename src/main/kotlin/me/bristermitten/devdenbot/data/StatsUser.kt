@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
+import me.bristermitten.devdenbot.serialization.PrettyName
 import org.apache.commons.collections4.queue.CircularFifoQueue
 import java.math.BigInteger
 
@@ -15,8 +16,10 @@ import java.math.BigInteger
 @Serializable
 data class StatsUser(
     val userId: Long,
+    @PrettyName("XP")
     var xp: BigInteger = BigInteger.ZERO,
-    var level: Int = 0
+    var level: Int = 0,
+    var bumps: Int = 0,
 ) {
     @Transient
     val recentMessages = CircularFifoQueue<String>(5)

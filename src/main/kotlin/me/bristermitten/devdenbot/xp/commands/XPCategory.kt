@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.xp.category
+package me.bristermitten.devdenbot.xp.commands
 
 import me.bristermitten.devdenbot.commands.category.CommandCategory
 import net.dv8tion.jda.api.entities.Activity
