@@ -5,7 +5,8 @@ COPY . .
 
 RUN gradle shadowJar --no-daemon
 
-RUN mkdir /app/data
+RUN mkdir /app/
+VOLUME /var/data
 
 COPY ./*.jar /app/app.jar
 
