@@ -37,8 +37,6 @@ fun wordiness(str: String): Double {
     return split.sumBy { s -> if (s in words) str.length + 1 else 0 } / str.length.toDouble()
 }
 
-private val random = SplittableRandom()
-
 fun xpForMessage(message: String): Double {
     val compressibility = compressibility(message)
     val wordiness = wordiness(message)
