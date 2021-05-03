@@ -63,7 +63,7 @@ tasks {
     }
 
     test {
-        useJUnitPlatform()
+        useJUnit()
     }
 
     application {
