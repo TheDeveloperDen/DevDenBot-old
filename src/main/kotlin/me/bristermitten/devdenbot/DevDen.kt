@@ -9,9 +9,10 @@ import me.bristermitten.devdenbot.commands.ListenersModule
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
-import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.getInstance
+import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import net.dv8tion.jda.api.JDA
 import java.io.File
 import java.util.*
@@ -60,19 +61,28 @@ class DevDen {
     }
 
     private val statsFilePath = "/var/data/stats.json"
+    private val globalStatsFilePath = "/var/data/globalstats.json"
+
     private fun loadStats() {
         val statsFile = File(statsFilePath)
-        if (!statsFile.exists()) {
-            return
+        if (statsFile.exists()) {
+            val content = statsFile.readText()
+            StatsUsers.loadFrom(content)
         }
-        val content = statsFile.readText()
-        StatsUsers.loadFrom(content)
+
+        val globalStatsFile = File(globalStatsFilePath)
+        if (globalStatsFile.exists()) {
+            GlobalStats.loadFrom(globalStatsFile.readText())
+        }
     }
 
     private fun saveStats() {
         val statsFile = File(statsFilePath)
         val content = StatsUsers.saveToString()
         statsFile.writeText(content)
+
+        val globalStatsFile = File(globalStatsFilePath)
+        globalStatsFile.writeText(GlobalStats.saveToString())
     }
 
 }

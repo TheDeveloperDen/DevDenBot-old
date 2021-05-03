@@ -7,6 +7,7 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
+import me.bristermitten.devdenbot.stats.GlobalStats
 import org.apache.commons.collections4.queue.CircularFifoQueue
 import java.math.BigInteger
 
@@ -25,4 +26,9 @@ data class StatsUser(
     val recentMessages = CircularFifoQueue<String>(5)
 
     var lastMessageSentTime: Long = -1
+
+    fun giveXP(amount: BigInteger) {
+        this.xp += amount
+        GlobalStats.xpGiven += amount
+    }
 }

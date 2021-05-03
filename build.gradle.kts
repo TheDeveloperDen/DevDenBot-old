@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.serialization") version "1.5.0"
@@ -6,7 +8,7 @@ plugins {
 }
 
 group = "me.bristermitten"
-version = "1.0-SNAPSHOT"
+version = "1.1.0"
 
 
 repositories {
@@ -80,5 +82,12 @@ tasks {
 
     test {
         useJUnitPlatform()
+    }
+
+    processResources {
+        from(sourceSets.main.get().resources.srcDirs) {
+            filter(ReplaceTokens::class, mapOf("version" to version))
+        }
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }

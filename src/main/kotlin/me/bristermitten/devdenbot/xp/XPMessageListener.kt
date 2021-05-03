@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
 import net.dv8tion.jda.api.entities.Member
@@ -44,10 +45,12 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
         synchronized(user) {
             user.recentMessages.add(strippedMessage)
             user.lastMessageSentTime = System.currentTimeMillis()
-            user.xp += gained.toBigInteger()
+            user.giveXP(gained.toBigInteger())
+
             val requiredForNextLevel = xpForLevel(user.level + 1)
             if (user.xp >= requiredForNextLevel) {
                 GlobalScope.launch {
+                    GlobalStats.levelUps++
                     sendLevelUpMessage(member, ++user.level)
                 }
             }
