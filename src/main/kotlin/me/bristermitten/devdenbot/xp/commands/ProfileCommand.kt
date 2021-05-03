@@ -14,8 +14,7 @@ import javax.inject.Inject
 class ProfileCommand @Inject constructor(
 ) : DevDenCommand(
     name = "profile",
-    help = "View your profile",
-    aliases = arrayOf("stats")
+    help = "View your profile"
 ) {
 
     override suspend fun CommandEvent.execute() {
