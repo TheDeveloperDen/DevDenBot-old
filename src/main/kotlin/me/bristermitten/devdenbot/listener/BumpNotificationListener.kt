@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import me.bristermitten.devdenbot.commands.roles.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.extensions.await
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.util.concurrent.TimeUnit
@@ -36,7 +37,7 @@ class BumpNotificationListener : ListenerAdapter() {
                     delay(BUMP_COOLDOWN)
                     val bumpNotificationRole =
                         requireNotNull(event.jda.getRoleById(BUMP_NOTIFICATIONS_ROLE_ID)) { "Bump Notifications role not found" }
-                    event.channel.sendMessage("${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**")
+                    event.channel.sendMessage("${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**").await()
                 }
 
         }
