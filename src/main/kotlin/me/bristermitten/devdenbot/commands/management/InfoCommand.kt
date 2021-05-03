@@ -26,7 +26,7 @@ class InfoCommand @Inject constructor(
 ) {
 
     private val version by lazy {
-        javaClass.classLoader.getResourceAsStream("version")!!.reader().readText()
+        javaClass.classLoader.getResourceAsStream("version.txt")!!.reader().readText()
     }
 
     private fun formatNumber(a: Any) = "`${NumberFormat.getNumberInstance(Locale.US).format(a)}`"
