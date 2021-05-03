@@ -1,6 +1,7 @@
 @file:UseSerializers(BigIntegerSerializer::class)
 package me.bristermitten.devdenbot.stats
 
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
