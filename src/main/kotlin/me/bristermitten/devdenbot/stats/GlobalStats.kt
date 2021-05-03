@@ -1,3 +1,4 @@
+@file:UseSerializers(BigIntegerSerializer::class)
 package me.bristermitten.devdenbot.stats
 
 import kotlinx.serialization.Serializable
@@ -7,7 +8,7 @@ import kotlinx.serialization.serializer
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import java.math.BigInteger
 
-@Serializable(with = BigIntegerSerializer::class)
+@Serializable
 object GlobalStats {
     //Actual thread safety is effort
     @get:Synchronized
