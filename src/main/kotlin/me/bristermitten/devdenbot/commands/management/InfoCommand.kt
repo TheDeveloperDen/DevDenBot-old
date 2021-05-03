@@ -44,6 +44,7 @@ class InfoCommand @Inject constructor(
             .setTitle("Developer Den")
             .setDescription("Mildly interesting stats and info")
             .setColor(ddbConfig.colour)
+            .addField("Version", version, true)
             .addField("Total XP Given", totalXP, true)
             .addField("Total Members", totalMembers, true)
             .addField("Date Created", dateCreated, true)
