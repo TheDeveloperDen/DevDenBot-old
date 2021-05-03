@@ -25,6 +25,15 @@ internal class StringSimilarityUtilsTest {
     }
 
     @Test
+    fun `test getSuggestion returns case insensitive suggestion`() {
+        val input = "cLASH OF cODY"
+        val allowedValues = testRoles
+        val suggestion = getSuggestion(input, allowedValues)
+        assertNotNull(suggestion)
+        assertEquals("Clash of Code", suggestion)
+    }
+
+    @Test
     fun `test getSuggestion none match returns null`() {
         val input = "someInput"
         val allowedValues = testRoles
