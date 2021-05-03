@@ -16,15 +16,6 @@ class RoleCommand @Inject constructor(
     aliases = arrayOf()
 ) {
 
-    companion object {
-        val ROLES: Set<Long> = setOf(
-            837576267922538516L,
-            837576282454622218L,
-            837584481526874153L,
-            831987774499454997L
-        )
-    }
-
     override suspend fun CommandEvent.execute() {
         val roles = jda.getRolesByName(args, true)
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
