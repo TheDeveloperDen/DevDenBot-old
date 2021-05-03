@@ -85,8 +85,8 @@ tasks {
     }
 
     processResources {
-        from(sourceSets.main.get().resources.srcDirs) {
-            filter(ReplaceTokens::class, mapOf("version" to version))
+        from("${project.rootDir}/src/main/resources/version.txt") {
+            expand("version" to project.version)
         }
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
