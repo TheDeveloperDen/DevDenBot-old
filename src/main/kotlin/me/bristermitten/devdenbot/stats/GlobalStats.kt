@@ -1,28 +1,21 @@
 @file:UseSerializers(BigIntegerSerializer::class)
+
 package me.bristermitten.devdenbot.stats
 
-import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
+import me.bristermitten.devdenbot.data.AtomicBigInteger
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
-import java.math.BigInteger
 
 @Serializable
 object GlobalStats {
-    //Actual thread safety is effort
-    @get:Synchronized
-    @set:Synchronized
-    var totalMessagesSent: BigInteger = BigInteger.ZERO
+    var totalMessagesSent: AtomicBigInteger = AtomicBigInteger.ZERO
 
-    @get:Synchronized
-    @set:Synchronized
-    var xpGiven: BigInteger = BigInteger.ZERO
+    var xpGiven: AtomicBigInteger = AtomicBigInteger.ZERO
 
-    @get:Synchronized
-    @set:Synchronized
-    var levelUps: BigInteger = BigInteger.ZERO
+    var levelUps: AtomicBigInteger = AtomicBigInteger.ZERO
 
     fun saveToString(): String {
         return Json.encodeToString(serializer(), this)

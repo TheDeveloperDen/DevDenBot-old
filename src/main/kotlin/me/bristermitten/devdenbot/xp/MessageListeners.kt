@@ -5,9 +5,7 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.levenshtein
-import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 
 /**
@@ -52,7 +50,8 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
 }
 
 fun isTooSimilar(user: StatsUser, content: String): Boolean {
-    if (user.recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
+    val recentMessages = user.recentMessages.copy()
+    if (recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
         println("Message $content was discarded as it was too similar to previous messages - ${
             user.recentMessages.associateWith { similarityProportion(it.msg, content) }
         }")

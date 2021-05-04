@@ -1,12 +1,14 @@
 package me.bristermitten.devdenbot.data
 
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 object MessageCache {
 
     private const val MAX_CACHE_SIZE = 1000;
 
-    private val cache = mutableMapOf<Long, CachedMessage>()
+    private val cache = ConcurrentHashMap<Long, CachedMessage>()
 
     @Synchronized
     fun cache(message: CachedMessage) {

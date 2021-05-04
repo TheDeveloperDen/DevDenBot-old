@@ -4,15 +4,15 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author AlexL
  */
 object StatsUsers {
 
-    private val users = mutableMapOf<Long, StatsUser>()
+    private val users = ConcurrentHashMap<Long, StatsUser>()
 
-    @Synchronized
     operator fun get(userId: Long): StatsUser {
         return users.getOrPut(userId) {
             StatsUser(userId)

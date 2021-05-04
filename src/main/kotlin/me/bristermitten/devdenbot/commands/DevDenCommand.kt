@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.util.botCommandsChannelId
+import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.Permission
 
 /**
@@ -35,7 +36,7 @@ abstract class DevDenCommand(
     abstract suspend fun CommandEvent.execute()
 
     final override fun execute(event: CommandEvent) {
-        GlobalScope.launch {
+        scope.launch {
             if (event.channel.idLong != botCommandsChannelId && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
