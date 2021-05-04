@@ -83,10 +83,6 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
             xpForMessage(strippedMessage)
         else 0.0
 
-        if (isTooSimilar(user, strippedMessage)) {
-            curXP = 0.0
-        }
-
         val diff = curXP.roundToInt() - prevXP.roundToInt()
 
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
