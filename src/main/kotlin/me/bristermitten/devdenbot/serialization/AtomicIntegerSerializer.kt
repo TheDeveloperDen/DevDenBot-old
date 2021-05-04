@@ -17,10 +17,10 @@ object AtomicIntegerSerializer : KSerializer<AtomicInteger> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AtomicInteger", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): AtomicInteger {
-        return decoder.decodeString().toInt().atomic()
+        return decoder.decodeInt().atomic()
     }
 
     override fun serialize(encoder: Encoder, value: AtomicInteger) {
-        encoder.encodeString(value.get().toString())
+        encoder.encodeInt(value.get())
     }
 }

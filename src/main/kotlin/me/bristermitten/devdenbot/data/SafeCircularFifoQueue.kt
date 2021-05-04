@@ -1,6 +1,5 @@
 package me.bristermitten.devdenbot.data
 
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,6 +19,7 @@ class SafeCircularFifoQueue<T>(size: Int) : Iterable<T> {
             queue.toList()
         }
     }
+
     override fun iterator() = copy().iterator()
 
 }
