@@ -1,9 +1,13 @@
 package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.levenshtein
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.User
 
 /**
  * @author AlexL
@@ -14,7 +18,10 @@ private const val MIN_DISTANCE = 0.4f
 
 private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.toDouble()
 
-fun Message.shouldCountForStats(): Boolean {
+fun shouldCountForStats(author: User, content: String, channel: MessageChannel, config: DDBConfig): Boolean {
+    if (content.startsWith(config.prefix)) {
+        return false
+    }
     if (author.isBot) {
         return false
     }
@@ -22,7 +29,6 @@ fun Message.shouldCountForStats(): Boolean {
         return false
     }
     val now = System.currentTimeMillis()
-    val content = contentDisplay
 
     val len = content.length
     if (len < MIN_MESSAGE_LEN) {
@@ -41,9 +47,9 @@ fun Message.shouldCountForStats(): Boolean {
     if (content.none(Char::isWhitespace)) {
         return false
     }
-    if (user.recentMessages.any { similarityProportion(it, content) < MIN_DISTANCE }) {
+    if (user.recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
         println("Message $content was discarded as it was too similar to previous messages - ${
-            user.recentMessages.associateWith { similarityProportion(it, content) }
+            user.recentMessages.associateWith { similarityProportion(it.msg, content) }
         }")
         return false
     }
