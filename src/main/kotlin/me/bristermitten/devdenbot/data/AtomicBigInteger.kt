@@ -12,7 +12,7 @@ import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicReference
 
 @Serializable(with = AtomicBigInteger.Serializer::class)
-class AtomicBigInteger(v: BigInteger) : AtomicReference<BigInteger>(v) {
+class AtomicBigInteger(v: BigInteger) : AtomicReference<BigInteger>(v), Comparable<AtomicBigInteger> {
 
     operator fun plusAssign(other: BigInteger) {
         getAndAccumulate(other, BigInteger::add)
@@ -45,5 +45,9 @@ class AtomicBigInteger(v: BigInteger) : AtomicReference<BigInteger>(v) {
         override fun serialize(encoder: Encoder, value: AtomicBigInteger) {
             encoder.encodeString(value.get().toString())
         }
+    }
+
+    override fun compareTo(other: AtomicBigInteger): Int {
+        return get().compareTo(other.get())
     }
 }

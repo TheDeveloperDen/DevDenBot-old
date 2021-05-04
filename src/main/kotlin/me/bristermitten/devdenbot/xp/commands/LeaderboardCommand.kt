@@ -10,9 +10,11 @@ import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.reply
 import me.bristermitten.devdenbot.serialization.PrettyName
 import net.dv8tion.jda.api.JDA
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
-import kotlin.reflect.KProperty1
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.isSubtypeOf
 
 
 /**
@@ -29,11 +31,12 @@ class LeaderboardCommand @Inject constructor(
         const val DEFAULT_LEADERBOARD_COUNT = 10
     }
 
+
     override suspend fun CommandEvent.execute() {
         val args = args.split(WHITESPACE_REGEX)
 
         if (args.isEmpty() || args.firstOrNull()?.isEmpty() != false) {
-            return sendLeaderboard(10, StatsUser::xp as KProperty1<StatsUser, Comparable<Any>>, "XP")
+            return sendLeaderboard(10, StatsUser::xp, "XP")
         }
 
         val firstArgAsInt = args.first().toIntOrNull()
@@ -70,13 +73,22 @@ class LeaderboardCommand @Inject constructor(
         }
 
         val prettyName = property.findAnnotation<PrettyName>()?.prettyName ?: leaderboardBy.capitalize()
+        val propertyType = property.returnType
+        val func: (StatsUser) -> Comparable<Any> =
+            when {
+                propertyType.isSubtypeOf(Comparable::class.createType()) -> { it -> property(it) as Comparable<Any> }
+                propertyType == AtomicInteger::class.createType() -> { it ->
+                    (property(it) as AtomicInteger).get() as Comparable<Any>
+                }
+                else -> error("i want death")
+            }
 
-        sendLeaderboard(count, property as KProperty1<StatsUser, Comparable<Any>>, prettyName)
+        sendLeaderboard(count, func, prettyName)
     }
 
-    private suspend fun <C: Comparable<Any>> CommandEvent.sendLeaderboard(
+    private suspend fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
         count: Int,
-        by: KProperty1<StatsUser, C>,
+        by: (StatsUser) -> C,
         leaderboardName: String,
     ) {
         val users = StatsUsers.all
