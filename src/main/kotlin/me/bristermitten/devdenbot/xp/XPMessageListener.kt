@@ -12,7 +12,6 @@ import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -24,7 +23,7 @@ import kotlin.math.roundToInt
 /**
  * @author AlexL
  */
-class XPMessageListener @Inject constructor(private val config: DDBConfig, private val jda: JDA) : ListenerAdapter() {
+class XPMessageListener @Inject constructor(private val config: DDBConfig) : ListenerAdapter() {
 
     private val logger by log()
 
@@ -95,7 +94,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig, priva
         val contents = stripMessage(message.msg)
 
         val user = StatsUsers[message.authorId]
-        val author = jda.getUserById(message.authorId) ?: return
+        val author = event.jda.getUserById(message.authorId) ?: return
 
         if (!shouldCountForStats(author, message.msg, event.channel, config)) {
             return
