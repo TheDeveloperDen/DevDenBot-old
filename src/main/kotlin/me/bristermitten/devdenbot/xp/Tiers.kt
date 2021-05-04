@@ -1,8 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
 import net.dv8tion.jda.api.JDA
-import kotlin.math.floor
-import kotlin.math.log10
 
 val tierRoleIds = listOf(
     821743100203368458, //@everyone (tier 0)
@@ -22,7 +20,7 @@ fun tierOf(level: Int): Int {
     if (level == 0) {
         return 0
     }
-    return 1 + floor(log10(level.toDouble())).toInt()
+    return 1 + (level / 10)
 }
 
 fun tierRole(jda: JDA, tier: Int) = jda.getRoleById(tierRoleIds[tier]) ?: error("Could not find role for Tier $tier")
