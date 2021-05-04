@@ -103,7 +103,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
             val contents = stripMessage(message.msg)
 
             val user = StatsUsers[message.authorId]
-            val author = event.jda.retrieveUserById(message.authorId).complete() ?: return@launch
+            val author = event.jda.retrieveUserById(message.authorId).await() ?: return@launch
             logger.info("2")
 
             if (!shouldCountForStats(author, message.msg, event.channel, config)) {
