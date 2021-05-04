@@ -8,6 +8,7 @@ import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
 import me.bristermitten.devdenbot.extensions.commands.prepareReply
 import me.bristermitten.devdenbot.graphics.createTextImage
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.util.formatNumber
 import java.awt.Color
 import java.awt.LinearGradientPaint
 import java.text.NumberFormat
@@ -41,7 +42,7 @@ class XPCommand @Inject constructor(
     override suspend fun CommandEvent.execute() {
         val targetUser = firstMentionedUser() ?: event.message.author
         val targetStatsUser = StatsUsers[targetUser.idLong]
-        val text = NumberFormat.getNumberInstance(Locale.UK).format(targetStatsUser.xp) + " XP"
+        val text = formatNumber(targetStatsUser.xp.get()) + " XP"
 
         val photo = createTextImage(width = 400, height = 200, fontSize = 80, text = text, fontColor = gradient, backgroundColor = Color.darkGray)
         val message = prepareReply {
