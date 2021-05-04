@@ -97,24 +97,19 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
 
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         GlobalScope.launch {
-            logger.info { MessageCache.getCached(event.messageIdLong) }
             val message = MessageCache.getCached(event.messageIdLong) ?: return@launch
-            logger.info("1")
             val contents = stripMessage(message.msg)
 
             val user = StatsUsers[message.authorId]
             val author = event.jda.retrieveUserById(message.authorId).await() ?: return@launch
-            logger.info("2")
 
             if (!shouldCountForStats(author, message.msg, event.channel, config)) {
                 return@launch
             }
 
-            logger.info("3")
 
             val gained = xpForMessage(contents).roundToInt()
 
-            logger.info("please work")
 
             synchronized (user) {
                 user.giveXP((-gained).toBigInteger())
