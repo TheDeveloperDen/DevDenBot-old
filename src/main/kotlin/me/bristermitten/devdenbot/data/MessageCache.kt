@@ -1,14 +1,13 @@
 package me.bristermitten.devdenbot.data
 
 import java.util.*
-import kotlin.collections.HashMap
 
 object MessageCache {
 
     private const val MAX_CACHE_SIZE = 1000;
 
-    private val cache = HashMap<Long, CachedMessage>()
-    private val byTime = PriorityQueue<CachedMessage>(Comparator.comparingLong {it.timestamp})
+    private val cache = mutableMapOf<Long, CachedMessage>()
+    private val byTime = PriorityQueue<CachedMessage>(compareBy { it.timestamp })
 
     @Synchronized
     fun cache(message: CachedMessage) {
@@ -30,4 +29,5 @@ object MessageCache {
         return cache[id]
     }
 
+    val all get() = cache.toMap()
 }
