@@ -96,29 +96,31 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
     }
 
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
-        logger.info { MessageCache.getCached(event.messageIdLong) }
-        val message = MessageCache.getCached(event.messageIdLong) ?: return
-        logger.info("1")
-        val contents = stripMessage(message.msg)
+        GlobalScope.launch {
+            logger.info { MessageCache.getCached(event.messageIdLong) }
+            val message = MessageCache.getCached(event.messageIdLong) ?: return@launch
+            logger.info("1")
+            val contents = stripMessage(message.msg)
 
-        val user = StatsUsers[message.authorId]
-        val author = event.jda.retrieveUserById(message.authorId).complete() ?: return
-        logger.info("2")
+            val user = StatsUsers[message.authorId]
+            val author = event.jda.retrieveUserById(message.authorId).complete() ?: return@launch
+            logger.info("2")
 
-        if (!shouldCountForStats(author, message.msg, event.channel, config)) {
-            return
-        }
+            if (!shouldCountForStats(author, message.msg, event.channel, config)) {
+                return@launch
+            }
 
-        logger.info("3")
+            logger.info("3")
 
-        val gained = xpForMessage(contents).roundToInt()
+            val gained = xpForMessage(contents).roundToInt()
 
-        logger.info("please work")
+            logger.info("please work")
 
-        synchronized (user) {
-            user.giveXP((-gained).toBigInteger())
-            logger.info {
-                "Took ${-gained} XP from ${author.name} for a message (${message.id})"
+            synchronized (user) {
+                user.giveXP((-gained).toBigInteger())
+                logger.info {
+                    "Took ${-gained} XP from ${author.name} for a message (${message.id})"
+                }
             }
         }
     }
