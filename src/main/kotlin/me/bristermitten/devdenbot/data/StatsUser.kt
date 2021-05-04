@@ -33,7 +33,6 @@ data class StatsUser(
 
     fun giveXP(amount: BigInteger) {
         this.xp += amount
-        GlobalStats.xpGiven += amount
     }
 
 }

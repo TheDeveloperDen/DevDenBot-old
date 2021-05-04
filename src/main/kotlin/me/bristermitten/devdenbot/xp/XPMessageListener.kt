@@ -111,7 +111,6 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     private suspend fun checkLevelUp(member: Member, user: StatsUser) {
         val requiredForNextLevel = xpForLevel(user.level.get() + 1)
         if (user.xp >= requiredForNextLevel) {
-            GlobalStats.levelUps++
             processLevelUp(member, (++user.level).get())
         }
     }

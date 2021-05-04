@@ -38,8 +38,7 @@ class InfoCommand @Inject constructor(
         val totalMembers = formatForInfo(event.guild.memberCount)
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
         val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
-        val totalXPGiven = formatForInfo(GlobalStats.xpGiven.get())
-        val levelUps = formatForInfo(GlobalStats.levelUps.get())
+        val levelUps = formatForInfo(StatsUsers.all.map { it.level }.map { it.get() }.sum())
         val formattedVersion = formatForInfo(version)
 
         reply(EmbedBuilder()
@@ -51,7 +50,6 @@ class InfoCommand @Inject constructor(
             .addField("Total Members", totalMembers, true)
             .addField("Date Created", dateCreated, true)
             .addField("Total Messages Sent", totalMessages, true)
-            .addField("Total XP Given", totalXPGiven, true)
             .addField("Level Ups", levelUps, true)
             .build())
     }

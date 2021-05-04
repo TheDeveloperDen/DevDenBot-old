@@ -13,18 +13,12 @@ import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 object GlobalStats {
     var totalMessagesSent: AtomicBigInteger = AtomicBigInteger.ZERO
 
-    var xpGiven: AtomicBigInteger = AtomicBigInteger.ZERO
-
-    var levelUps: AtomicBigInteger = AtomicBigInteger.ZERO
-
     fun saveToString(): String {
-        return Json.encodeToString(serializer(), this)
+        return Json { ignoreUnknownKeys = true }.encodeToString(serializer(), this)
     }
 
     fun loadFrom(json: String) {
         val loaded = Json.decodeFromString<GlobalStats>(json)
         this.totalMessagesSent = loaded.totalMessagesSent
-        this.xpGiven = loaded.xpGiven
-        this.levelUps = loaded.levelUps
     }
 }
