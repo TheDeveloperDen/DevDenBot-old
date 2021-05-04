@@ -8,10 +8,8 @@ import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.formatNumber
 import net.dv8tion.jda.api.EmbedBuilder
-import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -30,21 +28,25 @@ class InfoCommand @Inject constructor(
         javaClass.classLoader.getResourceAsStream("version.txt")!!.reader().readText()
     }
 
-    private fun formatDate(dt: LocalDate) = "`${DateTimeFormatter.ofPattern("YYYY MM dd").format(dt)}`"
+    private fun formatDate(dt: LocalDate) = DateTimeFormatter.ofPattern("YYYY MM dd").format(dt)
 
     override suspend fun CommandEvent.execute() {
-        val totalXP = formatNumber(StatsUsers.all.map { it.xp }.reduce(AtomicBigInteger::plus).get())
-        val totalMembers = formatNumber(event.guild.memberCount)
-        val dateCreated = formatDate(event.guild.timeCreated.toLocalDate())
-        val totalMessages = formatNumber(GlobalStats.totalMessagesSent.get())
-        val totalXPGiven = formatNumber(GlobalStats.xpGiven.get())
-        val levelUps = formatNumber(GlobalStats.levelUps.get())
+        fun formatForInfo(s: String) = "`$s`"
+        fun formatForInfo(s: Number) = "`${formatNumber(s)}`"
+
+        val totalXP = formatForInfo(StatsUsers.all.map { it.xp }.reduce(AtomicBigInteger::plus).get())
+        val totalMembers = formatForInfo(event.guild.memberCount)
+        val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
+        val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
+        val totalXPGiven = formatForInfo(GlobalStats.xpGiven.get())
+        val levelUps = formatForInfo(GlobalStats.levelUps.get())
+        val formattedVersion = formatForInfo(version)
 
         reply(EmbedBuilder()
             .setTitle("Developer Den")
             .setDescription("Mildly interesting stats and info")
             .setColor(ddbConfig.colour)
-            .addField("Version", version, true)
+            .addField("Version", formattedVersion, true)
             .addField("Total XP Given", totalXP, true)
             .addField("Total Members", totalMembers, true)
             .addField("Date Created", dateCreated, true)
