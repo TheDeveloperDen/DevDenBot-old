@@ -23,9 +23,7 @@ object MessageCache {
 
     @Synchronized
     fun update(id: Long, msg: String) {
-        getCached(id)?.also {
-            it.msg = msg
-        }
+        getCached(id)?.msg = msg
     }
 
     fun getCached(id: Long): CachedMessage? {
