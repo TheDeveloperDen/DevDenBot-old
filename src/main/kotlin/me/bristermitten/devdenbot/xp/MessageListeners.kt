@@ -1,5 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
+import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.botCommandsChannelId
@@ -47,11 +48,15 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
     if (content.none(Char::isWhitespace)) {
         return false
     }
+    return true
+}
+
+fun isTooSimilar(user: StatsUser, content: String): Boolean {
     if (user.recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
         println("Message $content was discarded as it was too similar to previous messages - ${
             user.recentMessages.associateWith { similarityProportion(it.msg, content) }
         }")
-        return false
+        return true
     }
-    return true
+    return false
 }

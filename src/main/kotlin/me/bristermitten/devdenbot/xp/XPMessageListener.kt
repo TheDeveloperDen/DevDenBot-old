@@ -39,6 +39,10 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
         val gained = xpForMessage(strippedMessage).roundToInt()
         val user = StatsUsers[message.author.idLong]
 
+        if (isTooSimilar(user, strippedMessage)) {
+            return
+        }
+
         val toCache = CachedMessage(
                 message.idLong,
                 member.idLong,
@@ -73,9 +77,15 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
             xpForMessage(prevMessage.msg)
         else 0.0
 
-        val curXP = if (shouldCountForStats(event.author, event.message.contentRaw, event.channel, config))
-            xpForMessage(contents)
+        val strippedMessage = stripMessage(event.message.contentRaw)
+
+        var curXP = if (shouldCountForStats(event.author, event.message.contentRaw, event.channel, config))
+            xpForMessage(strippedMessage)
         else 0.0
+
+        if (isTooSimilar(user, strippedMessage)) {
+            curXP = 0.0
+        }
 
         val diff = curXP.roundToInt() - prevXP.roundToInt()
 
