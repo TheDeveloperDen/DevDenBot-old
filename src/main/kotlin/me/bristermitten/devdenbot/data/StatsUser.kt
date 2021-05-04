@@ -23,7 +23,7 @@ data class StatsUser(
     var bumps: Int = 0,
 ) {
     @Transient
-    val recentMessages = CircularFifoQueue<String>(5)
+    val recentMessages = CircularFifoQueue<CachedMessage>(10)
 
     var lastMessageSentTime: Long = -1
 
@@ -31,4 +31,5 @@ data class StatsUser(
         this.xp += amount
         GlobalStats.xpGiven += amount
     }
+
 }

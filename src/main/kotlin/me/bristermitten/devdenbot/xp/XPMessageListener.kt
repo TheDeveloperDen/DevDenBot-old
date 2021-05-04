@@ -3,60 +3,120 @@ package me.bristermitten.devdenbot.xp
 import com.google.inject.Inject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import me.bristermitten.devdenbot.data.CachedMessage
+import me.bristermitten.devdenbot.data.MessageCache
+import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
+import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import kotlin.math.roundToInt
 
 /**
  * @author AlexL
  */
-class XPMessageListener @Inject constructor(private val config: DDBConfig) : ListenerAdapter() {
+class XPMessageListener @Inject constructor(private val config: DDBConfig, private val jda: JDA) : ListenerAdapter() {
 
     private val logger by log()
 
-    /**
-     * Filters out all form of discord mentions - roles, users, channels, and emotes
-     */
-    private val pingRegex = "<[a-zA-Z0-9@:&!#]+?[0-9]+>".toRegex()
-
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        if (event.message.contentRaw.startsWith(config.prefix)) {
-            return
-        }
-        if (!event.message.shouldCountForStats()) {
+        if (!shouldCountForStats(event.author, event.message.contentRaw, event.message.channel, config)) {
             return
         }
         val message = event.message
         val member = message.member ?: return
 
-        val strippedMessage = pingRegex.replace(message.contentStripped, "")
+        val strippedMessage = stripMessage(message.contentStripped)
 
         val gained = xpForMessage(strippedMessage).roundToInt()
         val user = StatsUsers[message.author.idLong]
 
+        val toCache = CachedMessage(
+                message.idLong,
+                member.idLong,
+                message.timeCreated.toInstant().toEpochMilli(),
+                strippedMessage
+        )
+
         synchronized(user) {
-            user.recentMessages.add(strippedMessage)
+            user.recentMessages.add(toCache)
+            MessageCache.cache(toCache)
             user.lastMessageSentTime = System.currentTimeMillis()
             user.giveXP(gained.toBigInteger())
 
-            val requiredForNextLevel = xpForLevel(user.level + 1)
-            if (user.xp >= requiredForNextLevel) {
-                GlobalScope.launch {
-                    GlobalStats.levelUps++
-                    sendLevelUpMessage(member, ++user.level)
-                }
-            }
+            checkLevelUp(member, user)
 
             logger.info {
                 "Gave ${event.author.name} $gained XP for a message (${event.message.id})"
+            }
+        }
+    }
+
+    override fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
+        val message = event.message
+        val contents = stripMessage(event.message.contentRaw)
+
+        val user = StatsUsers[message.author.idLong]
+        val member = event.member ?: return
+
+        val prevMessage = MessageCache.getCached(event.messageIdLong) ?: return
+
+        val prevXP = if (shouldCountForStats(event.author, prevMessage.msg, event.channel, config))
+            xpForMessage(prevMessage.msg)
+        else 0.0
+
+        val curXP = if (shouldCountForStats(event.author, event.message.contentRaw, event.channel, config))
+            xpForMessage(contents)
+        else 0.0
+
+        val diff = curXP.roundToInt() - prevXP.roundToInt()
+
+        MessageCache.update(event.messageIdLong, event.message.contentRaw)
+        synchronized (user) {
+            user.giveXP(diff.toBigInteger())
+            checkLevelUp(member, user)
+            logger.info {
+                "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
+            }
+        }
+    }
+
+    override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
+        val message = MessageCache.getCached(event.messageIdLong) ?: return
+        val contents = stripMessage(message.msg)
+
+        val user = StatsUsers[message.authorId]
+        val author = jda.getUserById(message.authorId) ?: return
+
+        if (!shouldCountForStats(author, message.msg, event.channel, config)) {
+            return
+        }
+
+        val gained = xpForMessage(contents).roundToInt()
+
+        synchronized (user) {
+            user.giveXP((-gained).toBigInteger())
+            logger.info {
+                "Took ${-gained} XP from ${author.name} for a message (${message.id})"
+            }
+        }
+    }
+
+    private fun checkLevelUp(member: Member, user: StatsUser) {
+        val requiredForNextLevel = xpForLevel(user.level + 1)
+        if (user.xp >= requiredForNextLevel) {
+            GlobalScope.launch {
+                GlobalStats.levelUps++
+                sendLevelUpMessage(member, ++user.level)
             }
         }
     }
