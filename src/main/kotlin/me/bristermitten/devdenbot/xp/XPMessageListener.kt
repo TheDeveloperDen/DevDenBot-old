@@ -90,7 +90,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Lis
     }
 
     override fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
-        logger.info { MessageCache.all }
+        logger.info { MessageCache.getCached(event.messageIdLong) }
         val message = MessageCache.getCached(event.messageIdLong) ?: return
         val contents = stripMessage(message.msg)
 
