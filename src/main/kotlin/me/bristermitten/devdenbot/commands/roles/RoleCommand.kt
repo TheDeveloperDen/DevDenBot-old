@@ -17,6 +17,10 @@ class RoleCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
+        if (args == ""){
+            channel.sendMessage("Invalid use of the role command: Please specify a role.")
+            return
+        }
         val roles = jda.getRolesByName(args, true)
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
         if (role == null) {
