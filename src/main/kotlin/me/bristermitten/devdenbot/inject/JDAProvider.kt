@@ -28,7 +28,10 @@ class JDAProvider @Inject constructor(
             .addEventListeners(commandClient, eventWaiter)
             .setEventManager(manager)
             .build()
-        listeners.forEach { it.register(jda) }
+        listeners.forEach { 
+             println("Register listener $it")
+             it.register(jda) 
+        }
         return jda
     }
 }
