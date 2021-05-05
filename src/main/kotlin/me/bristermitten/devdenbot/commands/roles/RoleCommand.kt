@@ -19,11 +19,6 @@ class RoleCommand @Inject constructor(
     override suspend fun CommandEvent.execute() {
         val roles = jda.getRolesByName(args, true)
         val role = roles.firstOrNull { ROLES.contains(it.idLong) }
-
-        if (role == null && args.length <= 2){
-            channel.sendMessage("Invalid role!")
-            return
-        }
         if (role == null) {
             val suggestion = getSuggestion(
                 args,

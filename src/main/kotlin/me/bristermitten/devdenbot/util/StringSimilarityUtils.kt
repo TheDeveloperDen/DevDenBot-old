@@ -15,11 +15,10 @@ fun getSuggestion(
     allowedValues: List<String>,
     threshold: Double = SUGGESTION_THRESHOLD,
 ): String? {
-
     if (input.length <= 2){
         return null;
     }
-
+    
     return allowedValues
         .map { it to similarity(input.toLowerCase(Locale.ROOT), it.toLowerCase(Locale.ROOT)) }
         .maxByOrNull { (_, distance) -> distance }
