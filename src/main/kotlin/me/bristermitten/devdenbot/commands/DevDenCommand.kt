@@ -38,7 +38,7 @@ abstract class DevDenCommand(
     private val logger by log()
 
     final override fun execute(event: CommandEvent) {
-        scope.launch() {
+        scope.launch {
             if (event.channel.idLong != botCommandsChannelId && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
