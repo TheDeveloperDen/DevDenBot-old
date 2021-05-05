@@ -2,8 +2,6 @@ package me.bristermitten.devdenbot.commands
 
 import com.jagrosh.jdautilities.command.Command
 import com.jagrosh.jdautilities.command.CommandEvent
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
 import me.bristermitten.devdenbot.extensions.commands.tempReply
@@ -40,15 +38,24 @@ abstract class DevDenCommand(
     private val logger by log()
 
     final override fun execute(event: CommandEvent) {
-        val handler = CoroutineExceptionHandler { _, exception ->
-            logger.error("Could not execute command for event $event.", exception)
-        }
-        scope.launch(handler) {
+        scope.launch() {
             if (event.channel.idLong != botCommandsChannelId && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
             }
-            event.execute()
+            try {
+                event.execute()
+            } catch (exception: Exception){
+                event.channel.sendMessage(
+                    "Could not execute command. Stacktrace: ```${
+                        exception.stackTrace.joinToString(
+                            "\n",
+                            limit = 50
+                        )
+                    }```"
+                )
+                logger.error("Could not execute command for event $event.", exception)
+            }
         }
     }
 
