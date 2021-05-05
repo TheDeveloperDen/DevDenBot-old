@@ -56,7 +56,7 @@ fun xpForMessage(message: String): Double {
     val compressibility = compressibility(message)
     val wordiness = wordiness(message)
     val length = message.length.toDouble()
-    return ((1 - compressibility) * 0.7 + wordiness * 0.2) * tanh(length / 25.0) * length.pow(0.73)
+    return ((1 - compressibility) * (0.5 + 0.5 * wordiness)) * tanh(length / 25.0) * length.pow(0.73)
 }
 
 fun xpForLevel(level: Int): BigInteger = level.toBigDecimal()
