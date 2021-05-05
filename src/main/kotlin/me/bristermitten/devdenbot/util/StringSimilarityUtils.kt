@@ -8,14 +8,22 @@ val levenshtein = LevenshteinDistance.getDefaultInstance()::apply
 
 private const val SUGGESTION_THRESHOLD = .25
 
-private val similarity = SorensenDice(2)::similarity
+private const val k = 2 // number of letters that form a comparison group in the SD similarity algorithm
+private val similarity = SorensenDice(k)::similarity
 
 fun getSuggestion(
     input: String,
     allowedValues: List<String>,
     threshold: Double = SUGGESTION_THRESHOLD,
-): String? = allowedValues
+): String? {
+    if (input.length <= k){
+        return null;
+    }
+
+    return allowedValues
+        .filter{ it.length >= k }
         .map { it to similarity(input.toLowerCase(Locale.ROOT), it.toLowerCase(Locale.ROOT)) }
         .maxByOrNull { (_, distance) -> distance }
         ?.takeIf { (_, distance) -> distance >= threshold}
         ?.first
+}
