@@ -1,9 +1,7 @@
 package me.bristermitten.devdenbot.leaderboard
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
-import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.extensions.commands.KotlinEmbedBuilder
-import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeUnit
  */
 class DevDenPaginator<T> constructor(
     private val valueSupplier: (Int) -> T,
-    private val valueRenderer: suspend (KotlinEmbedBuilder, T, Int) -> Unit,
+    private val valueRenderer: (KotlinEmbedBuilder, T, Int) -> Unit,
     private val entriesPerPage: Int = 10,
     private val entryCount: Int,
     private val title: String = "",
@@ -36,18 +34,14 @@ class DevDenPaginator<T> constructor(
         private val timeoutUnit: TimeUnit = TimeUnit.SECONDS
     }
 
-
     fun display(channel: MessageChannel, page: Int = 0) = showMessage(page) { channel.sendMessage(it) }
 
     private fun update(msg: Message, page: Int) = showMessage(page) { msg.editMessage(it) }
 
     private fun showMessage(page: Int, showAction: (MessageEmbed) -> MessageAction) =
-        scope.launch {
-            val embed = render(page)
-            showAction.invoke(embed).queue { addReactions(it, page); addReactionListener(it, page) }
-        }
+            showAction.invoke(render(page)).queue { addReactions(it, page); addReactionListener(it, page) }
 
-    private suspend fun render(page: Int): MessageEmbed {
+    private fun render(page: Int): MessageEmbed {
         val embedBuilder = KotlinEmbedBuilder()
         val start = page * entriesPerPage
         val end = min((page + 1) * entriesPerPage, entryCount)
