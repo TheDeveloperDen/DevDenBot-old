@@ -1,6 +1,8 @@
 package me.bristermitten.devdenbot.xp.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter
+import com.jagrosh.jdautilities.menu.Paginator
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
@@ -8,8 +10,11 @@ import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.reply
+import me.bristermitten.devdenbot.leaderboard.DevDenPaginator
+import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.serialization.PrettyName
 import net.dv8tion.jda.api.JDA
+import java.awt.Color
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import kotlin.reflect.full.createType
@@ -21,7 +26,7 @@ import kotlin.reflect.full.isSubtypeOf
  * @author AlexL
  */
 class LeaderboardCommand @Inject constructor(
-    val jda: JDA,
+    private val eventWaiter: EventWaiter,
 ) : DevDenCommand(
     name = "leaderboard",
     help = "View the leaderboard",
@@ -87,25 +92,25 @@ class LeaderboardCommand @Inject constructor(
     }
 
     private suspend fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
-        count: Int,
+        entriesPerPage: Int,
         by: (StatsUser) -> C,
         leaderboardName: String,
     ) {
-        val users = StatsUsers.all
+        val users = StatsUsers.all.sortedByDescending(by)
 
-        val sorted = users.sortedByDescending(by)
-            .take(count)
-
-        reply {
-            title = "Top $count Users based on $leaderboardName"
-
-            for ((index, elem) in sorted.withIndex()) {
-                field(
-                    "#${index + 1} - ${by(elem)} $leaderboardName",
-                    jda.retrieveUserById(elem.userId).await()?.asMention ?: "Unknown User (${elem.userId})",
+        DevDenPaginator(
+            { users[it] },
+            { builder, statsUser, index ->
+                builder.field(
+                    "#${index + 1} - ${by(statsUser)} $leaderboardName",
+                    jda.retrieveUserById(statsUser.userId).await()?.asMention ?: "Unknown User (${statsUser.userId})",
                 )
-            }
-        }
+            },
+            entryCount = users.size,
+            title = "Users ranked by $leaderboardName",
+            eventWaiter = eventWaiter,
+            entriesPerPage = entriesPerPage,
+        ).display(channel)
     }
 
 }
