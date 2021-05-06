@@ -103,7 +103,7 @@ class LeaderboardCommand @Inject constructor(
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${by(statsUser)} $leaderboardName",
-                    jda.retrieveUserById(statsUser.userId).await()?.asMention ?: "Unknown User (${statsUser.userId})",
+                    jda.retrieveUserById(statsUser.userId, false).await()?.asMention ?: "Unknown User (${statsUser.userId})",
                 )
             },
             entryCount = users.size,
