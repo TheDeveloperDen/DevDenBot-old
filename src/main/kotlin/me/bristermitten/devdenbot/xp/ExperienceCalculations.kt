@@ -9,9 +9,7 @@ import kotlin.math.tanh
 private val words by lazy {
     val words = object {}.javaClass.classLoader.getResourceAsStream("words.txt")
     requireNotNull(words)
-    words.bufferedReader().useLines { lines ->
-        lines.map(String::toLowerCase).toSet()
-    }
+    words.bufferedReader().useLines {it.toSet()}
 }
 
 fun compressibility(str: String): Double {
