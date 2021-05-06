@@ -99,14 +99,14 @@ class LeaderboardCommand @Inject constructor(
         val users = StatsUsers.all.sortedByDescending(by)
 
         DevDenPaginator(
-            { users[it % users.size] }, //TODO replace with it
+            { users[it] },
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${by(statsUser)} $leaderboardName",
                     jda.retrieveUserById(statsUser.userId).await()?.asMention ?: "Unknown User (${statsUser.userId})",
                 )
             },
-            entryCount = 40, //TODO replace with users.size
+            entryCount = users.size,
             title = "Users ranked by $leaderboardName",
             eventWaiter = eventWaiter,
             entriesPerPage = entriesPerPage,
