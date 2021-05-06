@@ -9,6 +9,8 @@ import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.Permission
+import java.io.PrintWriter
+import java.io.StringWriter
 
 /**
  * @author Alexander Wood (BristerMitten)
@@ -46,14 +48,12 @@ abstract class DevDenCommand(
             try {
                 event.execute()
             } catch (exception: Exception){
+                val stringWriter = StringWriter()
+                exception.printStackTrace(PrintWriter(stringWriter))
+
                 event.channel.sendMessage(
-                    "Could not execute command. Stacktrace: ```${
-                        exception.stackTrace.joinToString(
-                            "\n",
-                            limit = 50
-                        )
-                    }```"
-                )
+                    "Could not execute command. Stacktrace: ```$stringWriter```"
+                ).queue()
                 logger.error("Could not execute command for event $event.", exception)
             }
         }
