@@ -25,7 +25,7 @@ class DevDenPaginator<T> constructor(
     private val entryCount: Int,
     private val title: String = "",
     private val eventWaiter: EventWaiter,
-    ) {
+) {
 
     companion object {
         private const val LEFT = "\u25C0"
@@ -55,6 +55,7 @@ class DevDenPaginator<T> constructor(
         (start until end)
             .map { it to valueSupplier.invoke(it) }
             .forEach { (idx, value) -> valueRenderer.invoke(embedBuilder, value, idx) }
+        embedBuilder.footer = "Page ${page + 1}/${pageCount()}"
 
         return embedBuilder.build()
     }
