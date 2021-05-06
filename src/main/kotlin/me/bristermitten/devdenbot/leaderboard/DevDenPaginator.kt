@@ -30,6 +30,8 @@ class DevDenPaginator<T> constructor(
         private const val STOP = "\u23F9"
         private const val RIGHT = "\u25B6"
 
+        private val relevantEmojis = listOf(LEFT, STOP, RIGHT)
+
         private const val timeout: Long = 60
         private val timeoutUnit: TimeUnit = TimeUnit.SECONDS
     }
@@ -64,7 +66,11 @@ class DevDenPaginator<T> constructor(
     private fun addReactionListener(msg: Message, page: Int) =
         eventWaiter.waitForEvent(
             MessageReactionAddEvent::class.java,
-            { it.messageIdLong == msg.idLong && it.user?.isBot == false },
+            {
+                it.messageIdLong == msg.idLong
+                        && it.reactionEmote.name in relevantEmojis
+                        && it.user?.isBot == false
+            },
             { handleReaction(it, msg, page) },
             timeout, timeoutUnit
         ) { cleanUp(msg) }
