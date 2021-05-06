@@ -92,7 +92,6 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
 
     private suspend fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         val message = MessageCache.getCached(event.messageIdLong) ?: return
-        val contents = stripMessage(message.msg)
 
         val user = StatsUsers[message.authorId]
         val author = event.jda.retrieveUserById(message.authorId).await() ?: return
@@ -100,7 +99,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         if (!shouldCountForStats(author, message.msg, event.channel, config)) {
             return
         }
-        val gained = xpForMessage(contents).roundToInt()
+        val gained = xpForMessage(message.msg).roundToInt()
 
         user.giveXP((-gained).toBigInteger())
         logger.info {
