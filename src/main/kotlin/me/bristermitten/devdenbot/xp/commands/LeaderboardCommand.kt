@@ -98,12 +98,13 @@ class LeaderboardCommand @Inject constructor(
     ) {
         val users = StatsUsers.all.sortedByDescending(by)
 
+
         DevDenPaginator(
             { users[it] },
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${by(statsUser)} $leaderboardName",
-                    jda.retrieveUserById(statsUser.userId, false).await()?.asMention ?: "Unknown User (${statsUser.userId})",
+                    "<@${statsUser.userId}>",
                 )
             },
             entryCount = users.size,
