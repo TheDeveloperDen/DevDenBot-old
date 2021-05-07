@@ -20,7 +20,6 @@ class BumpNotificationListener : ListenerAdapter() {
 
     companion object {
         private const val DISBOARD_BOT_ID = 302050872383242240
-        private const val SUCCESS_COLOR = -1;
         private val BUMP_COOLDOWN = TimeUnit.HOURS.toMillis(2)
     }
 
@@ -29,9 +28,7 @@ class BumpNotificationListener : ListenerAdapter() {
         if (event.author.idLong != DISBOARD_BOT_ID) {
             return
         }
-        event.channel.sendMessage("embed color: "+event.message.embeds.first().color)
-
-        if(event.message.embeds.first(). colorRaw != SUCCESS_COLOR) {
+        if(!event.message.embeds.first().description?.contains("Check it on DISBOARD:")!!) {
             return
         }
 
