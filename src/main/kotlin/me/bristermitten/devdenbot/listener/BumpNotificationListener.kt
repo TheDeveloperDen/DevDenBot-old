@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.util.concurrent.TimeUnit
 
 class BumpNotificationListener : ListenerAdapter() {
+
     companion object {
         private const val DISBOARD_BOT_ID = 302050872383242240
         private val BUMP_COOLDOWN = TimeUnit.HOURS.toMillis(2)
@@ -28,7 +29,7 @@ class BumpNotificationListener : ListenerAdapter() {
             return
         }
 
-        if(!event.message.contentRaw.contains(":thumbsup:")) {
+        if(!event.message.embeds.first().description?.contains(":thumbsup:")!!) {
             return
         }
 
