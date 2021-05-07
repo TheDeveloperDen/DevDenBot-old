@@ -13,6 +13,7 @@ import me.bristermitten.devdenbot.extensions.commands.reply
 import me.bristermitten.devdenbot.leaderboard.DevDenPaginator
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.serialization.PrettyName
+import me.bristermitten.devdenbot.util.mention
 import net.dv8tion.jda.api.JDA
 import java.awt.Color
 import java.util.concurrent.atomic.AtomicInteger
@@ -91,7 +92,7 @@ class LeaderboardCommand @Inject constructor(
         sendLeaderboard(count, func, prettyName)
     }
 
-    private suspend fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
+    private fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
         entriesPerPage: Int,
         by: (StatsUser) -> C,
         leaderboardName: String,
@@ -104,7 +105,7 @@ class LeaderboardCommand @Inject constructor(
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${by(statsUser)} $leaderboardName",
-                    "<@${statsUser.userId}>",
+                    mention(statsUser.userId)
                 )
             },
             entryCount = users.size,
