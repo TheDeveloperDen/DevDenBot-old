@@ -99,12 +99,13 @@ class LeaderboardCommand @Inject constructor(
     ) {
         val users = StatsUsers.all.sortedByDescending(by)
 
+
         DevDenPaginator(
             { users[it] },
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${by(statsUser)} $leaderboardName",
-                    mention(statsUser.userId),
+                    mention(statsUser.userId)
                 )
             },
             entryCount = users.size,
