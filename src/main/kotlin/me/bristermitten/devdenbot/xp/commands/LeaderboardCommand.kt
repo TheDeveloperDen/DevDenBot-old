@@ -2,22 +2,17 @@ package me.bristermitten.devdenbot.xp.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
-import com.jagrosh.jdautilities.menu.Paginator
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
-import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
-import me.bristermitten.devdenbot.extensions.commands.reply
 import me.bristermitten.devdenbot.leaderboard.DevDenPaginator
-import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.mention
-import net.dv8tion.jda.api.JDA
-import java.awt.Color
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubtypeOf
@@ -82,7 +77,7 @@ class LeaderboardCommand @Inject constructor(
         val propertyType = property.returnType
         val func: (StatsUser) -> Comparable<Any> =
             when {
-                propertyType.isSubtypeOf(Comparable::class.createType()) -> { it -> property(it) as Comparable<Any> }
+                propertyType.isSubtypeOf(Comparable::class.createType(listOf(KTypeProjection.STAR))) -> { it -> property(it) as Comparable<Any> }
                 propertyType == AtomicInteger::class.createType() -> { it ->
                     (property(it) as AtomicInteger).get() as Comparable<Any>
                 }
