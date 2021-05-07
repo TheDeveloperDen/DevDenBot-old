@@ -73,7 +73,9 @@ class LeaderboardCommand @Inject constructor(
             }
         }
 
-        val prettyName = property.findAnnotation<PrettyName>()?.prettyName ?: leaderboardBy.capitalize()
+        val prettyName = property.findAnnotation<PrettyName>()?.prettyName ?: leaderboardBy.replaceFirstChar {
+            it.uppercase()
+        }
         val propertyType = property.returnType
         val func: (StatsUser) -> Comparable<Any> =
             when {
