@@ -11,6 +11,7 @@ import me.bristermitten.devdenbot.commands.category.CommandCategory
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
@@ -19,6 +20,7 @@ import javax.inject.Inject
 /**
  * @author Alexander Wood (BristerMitten)
  */
+@Used
 class HelpCommand @Inject constructor(
     private val commandClient: Provider<CommandClient>,
     private val DDBConfig: DDBConfig,

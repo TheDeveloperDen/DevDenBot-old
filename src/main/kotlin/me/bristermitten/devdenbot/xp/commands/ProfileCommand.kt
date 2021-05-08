@@ -5,12 +5,14 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.prepareReply
+import me.bristermitten.devdenbot.inject.Used
 import javax.inject.Inject
 
 
 /**
  * @author AlexL
  */
+@Used
 class ProfileCommand @Inject constructor(
 ) : DevDenCommand(
     name = "profile",

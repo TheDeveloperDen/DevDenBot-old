@@ -2,7 +2,6 @@ package me.bristermitten.devdenbot.util
 
 import info.debatty.java.stringsimilarity.SorensenDice
 import org.apache.commons.text.similarity.LevenshteinDistance
-import java.util.*
 
 val levenshtein = LevenshteinDistance.getDefaultInstance()::apply
 
@@ -16,14 +15,14 @@ fun getSuggestion(
     allowedValues: List<String>,
     threshold: Double = SUGGESTION_THRESHOLD,
 ): String? {
-    if (input.length <= k){
-        return null;
+    if (input.length <= k) {
+        return null
     }
 
     return allowedValues
-        .filter{ it.length >= k }
-        .map { it to similarity(input.toLowerCase(Locale.ROOT), it.toLowerCase(Locale.ROOT)) }
+        .filter { it.length >= k }
+        .map { it to similarity(input.lowercase(), it.lowercase()) }
         .maxByOrNull { (_, distance) -> distance }
-        ?.takeIf { (_, distance) -> distance >= threshold}
+        ?.takeIf { (_, distance) -> distance >= threshold }
         ?.first
 }

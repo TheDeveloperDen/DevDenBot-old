@@ -8,9 +8,9 @@ import me.bristermitten.devdenbot.data.MessageCache
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
@@ -23,6 +23,7 @@ import kotlin.math.roundToInt
 /**
  * @author AlexL
  */
+@Used
 class XPMessageListener @Inject constructor(private val config: DDBConfig) : EventListener {
 
     private val logger by log()

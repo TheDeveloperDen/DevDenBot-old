@@ -7,9 +7,11 @@ import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.leaderboard.DevDenPaginator
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.mention
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import kotlin.reflect.KTypeProjection
@@ -21,6 +23,7 @@ import kotlin.reflect.full.isSubtypeOf
 /**
  * @author AlexL
  */
+@Used
 class LeaderboardCommand @Inject constructor(
     private val eventWaiter: EventWaiter,
 ) : DevDenCommand(
@@ -60,7 +63,7 @@ class LeaderboardCommand @Inject constructor(
             }
             args.size == 1 -> "xp"
             else -> args[1]
-        }.toLowerCase()
+        }.lowercase(Locale.getDefault())
 
 
         val property = when (leaderboardBy) {
@@ -79,7 +82,9 @@ class LeaderboardCommand @Inject constructor(
         val propertyType = property.returnType
         val func: (StatsUser) -> Comparable<Any> =
             when {
-                propertyType.isSubtypeOf(Comparable::class.createType(listOf(KTypeProjection.STAR))) -> { it -> property(it) as Comparable<Any> }
+                propertyType.isSubtypeOf(Comparable::class.createType(listOf(KTypeProjection.STAR))) -> { it ->
+                    property(it) as Comparable<Any>
+                }
                 propertyType == AtomicInteger::class.createType() -> { it ->
                     (property(it) as AtomicInteger).get() as Comparable<Any>
                 }

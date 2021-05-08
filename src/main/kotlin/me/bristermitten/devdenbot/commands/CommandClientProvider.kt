@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.Activity
 /**
  * @author AlexL
  */
-class CommandClientProvider @Inject constructor(private val config: DDBConfig,) :
+class CommandClientProvider @Inject constructor(private val config: DDBConfig) :
     Provider<CommandClient> {
 
     override fun get(): CommandClient {

@@ -5,7 +5,6 @@ import dev.misfitlabs.kotlinguice4.multibindings.KotlinMultibinder
 import dev.misfitlabs.kotlinguice4.multibindings.KotlinMultibindingsScanner
 import me.bristermitten.devdenbot.inject.Classpath
 import me.bristermitten.devdenbot.listener.EventListener
-import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 /**
  * @author Alexander Wood (BristerMitten)

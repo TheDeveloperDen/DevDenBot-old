@@ -3,9 +3,11 @@ package me.bristermitten.devdenbot.commands.roles
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.inject.Used
 import net.dv8tion.jda.api.JDA
 import javax.inject.Inject
 
+@Used
 class DeroleCommand @Inject constructor(
     val jda: JDA,
 ) : DevDenCommand(

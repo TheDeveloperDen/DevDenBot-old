@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.AtomicBigInteger
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.formatNumber
@@ -15,6 +16,7 @@ import javax.inject.Inject
 /**
  * @author Alexander Wood (BristerMitten)
  */
+@Used
 class InfoCommand @Inject constructor(
     private val ddbConfig: DDBConfig,
 ) : DevDenCommand(
@@ -38,7 +40,7 @@ class InfoCommand @Inject constructor(
         val totalMembers = formatForInfo(event.guild.memberCount)
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
         val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
-        val levelUps = formatForInfo(StatsUsers.all.map { it.level }.map { it.get() }.sum())
+        val levelUps = formatForInfo(StatsUsers.all.map { it.level }.sumOf { it.get() })
         val formattedVersion = formatForInfo(version)
 
         reply(EmbedBuilder()

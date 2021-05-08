@@ -7,6 +7,7 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import java.math.BigInteger
 import javax.inject.Inject
@@ -20,6 +21,7 @@ import kotlin.reflect.full.memberProperties
 /**
  * @author AlexL
  */
+@Used
 class SetVarCommand @Inject constructor(
     val config: DDBConfig,
 ) : DevDenCommand(

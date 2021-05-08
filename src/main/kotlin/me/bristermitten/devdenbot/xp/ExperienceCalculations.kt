@@ -2,18 +2,17 @@ package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.CharTree
 import java.math.BigInteger
-import java.util.*
 import kotlin.math.pow
 import kotlin.math.tanh
 
 private val words by lazy {
     val words = object {}.javaClass.classLoader.getResourceAsStream("words.txt")
     requireNotNull(words)
-    words.bufferedReader().useLines {it.toSet()}
+    words.bufferedReader().useLines { it.toSet() }
 }
 
 fun compressibility(str: String): Double {
-    val lower = str.toLowerCase()
+    val lower = str.lowercase()
     val tree = CharTree<Unit>()
     var cut = 0
     var i = 0
@@ -38,7 +37,7 @@ private val punctuationRegex = "[.?,!\\-'\"`]".toRegex()
 fun wordiness(str: String): Double {
     val split = punctuationRegex.replace(str.lowercase(), "") // Strip punctuation to not affect the score
         .split(" ")
-    return split.sumBy { s -> if (s in words) s.length + 1 else 0 } / str.length.toDouble()
+    return split.sumOf { s -> if (s in words) s.length + 1 else 0 } / str.length.toDouble()
 }
 
 /**

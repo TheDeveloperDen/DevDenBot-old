@@ -1,6 +1,5 @@
 package me.bristermitten.devdenbot.util
 
-import java.math.BigInteger
 import java.text.NumberFormat
 import java.util.*
 

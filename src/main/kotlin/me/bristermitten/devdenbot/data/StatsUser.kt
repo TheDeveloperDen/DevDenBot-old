@@ -9,11 +9,8 @@ import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.serialization.AtomicIntegerSerializer
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
-import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.atomic
-import org.apache.commons.collections4.queue.CircularFifoQueue
 import java.math.BigInteger
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 /**

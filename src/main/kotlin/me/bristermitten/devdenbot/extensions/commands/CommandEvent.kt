@@ -19,11 +19,6 @@ import kotlin.coroutines.suspendCoroutine
  * @author Alexander Wood (BristerMitten)
  */
 
-suspend inline fun CommandEvent.reply(function: (KotlinEmbedBuilder).() -> Unit): Message {
-    val builder = KotlinEmbedBuilder().apply(function)
-
-    return event.channel.sendMessage(builder.build()).await()
-}
 
 suspend inline fun CommandEvent.awaitReply(message: String): Message {
     return suspendCoroutine { cont ->

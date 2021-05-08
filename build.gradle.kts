@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.serialization") version "1.5.0"
@@ -13,7 +11,6 @@ version = "1.2.3"
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io")
     maven("https://maven.scijava.org/content/groups/public/")

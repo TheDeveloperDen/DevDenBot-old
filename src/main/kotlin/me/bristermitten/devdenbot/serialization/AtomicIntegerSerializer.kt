@@ -7,7 +7,6 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import me.bristermitten.devdenbot.util.atomic
-import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
