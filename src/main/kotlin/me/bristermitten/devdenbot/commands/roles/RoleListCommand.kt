@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.commands.roles
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.discord.SELF_ROLES
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
@@ -21,7 +22,7 @@ class RoleListCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val roleList = ROLES
+        val roleList = SELF_ROLES
             .mapNotNull { jda.getRoleById(it) }
             .joinToString("\n") { ">> " + it.name }
         val builder = EmbedBuilder()

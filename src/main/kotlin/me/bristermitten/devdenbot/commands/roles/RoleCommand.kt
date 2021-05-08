@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.commands.roles
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.discord.SELF_ROLES
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.getSuggestion
@@ -24,11 +25,11 @@ class RoleCommand @Inject constructor(
             return
         }
         val roles = jda.getRolesByName(args, true)
-        val role = roles.firstOrNull { ROLES.contains(it.idLong) }
+        val role = roles.firstOrNull { SELF_ROLES.contains(it.idLong) }
         if (role == null) {
             val suggestion = getSuggestion(
                 args,
-                ROLES.mapNotNull { jda.getRoleById(it.toString())?.name })
+                SELF_ROLES.mapNotNull { jda.getRoleById(it.toString())?.name })
                 ?.let { " Do you mean '$it'?" } ?: ""
             channel.sendMessage("Invalid role!$suggestion").await()
             return

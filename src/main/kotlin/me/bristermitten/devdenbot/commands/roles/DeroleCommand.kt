@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.commands.roles
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.discord.SELF_ROLES
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import net.dv8tion.jda.api.JDA
@@ -19,7 +20,7 @@ class DeroleCommand @Inject constructor(
 
     override suspend fun CommandEvent.execute() {
         val roles = jda.getRolesByName(args, true)
-        val role = roles.firstOrNull { ROLES.contains(it.idLong) }
+        val role = roles.firstOrNull { SELF_ROLES.contains(it.idLong) }
         if (role == null) {
             channel.sendMessage("Invalid role!").await()
             return

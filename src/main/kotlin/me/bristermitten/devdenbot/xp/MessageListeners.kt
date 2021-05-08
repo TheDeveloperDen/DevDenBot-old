@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.levenshtein
+import mu.KotlinLogging
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.User
 
@@ -16,6 +17,8 @@ private const val MIN_MESSAGE_LEN = 6
 private const val MIN_DISTANCE = 0.4f
 
 private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.toDouble()
+
+private val log = KotlinLogging.logger("MessageListeners")
 
 fun shouldCountForStats(author: User, content: String, channel: MessageChannel, config: DDBConfig): Boolean {
     if (content.startsWith(config.prefix)) {
@@ -36,7 +39,7 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
 
     val user = StatsUsers[author.idLong]
     if (now - user.lastMessageSentTime < MESSAGE_MIN_DELAY_MILLIS) {
-        println("Message $content was discarded as $user typed ${now - user.lastMessageSentTime}ms ago")
+        log.info { "Message $content was discarded as $user typed ${now - user.lastMessageSentTime}ms ago" }
         return false
     }
 
@@ -52,9 +55,11 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
 fun isTooSimilar(user: StatsUser, content: String): Boolean {
     val recentMessages = user.recentMessages.copy()
     if (recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
-        println("Message $content was discarded as it was too similar to previous messages - ${
-            user.recentMessages.associateWith { similarityProportion(it.msg, content) }
-        }")
+        log.info {
+            "Message $content was discarded as it was too similar to previous messages - ${
+                user.recentMessages.associateWith { similarityProportion(it.msg, content) }
+            }"
+        }
         return true
     }
     return false

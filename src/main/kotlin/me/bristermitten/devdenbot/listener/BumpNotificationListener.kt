@@ -3,8 +3,8 @@ package me.bristermitten.devdenbot.listener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import me.bristermitten.devdenbot.commands.roles.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.discord.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.inc

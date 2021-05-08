@@ -47,7 +47,11 @@ abstract class DevDenCommand(
             }
             try {
                 event.execute()
-            } catch (exception: Exception){
+            } catch (preconditionFailed: PreconditionFailedException) {
+                preconditionFailed.reason?.let {
+                    event.reply(it)
+                }
+            } catch (exception: Exception) {
                 val stringWriter = StringWriter()
                 exception.printStackTrace(PrintWriter(stringWriter))
 

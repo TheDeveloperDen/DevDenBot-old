@@ -34,7 +34,11 @@ dependencies {
     implementation("com.github.MinnDevelopment:jda-reactor:b3968f8e4e")
 
     implementation("org.apache.commons:commons-text:1.9")
-    implementation("org.slf4j:slf4j-simple:2.0.0-alpha1")
+    implementation("org.slf4j:slf4j-api:2.0.0-alpha1")
+
+    implementation("ch.qos.logback:logback-core:1.3.0-alpha5")
+    implementation("ch.qos.logback:logback-classic:1.3.0-alpha5")
+
     implementation("io.github.microutils:kotlin-logging:1.8.3")
 
     implementation("io.github.classgraph:classgraph:4.8.90")

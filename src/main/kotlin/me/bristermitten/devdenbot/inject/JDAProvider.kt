@@ -7,6 +7,7 @@ import com.jagrosh.jdautilities.command.CommandClient
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.util.log
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -20,7 +21,7 @@ class JDAProvider @Inject constructor(
     private val eventWaiter: EventWaiter,
     private val listeners: Set<EventListener>,
 ) : Provider<JDA> {
-
+    private val log by log()
     override fun get(): JDA {
         val manager = ReactiveEventManager()
         val jda = JDABuilder.createDefault(config.token)
@@ -28,10 +29,12 @@ class JDAProvider @Inject constructor(
             .addEventListeners(commandClient, eventWaiter)
             .setEventManager(manager)
             .build()
-        listeners.forEach { 
-             println("Register listener $it")
-             it.register(jda) 
+
+        listeners.forEach {
+            log.info { "Registered listener $it" }
+            it.register(jda)
         }
+
         return jda
     }
 }

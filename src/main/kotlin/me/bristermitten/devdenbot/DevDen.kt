@@ -2,16 +2,18 @@ package me.bristermitten.devdenbot
 
 import com.google.inject.Guice
 import com.jagrosh.jdautilities.command.CommandClient
+import dev.misfitlabs.kotlinguice4.getInstance
 import kotlinx.serialization.json.Json
 import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
-import me.bristermitten.devdenbot.commands.ListenersModule
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
+import me.bristermitten.devdenbot.listener.ListenersModule
+import me.bristermitten.devdenbot.log.initLogging
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
-import me.bristermitten.devdenbot.util.getInstance
+import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import net.dv8tion.jda.api.JDA
 import java.io.File
@@ -21,33 +23,34 @@ import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
 
 class DevDen {
-
-    private lateinit var jda: JDA
-
+    private val log by log()
     fun start() {
         val config = Json.decodeFromString(DDBConfig.serializer(), javaClass.getResource("/config.json")!!.readText())
-            .let { it.copy(token = System.getenv("DDB_TOKEN") ?: it.token) }
+            .let {
+                it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
+            }
 
         loadStats()
 
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
 
-        jda = injector.getInstance()
-
+        val jda = injector.getInstance<JDA>()
+        initLogging(jda, config.loggingChannelId)
 
         val commandClient = injector.getInstance<CommandClient>()
         val commands = injector.getInstance<Set<DevDenCommand>>()
+
         commands.forEach {
             commandClient.addCommand(it)
-            println("Registered ${it.javaClass.name}!")
+            log.info("Registered ${it.javaClass.name}!")
         }
 
         jda.awaitReady()
         GraphicsContext.init()
-        startTasks()
+        startTasks(jda)
     }
 
-    private fun startTasks() {
+    private fun startTasks(jda: JDA) {
 
         val timer = Timer()
         timer.schedule(0, TimeUnit.MINUTES.toMillis(5)) {
