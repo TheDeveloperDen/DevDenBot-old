@@ -4,6 +4,6 @@ import me.bristermitten.devdenbot.data.StatsUser
 
 object Leaderboards {
 
-    val XP = Leaderboard<StatsUser> { o1, o2 -> o2.xp.get().compareTo(o1.xp.get()) }
+    val XP = Leaderboard<StatsUser>(compareBy { it.xp.get() })
 
 }
