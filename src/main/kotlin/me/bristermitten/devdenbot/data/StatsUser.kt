@@ -5,6 +5,7 @@ package me.bristermitten.devdenbot.data
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
+import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.serialization.AtomicIntegerSerializer
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
@@ -33,6 +34,9 @@ data class StatsUser(
 
     fun giveXP(amount: BigInteger) {
         this.xp += amount
+        Leaderboards.XP.getPosition(this).also { Leaderboards.XP.update(this) } ?: run {
+            Leaderboards.XP.add(this)
+        }
     }
 
 }
