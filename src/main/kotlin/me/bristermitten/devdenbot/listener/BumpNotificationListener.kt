@@ -28,8 +28,7 @@ class BumpNotificationListener : ListenerAdapter() {
         if (event.author.idLong != DISBOARD_BOT_ID) {
             return
         }
-
-        if(!event.message.embeds.first().description?.contains(":thumbsup:")!!) {
+        if(!event.message.embeds.first().description?.contains("Check it on DISBOARD:")!!) {
             return
         }
 
