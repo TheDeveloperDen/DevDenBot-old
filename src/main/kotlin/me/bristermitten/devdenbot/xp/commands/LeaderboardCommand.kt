@@ -29,6 +29,7 @@ class LeaderboardCommand @Inject constructor(
 ) : DevDenCommand(
     name = "leaderboard",
     help = "View the leaderboard",
+    category = XPCategory,
     aliases = arrayOf("top", "lb")
 ) {
     private companion object {
@@ -80,6 +81,7 @@ class LeaderboardCommand @Inject constructor(
             it.uppercase()
         }
         val propertyType = property.returnType
+        //Please don't modify this ever it's horrible
         val func: (StatsUser) -> Comparable<Any> =
             when {
                 propertyType.isSubtypeOf(Comparable::class.createType(listOf(KTypeProjection.STAR))) -> { it ->

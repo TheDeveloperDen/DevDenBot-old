@@ -25,7 +25,8 @@ class XPCommand @Inject constructor(
     name = "xp",
     help = "View the xp of a user",
     cooldown = 2,
-    aliases = arrayOf("experience", "my-xp", "lvl")
+    aliases = arrayOf("experience", "my-xp", "lvl"),
+    category = XPCategory
 ) {
 
     companion object {
