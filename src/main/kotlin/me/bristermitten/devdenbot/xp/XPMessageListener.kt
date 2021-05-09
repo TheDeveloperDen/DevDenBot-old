@@ -1,8 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
 import com.google.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
 import me.bristermitten.devdenbot.data.StatsUser
@@ -138,8 +136,8 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageDeleteEvent>().onEach(this::onGuildMessageDelete).launchIn(scope)
-        jda.listenFlow<GuildMessageUpdateEvent>().onEach(this::onGuildMessageUpdate).launchIn(scope)
-        jda.listenFlow<GuildMessageReceivedEvent>().onEach(this::onGuildMessageReceived).launchIn(scope)
+        jda.listenFlow<GuildMessageDeleteEvent>().launchEachIn(scope, this::onGuildMessageDelete)
+        jda.listenFlow<GuildMessageUpdateEvent>().launchEachIn(scope, this::onGuildMessageUpdate)
+        jda.listenFlow<GuildMessageReceivedEvent>().launchEachIn(scope, this::onGuildMessageReceived)
     }
 }

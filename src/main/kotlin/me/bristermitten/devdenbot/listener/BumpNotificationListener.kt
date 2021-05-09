@@ -2,16 +2,15 @@ package me.bristermitten.devdenbot.listener
 
 import club.minnced.jda.reactor.onMessage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.discord.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.util.inc
-import me.bristermitten.devdenbot.util.listenFlow
-import me.bristermitten.devdenbot.util.log
-import me.bristermitten.devdenbot.util.scope
+import me.bristermitten.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import java.util.concurrent.TimeUnit
@@ -63,6 +62,6 @@ class BumpNotificationListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().onEach(this::onGuildMessageReceived).launchIn(scope)
+        jda.listenFlow<GuildMessageReceivedEvent>().launchEachIn(scope, this::onGuildMessageReceived)
     }
 }
