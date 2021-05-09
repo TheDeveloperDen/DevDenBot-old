@@ -20,6 +20,7 @@ class BumpNotificationListener : EventListener {
     companion object {
         private const val DISBOARD_BOT_ID = 302050872383242240
         private val BUMP_COOLDOWN = TimeUnit.HOURS.toMillis(2)
+        private val log by log()
     }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
@@ -27,15 +28,24 @@ class BumpNotificationListener : EventListener {
             return
         }
 
+        log.trace { "Received message from DISBOARD bot with description ${event.message.embeds.first().description}." }
+
         if (!event.message.embeds.first().description?.contains("Check it on DISBOARD:")!!) {
             return
         }
 
+
         StatsUsers[event.message.mentionedUsers[0].idLong].bumps++
+        log.trace {
+            "Increased bump stat for user ${event.message.mentionedUsers[0].name} from ${
+                StatsUsers[event.message.mentionedUsers[0].idLong].bumps.get() - 1
+            } to ${StatsUsers[event.message.mentionedUsers[0].idLong].bumps}."
+        }
 
         delay(BUMP_COOLDOWN)
         val bumpNotificationRole =
             requireNotNull(event.jda.getRoleById(BUMP_NOTIFICATIONS_ROLE_ID)) { "Bump Notifications role not found" }
+        log.trace { "Sending bump ready notification to users with the bump notification role" }
         event.channel.sendMessage("${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**")
             .await()
     }

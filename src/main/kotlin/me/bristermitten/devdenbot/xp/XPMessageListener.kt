@@ -26,7 +26,9 @@ import kotlin.math.roundToInt
 @Used
 class XPMessageListener @Inject constructor(private val config: DDBConfig) : EventListener {
 
-    private val logger by log()
+    companion object {
+        private val log by log()
+    }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (!shouldCountForStats(event.author, event.message.contentRaw, event.message.channel, config)) {
@@ -41,6 +43,11 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val user = StatsUsers[message.author.idLong]
 
         if (isTooSimilar(user, strippedMessage)) {
+            log.info {
+                "Message $strippedMessage was discarded as it was too similar to previous messages - ${
+                    user.recentMessages.associateWith { similarityProportion(it.msg, strippedMessage) }
+                }"
+            }
             return
         }
 
@@ -58,7 +65,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
 
         checkLevelUp(member, user)
 
-        logger.info {
+        log.info {
             "Gave ${event.author.name} $gained XP for a message (${event.message.id})"
         }
     }
@@ -86,7 +93,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
         user.giveXP(diff.toBigInteger())
         checkLevelUp(member, user)
-        logger.info {
+        log.info {
             "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
         }
     }
@@ -103,8 +110,8 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val gained = xpForMessage(message.msg).roundToInt()
 
         user.giveXP((-gained).toBigInteger())
-        logger.info {
-            "Took ${-gained} XP from ${author.name} for a message (${message.id})"
+        log.info {
+            "Took $gained XP from ${author.name} for deleting a message (${message.id})"
         }
     }
 
@@ -127,6 +134,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
             }
             user.guild.addRoleToMember(user, tierRole).await()
         }
+        log.trace { "Processed level up for ${user.user.name}" }
     }
 
     override fun register(jda: JDA) {
