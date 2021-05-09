@@ -4,6 +4,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import me.bristermitten.devdenbot.util.log
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap
 object StatsUsers {
 
     private val users = ConcurrentHashMap<Long, StatsUser>()
+    private val log by log()
 
     operator fun get(userId: Long): StatsUser {
         return users.getOrPut(userId) {
@@ -23,6 +25,7 @@ object StatsUsers {
         val map = Json.decodeFromString<Map<Long, StatsUser>>(text)
         users.clear()
         users.putAll(map)
+        log.debug("Loaded stats for ${users.size} users.")
     }
 
     fun saveToString(): String {

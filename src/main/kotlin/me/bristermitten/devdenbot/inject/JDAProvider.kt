@@ -31,7 +31,7 @@ class JDAProvider @Inject constructor(
             .build()
 
         listeners.forEach {
-            log.info { "Registered listener $it" }
+            log.debug { "Registering listener $it" }
             it.register(jda)
         }
 

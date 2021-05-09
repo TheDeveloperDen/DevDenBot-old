@@ -42,7 +42,7 @@ class DevDen {
 
         commands.forEach {
             commandClient.addCommand(it)
-            log.info("Registered ${it.javaClass.name}!")
+            log.debug("Registered ${it.javaClass.name}!")
         }
 
         jda.awaitReady()
@@ -51,7 +51,7 @@ class DevDen {
     }
 
     private fun startTasks(jda: JDA) {
-
+        log.info { "starting tasks..." }
         val timer = Timer()
         timer.schedule(0, TimeUnit.MINUTES.toMillis(5)) {
             saveStats()
@@ -67,19 +67,23 @@ class DevDen {
     private val globalStatsFilePath = "/var/data/globalstats.json"
 
     private fun loadStats() {
+        log.trace("loading stats...")
         val statsFile = File(statsFilePath)
         if (statsFile.exists()) {
             val content = statsFile.readText()
             StatsUsers.loadFrom(content)
+            log.trace { "Loading stats from $statsFilePath finished." }
         }
 
         val globalStatsFile = File(globalStatsFilePath)
         if (globalStatsFile.exists()) {
             GlobalStats.loadFrom(globalStatsFile.readText())
+            log.trace { "Loading global stats from $globalStatsFilePath finished." }
         }
     }
 
     private fun saveStats() {
+        log.trace("saving stats...")
         val statsFile = File(statsFilePath)
         val content = StatsUsers.saveToString()
         statsFile.writeText(content)

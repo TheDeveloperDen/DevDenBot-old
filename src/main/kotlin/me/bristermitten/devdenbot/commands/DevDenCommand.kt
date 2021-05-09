@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command
 import com.jagrosh.jdautilities.command.CommandEvent
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
+import me.bristermitten.devdenbot.commands.management.HelpCommand
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
@@ -37,17 +38,20 @@ abstract class DevDenCommand(
 
     abstract suspend fun CommandEvent.execute()
 
-    private val logger by log()
+    private val log by log()
 
     final override fun execute(event: CommandEvent) {
+        log.debug { "Executing command $name for ${event.member} in ${event.channel.name}." }
         scope.launch {
             if (event.channel.idLong != botCommandsChannelId && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
+                log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}."}
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
             }
             try {
                 event.execute()
             } catch (preconditionFailed: PreconditionFailedException) {
+                log.debug(preconditionFailed){ "Preconditions were not met, command $name was not executed."}
                 preconditionFailed.reason?.let {
                     event.reply(it)
                 }
@@ -55,10 +59,10 @@ abstract class DevDenCommand(
                 val stringWriter = StringWriter()
                 exception.printStackTrace(PrintWriter(stringWriter))
 
+                log.error(exception) { "Could not execute command for event $event." }
                 event.channel.sendMessage(
                     "Could not execute command. Stacktrace: ```$stringWriter```"
                 ).queue()
-                logger.error("Could not execute command for event $event.", exception)
             }
         }
     }

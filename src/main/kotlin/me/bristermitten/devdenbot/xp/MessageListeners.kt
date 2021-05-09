@@ -16,7 +16,7 @@ private const val MESSAGE_MIN_DELAY_MILLIS = 750
 private const val MIN_MESSAGE_LEN = 6
 private const val MIN_DISTANCE = 0.4f
 
-private fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.toDouble()
+fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.toDouble()
 
 private val log = KotlinLogging.logger("MessageListeners")
 
@@ -52,15 +52,6 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
     return true
 }
 
-fun isTooSimilar(user: StatsUser, content: String): Boolean {
-    val recentMessages = user.recentMessages.copy()
-    if (recentMessages.any { similarityProportion(it.msg, content) < MIN_DISTANCE }) {
-        log.info {
-            "Message $content was discarded as it was too similar to previous messages - ${
-                user.recentMessages.associateWith { similarityProportion(it.msg, content) }
-            }"
-        }
-        return true
-    }
-    return false
-}
+fun isTooSimilar(user: StatsUser, content: String): Boolean =
+    user.recentMessages.copy().any { similarityProportion(it.msg, content) < MIN_DISTANCE }
+
