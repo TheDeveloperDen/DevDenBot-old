@@ -44,6 +44,7 @@ suspend fun CommandEvent.firstMentionedUser(): User? {
         return message.mentionedUsers.first()
     }
     return arguments()
+        .args
         .asSequence()
         .map(Argument::content)
         .mapNotNull(String::toLongOrNull)

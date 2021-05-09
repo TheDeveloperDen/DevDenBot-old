@@ -21,7 +21,7 @@ class LogLevelCommand : DevDenCommand(
     override suspend fun CommandEvent.execute() {
         senderMustHaveRole(BOT_CONTRIBUTOR_ROLE_ID)
 
-        val levelName = arguments().first().content
+        val levelName = arguments().args.first().content
         val level = when (levelName.lowercase()) { // Fake enum :(
             "off" -> Level.OFF
             "error", "severe" -> Level.ERROR

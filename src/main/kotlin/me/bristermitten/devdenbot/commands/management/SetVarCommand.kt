@@ -32,9 +32,10 @@ class SetVarCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val args = arguments()
+        val arguments = arguments()
+        val args = arguments.args
 
-        args.validateLength(3) {
+        arguments.validateArgLength(3) {
             awaitReply("Not enough arguments.")
             return
         }
