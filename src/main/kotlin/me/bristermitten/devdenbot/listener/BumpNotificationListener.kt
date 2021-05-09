@@ -43,20 +43,23 @@ class BumpNotificationListener : EventListener {
             return
         }
 
+        StatsUsers[event.author.idLong].bumps++
 
-        StatsUsers[event.message.mentionedUsers[0].idLong].bumps++
         log.trace {
-            "Increased bump stat for user ${event.message.mentionedUsers[0].name} from ${
-                StatsUsers[event.message.mentionedUsers[0].idLong].bumps.get() - 1
-            } to ${StatsUsers[event.message.mentionedUsers[0].idLong].bumps}."
+            "Increased bump stat for user ${event.author.name} from ${
+                StatsUsers[event.author.idLong].bumps.get() - 1
+            } to ${StatsUsers[event.author.idLong].bumps}."
         }
 
         delay(BUMP_COOLDOWN)
-        val bumpNotificationRole =
-            requireNotNull(event.jda.getRoleById(BUMP_NOTIFICATIONS_ROLE_ID)) { "Bump Notifications role not found" }
+        val bumpNotificationRole = requireNotNull(event.jda.getRoleById(BUMP_NOTIFICATIONS_ROLE_ID)) {
+            "Bump Notifications role not found"
+        }
         log.trace { "Sending bump ready notification to users with the bump notification role" }
-        event.channel.sendMessage("${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**")
-            .await()
+
+        event.channel.sendMessage(
+            "${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**"
+        ).await()
     }
 
     override fun register(jda: JDA) {
