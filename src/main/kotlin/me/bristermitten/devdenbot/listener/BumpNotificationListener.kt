@@ -1,8 +1,9 @@
 package me.bristermitten.devdenbot.listener
 
+import club.minnced.jda.reactor.onMessage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.reactive.asFlow
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.discord.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.extensions.await
@@ -23,15 +24,24 @@ class BumpNotificationListener : EventListener {
     }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        if (event.author.idLong != DISBOARD_BOT_ID) {
+        if (event.message.contentRaw != "!d bump") {
             return
         }
 
-        if (!event.message.embeds.first().description?.contains("Check it on DISBOARD:")!!) {
+        val nextDisboardMessages = event.channel.onMessage()
+            .asFlow()
+            .filter { it.author.idLong == DISBOARD_BOT_ID }
+            .map { it.message.embeds }
+            .filter { it.isNotEmpty() }
+            .firstOrNull() ?: return
+
+        val nextDisboardMessage = nextDisboardMessages.firstOrNull() ?: return
+
+        if (nextDisboardMessage.description?.contains(":thumbsup:") != true) {
             return
         }
 
-        StatsUsers[event.message.mentionedUsers[0].idLong].bumps++
+        StatsUsers[event.author.idLong].bumps++
 
         delay(BUMP_COOLDOWN)
         val bumpNotificationRole =
