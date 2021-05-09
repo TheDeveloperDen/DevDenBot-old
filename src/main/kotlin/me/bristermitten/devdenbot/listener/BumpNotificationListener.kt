@@ -9,6 +9,7 @@ import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.inc
 import me.bristermitten.devdenbot.util.listenFlow
+import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent

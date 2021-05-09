@@ -1,5 +1,6 @@
 package me.bristermitten.devdenbot.commands.category
 
+import me.bristermitten.devdenbot.util.log
 import java.util.*
 
 /**
