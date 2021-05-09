@@ -1,6 +1,7 @@
 package me.bristermitten.devdenbot.extensions
 
 import com.jagrosh.jdautilities.command.CommandEvent
+import java.util.*
 
 val WHITESPACE_REGEX = Regex("\\s+")
 
@@ -9,14 +10,14 @@ fun CommandEvent.arguments(): Arguments {
     val args = split.drop(1).map(::Argument)
     return Arguments(
         split.first() //This might break in future for prefixes that don't require a space. deal with it
-        , args)
+        , args.filter { !it.isFlag }, args.filter { it.isFlag })
 }
 
 
-class Arguments(val command: String, private val args: List<Argument>) : List<Argument> by args {
+class Arguments(val command: String, val args: List<Argument>, val flags: List<Argument>) {
 
-    inline fun validateLength(length: Int, orElse: () -> Unit) {
-        if (size < length)
+    inline fun validateArgLength(length: Int, orElse: () -> Unit) {
+        if (args.size < length)
             orElse()
     }
 
@@ -27,7 +28,9 @@ class Arguments(val command: String, private val args: List<Argument>) : List<Ar
 }
 
 
-class Argument(val content: String) {
+class Argument(unformattedContent: String) {
+    val isFlag: Boolean = unformattedContent.startsWith('-')
+    val content = unformattedContent.removePrefix("-")
 
     inline fun validate(predicate: (String) -> Boolean, orElse: () -> Unit) {
         if (predicate(content)) return
@@ -35,7 +38,7 @@ class Argument(val content: String) {
     }
 
     override fun equals(other: Any?) = if (other is String) content.equals(other, true) else content == other
-    override fun hashCode(): Int = content.hashCode()
+    override fun hashCode(): Int = content.toLowerCase(Locale.ROOT).hashCode()
 }
 
 
