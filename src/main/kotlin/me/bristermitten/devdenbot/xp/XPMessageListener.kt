@@ -41,7 +41,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val user = StatsUsers[message.author.idLong]
 
         if (isTooSimilar(user, strippedMessage)) {
-            log.info {
+            log.debug {
                 "Message $strippedMessage was discarded as it was too similar to previous messages - ${
                     user.recentMessages.associateWith { similarityProportion(it.msg, strippedMessage) }
                 }"
@@ -63,7 +63,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
 
         checkLevelUp(member, user)
 
-        log.info {
+        log.debug {
             "Gave ${event.author.name} $gained XP for a message (${event.message.id})"
         }
     }
@@ -91,7 +91,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
         user.giveXP(diff.toBigInteger())
         checkLevelUp(member, user)
-        log.info {
+        log.debug {
             "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
         }
     }
@@ -108,7 +108,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val gained = xpForMessage(message.msg).roundToInt()
 
         user.giveXP((-gained).toBigInteger())
-        log.info {
+        log.debug {
             "Took $gained XP from ${author.name} for deleting a message (${message.id})"
         }
     }
