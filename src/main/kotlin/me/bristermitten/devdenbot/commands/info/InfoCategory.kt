@@ -6,6 +6,6 @@ import net.dv8tion.jda.api.entities.Activity
 object InfoCategory : CommandCategory(
     name = "Info",
     description = "Miscellaneous information",
-    emoji = Activity.Emoji("\uD83D\uDD34"),
+    emoji = Activity.Emoji("ℹ️"),
     shortName = "info"
 )
