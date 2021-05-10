@@ -16,7 +16,8 @@ class PasteCommand @Inject constructor(
     name = "paste",
     help = "Show the paste link",
     category = InfoCategory,
-    aliases = arrayOf()
+    aliases = arrayOf(),
+    commandChannelOnly = false
 ) {
 
     override suspend fun CommandEvent.execute() {
