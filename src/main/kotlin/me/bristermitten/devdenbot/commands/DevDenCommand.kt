@@ -24,7 +24,10 @@ abstract class DevDenCommand(
     ownerCommand: Boolean = false,
     cooldown: Int = 0,
     vararg aliases: String = emptyArray(),
+    commandChannelOnly: Boolean = true
 ) : Command() {
+
+    val commandChannelOnly: Boolean;
 
     init {
         super.name = name
@@ -34,6 +37,7 @@ abstract class DevDenCommand(
         super.ownerCommand = ownerCommand
         super.cooldown = cooldown
         super.aliases = aliases
+        this.commandChannelOnly = commandChannelOnly;
     }
 
     abstract suspend fun CommandEvent.execute()
@@ -43,7 +47,8 @@ abstract class DevDenCommand(
     final override fun execute(event: CommandEvent) {
         log.debug { "Executing command $name for ${event.member} in ${event.channel.name}." }
         scope.launch {
-            if (event.channel.idLong != botCommandsChannelId && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
+            if (commandChannelOnly && event.channel.idLong != botCommandsChannelId
+                    && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
                 log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}."}
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
