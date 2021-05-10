@@ -36,7 +36,7 @@ class DevDen {
             loadStats()
             Leaderboards.initializeLeaderboards()
         }
-        log.trace { "Loading stats took $loadStatsTime ms." }
+        log.debug { "Loading stats took $loadStatsTime ms." }
 
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
 

@@ -17,6 +17,5 @@ object Leaderboards {
     }
 }
 
-
 class StatsUserLeaderboard<T : Comparable<T>>(val name: String, val keyExtractor: (StatsUser) -> T) :
-    Leaderboard<StatsUser>(Comparator.comparing(keyExtractor))
+    Leaderboard<StatsUser>(Comparator.comparing(keyExtractor).reversed())
