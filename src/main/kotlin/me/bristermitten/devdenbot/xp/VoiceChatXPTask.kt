@@ -19,7 +19,7 @@ class VoiceChatXPTask(val jda: JDA) : TimerTask() {
                     it == guild.afkChannel
                 }
             }
-            .filter { it.members.isNotEmpty() }
+            .filter { it.members.size > 1 }
             .flatMap { it.members }
             .filterNot { it.user.isBot }
             .filterNot { it.voiceState?.isMuted ?: true }
