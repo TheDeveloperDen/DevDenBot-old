@@ -10,7 +10,7 @@ import java.util.*
  */
 class VoiceChatXPTask(val jda: JDA) : TimerTask() {
 
-    private val logger by log()
+    private val log by log()
 
     override fun run() {
         jda.guilds.asSequence()
@@ -28,7 +28,7 @@ class VoiceChatXPTask(val jda: JDA) : TimerTask() {
                 val user = StatsUsers[it.idLong]
                 val gained = (1..3).random()
                 user.giveXP(gained.toBigInteger())
-                logger.info {
+                log.debug {
                     "Gave ${it.user.name} $gained XP for being in voice channel ${it.voiceState?.channel?.name} (${it.voiceState?.channel?.id})"
                 }
             }
