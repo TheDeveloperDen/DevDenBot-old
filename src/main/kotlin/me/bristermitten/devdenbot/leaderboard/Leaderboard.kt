@@ -1,10 +1,11 @@
 package me.bristermitten.devdenbot.leaderboard
 
+import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.Comparator
 
-class Leaderboard<T> (private val comparator: Comparator<T>) {
+open class Leaderboard<T> (private val comparator: Comparator<T>) {
 
     private val indices = ConcurrentHashMap<T, Int>()
     private val entries = Vector<T>()
@@ -26,17 +27,20 @@ class Leaderboard<T> (private val comparator: Comparator<T>) {
     }
 
     @Synchronized
-    fun add(entry: T) {
+    private fun add(entry: T) {
         if (!indices.containsKey(entry)) {
             indices[entry] = entries.size
             entries.add(entry)
         }
-        update(entry)
     }
 
     @Synchronized
     fun update(entry: T) {
-        var index = getPosition(entry) ?: return
+        if (!indices.containsKey(entry)) {
+            add(entry)
+        }
+
+        var index = getPosition(entry) ?: throw IllegalStateException("User was not added correctly")
         while (index > 0 && comparator.compare(entry, entries[index - 1]) > 0) {
             val tmp = entries[index - 1]
             entries[index - 1] = entry

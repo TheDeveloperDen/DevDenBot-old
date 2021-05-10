@@ -42,7 +42,7 @@ class BumpNotificationListener : EventListener {
             return
         }
 
-        StatsUsers[event.author.idLong].bumps++
+        StatsUsers[event.author.idLong].incrementBumps()
 
         log.trace {
             "Increased bump stat for user ${event.author.name} from ${

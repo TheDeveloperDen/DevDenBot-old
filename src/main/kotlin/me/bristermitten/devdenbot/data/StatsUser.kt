@@ -26,15 +26,21 @@ data class StatsUser(
 ) {
     @Transient
     val recentMessages = SafeCircularFifoQueue<CachedMessage>(10)
-
     var lastMessageSentTime: Long = -1
 
     fun giveXP(amount: BigInteger) {
         this.xp += amount
-        Leaderboards.XP.getPosition(this)?.let { Leaderboards.XP.update(this) } ?: run {
-            Leaderboards.XP.add(this)
-        }
+        Leaderboards.XP.update(this)
+    }
 
+    fun incrementLevel(): Int {
+        Leaderboards.LEVEL.update(this)
+        return this.level.incrementAndGet()
+    }
+
+    fun incrementBumps(): Int {
+        Leaderboards.BUMPS.update(this)
+        return this.bumps.incrementAndGet()
     }
 
 }

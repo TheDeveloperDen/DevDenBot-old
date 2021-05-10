@@ -4,6 +4,12 @@ import me.bristermitten.devdenbot.data.StatsUser
 
 object Leaderboards {
 
-    val XP = Leaderboard<StatsUser>(compareBy { it.xp.get() })
+    val XP = StatsUserLeaderboard("XP") { it.xp.get() }
+    val LEVEL = StatsUserLeaderboard("Level") { it.level.get() }
+    val BUMPS = StatsUserLeaderboard("Bumps") { it.bumps.get() }
 
 }
+
+
+class StatsUserLeaderboard<T : Comparable<T>>(val name: String, val keyExtractor: (StatsUser) -> T) :
+    Leaderboard<StatsUser>(Comparator.comparing(keyExtractor))
