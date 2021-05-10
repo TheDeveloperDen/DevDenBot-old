@@ -15,9 +15,10 @@ class Leaderboard<T> (private val comparator: Comparator<T>) {
         indices.clear()
         entries.forEachIndexed { i, it -> indices[it] = i }
     }
+    fun getEntryCount(): Int = indices.size
 
-    fun getEntries(): Vector<T> {
-        return entries
+    fun getEntry(position: Int): T {
+        return entries[position]
     }
 
     fun getPosition(entry: T): Int? {
@@ -53,5 +54,6 @@ class Leaderboard<T> (private val comparator: Comparator<T>) {
             index--
         }
     }
+
 
 }

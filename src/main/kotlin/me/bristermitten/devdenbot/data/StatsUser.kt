@@ -31,9 +31,10 @@ data class StatsUser(
 
     fun giveXP(amount: BigInteger) {
         this.xp += amount
-        Leaderboards.XP.getPosition(this).also { Leaderboards.XP.update(this) } ?: run {
+        Leaderboards.XP.getPosition(this)?.let { Leaderboards.XP.update(this) } ?: run {
             Leaderboards.XP.add(this)
         }
+
     }
 
 }
