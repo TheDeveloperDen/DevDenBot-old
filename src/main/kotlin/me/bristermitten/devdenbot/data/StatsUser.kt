@@ -10,6 +10,7 @@ import me.bristermitten.devdenbot.serialization.AtomicIntegerSerializer
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.atomic
+import me.bristermitten.devdenbot.util.inc
 import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -34,13 +35,15 @@ data class StatsUser(
     }
 
     fun incrementLevel(): Int {
+        this.level++
         Leaderboards.LEVEL.update(this)
-        return this.level.incrementAndGet()
+        return this.level.get()
     }
 
     fun incrementBumps(): Int {
+        this.bumps++
         Leaderboards.BUMPS.update(this)
-        return this.bumps.incrementAndGet()
+        return this.bumps.get()
     }
 
 }
