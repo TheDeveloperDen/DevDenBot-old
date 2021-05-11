@@ -50,7 +50,7 @@ class Leaderboard<T> (private val comparator: Comparator<T>) {
             entries[index] = tmp
             indices[entry] = index + 1
             indices[tmp] = index
-            index--
+            index++
         }
     }
 
