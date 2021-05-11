@@ -10,6 +10,7 @@ import me.bristermitten.devdenbot.serialization.AtomicIntegerSerializer
 import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.atomic
+import me.bristermitten.devdenbot.util.inc
 import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -26,14 +27,23 @@ data class StatsUser(
 ) {
     @Transient
     val recentMessages = SafeCircularFifoQueue<CachedMessage>(10)
-
     var lastMessageSentTime: Long = -1
 
     fun giveXP(amount: BigInteger) {
         this.xp += amount
-        Leaderboards.XP.getPosition(this).also { Leaderboards.XP.update(this) } ?: run {
-            Leaderboards.XP.add(this)
-        }
+        Leaderboards.XP.update(this)
+    }
+
+    fun incrementLevel(): Int {
+        this.level++
+        Leaderboards.LEVEL.update(this)
+        return this.level.get()
+    }
+
+    fun incrementBumps(): Int {
+        this.bumps++
+        Leaderboards.BUMPS.update(this)
+        return this.bumps.get()
     }
 
 }

@@ -9,6 +9,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
+import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.listener.ListenersModule
 import me.bristermitten.devdenbot.log.initLogging
 import me.bristermitten.devdenbot.serialization.DDBConfig
@@ -21,6 +22,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
+import kotlin.system.measureTimeMillis
 
 class DevDen {
     private val log by log()
@@ -30,7 +32,11 @@ class DevDen {
                 it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
             }
 
-        loadStats()
+        val loadStatsTime = measureTimeMillis {
+            loadStats()
+            Leaderboards.initializeLeaderboards()
+        }
+        log.debug { "Loading stats took $loadStatsTime ms." }
 
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
 
