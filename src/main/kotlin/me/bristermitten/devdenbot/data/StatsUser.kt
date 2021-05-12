@@ -11,6 +11,7 @@ import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.atomic
 import java.math.BigInteger
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -35,5 +36,7 @@ data class StatsUser(
             Leaderboards.XP.add(this)
         }
     }
+
+    override fun hashCode() = Objects.hash(userId)
 
 }
