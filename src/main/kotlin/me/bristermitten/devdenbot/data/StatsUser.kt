@@ -49,4 +49,11 @@ data class StatsUser(
 
     override fun hashCode() = Objects.hash(userId)
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is StatsUser) {
+            return false
+        }
+        return other.userId == userId
+    }
+
 }
