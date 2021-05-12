@@ -12,6 +12,7 @@ import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.atomic
 import me.bristermitten.devdenbot.util.inc
 import java.math.BigInteger
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -44,6 +45,15 @@ data class StatsUser(
         this.bumps++
         Leaderboards.BUMPS.update(this)
         return this.bumps.get()
+    }
+
+    override fun hashCode() = userId.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is StatsUser) {
+            return false
+        }
+        return other.userId == userId
     }
 
 }
