@@ -16,7 +16,7 @@ object Leaderboards {
         LEVEL.addAll(users.filter { it.level.get() != 0 })
         BUMPS.addAll(users.filter { it.bumps.get() != 0 })
     }
-}
+} 
 
 class StatsUserLeaderboard<T : Comparable<T>>(val name: String, val keyExtractor: (StatsUser) -> T) :
     Leaderboard<StatsUser>(Comparator.comparing(keyExtractor))
