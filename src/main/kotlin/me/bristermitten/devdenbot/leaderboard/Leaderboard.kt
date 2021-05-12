@@ -12,7 +12,7 @@ open class Leaderboard<T> (private val comparator: Comparator<T>) {
 
     fun addAll(entries: Collection<T>) {
         entries.filter { !indices.contains(it) }.forEach { this.entries.add(it) }
-        this.entries.sortWith(comparator)
+        this.entries.sortWith(comparator.reversed())
         indices.clear()
         this.entries.forEachIndexed { i, it -> indices[it] = i }
     }
