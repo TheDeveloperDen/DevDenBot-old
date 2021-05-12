@@ -47,7 +47,7 @@ data class StatsUser(
         return this.bumps.get()
     }
 
-    override fun hashCode() = Objects.hash(userId)
+    override fun hashCode() = userId.hashCode()
 
     override fun equals(other: Any?): Boolean {
         if (other !is StatsUser) {
