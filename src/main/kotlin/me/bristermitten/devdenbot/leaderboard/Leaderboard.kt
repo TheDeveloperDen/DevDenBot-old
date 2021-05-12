@@ -11,10 +11,10 @@ open class Leaderboard<T> (private val comparator: Comparator<T>) {
     private val entries = Vector<T>()
 
     fun addAll(entries: Collection<T>) {
-        this.entries.addAll(entries)
+        entries.filter { !indices.contains(it) }.forEach { this.entries.add(it) }
         this.entries.sortWith(comparator)
         indices.clear()
-        entries.forEachIndexed { i, it -> indices[it] = i }
+        this.entries.forEachIndexed { i, it -> indices[it] = i }
     }
     fun getEntryCount(): Int = indices.size
 
