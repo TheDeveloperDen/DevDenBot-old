@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.xp.commands
+package me.bristermitten.devdenbot.leaderboard
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
@@ -8,9 +8,9 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.leaderboard.DevDenPaginator
 import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.mention
+import me.bristermitten.devdenbot.xp.commands.XPCategory
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class LeaderboardCommand @Inject constructor(
         val args = args.split(WHITESPACE_REGEX)
 
         if (args.isEmpty() || args.firstOrNull()?.isEmpty() != false) {
-            return sendLeaderboard(10, StatsUser::xp, "XP")
+            return sendLeaderboard(10, Leaderboards.XP)
         }
 
         val firstArgAsInt = args.first().toIntOrNull()
@@ -66,54 +66,33 @@ class LeaderboardCommand @Inject constructor(
             else -> args[1]
         }.lowercase(Locale.getDefault())
 
-
-        val property = when (leaderboardBy) {
-            "xp" -> StatsUser::xp
-            "level", "lvl" -> StatsUser::level
-            "bump", "bumps" -> StatsUser::bumps
+        val leaderboard = when (leaderboardBy) {
+            "xp" ->Leaderboards.XP
+            "level", "lvl" -> Leaderboards.LEVEL
+            "bump", "bumps" -> Leaderboards.BUMPS
             else -> {
                 awaitReply("Hmm, I don't recognise $leaderboardBy")
                 return
             }
         }
 
-        val prettyName = property.findAnnotation<PrettyName>()?.prettyName ?: leaderboardBy.replaceFirstChar {
-            it.uppercase()
-        }
-        val propertyType = property.returnType
-        //Please don't modify this ever it's horrible
-        val func: (StatsUser) -> Comparable<Any> =
-            when {
-                propertyType.isSubtypeOf(Comparable::class.createType(listOf(KTypeProjection.STAR))) -> { it ->
-                    property(it) as Comparable<Any>
-                }
-                propertyType == AtomicInteger::class.createType() -> { it ->
-                    (property(it) as AtomicInteger).get() as Comparable<Any>
-                }
-                else -> error("i want death")
-            }
-
-        sendLeaderboard(count, func, prettyName)
+        sendLeaderboard(count, leaderboard)
     }
 
     private fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
         entriesPerPage: Int,
-        by: (StatsUser) -> C,
-        leaderboardName: String,
+        statsUserLeaderboard: StatsUserLeaderboard<C>
     ) {
-        val users = StatsUsers.all.sortedByDescending(by)
-
-
         DevDenPaginator(
-            { users[it] },
+            { statsUserLeaderboard.getEntry(it)},
             { builder, statsUser, index ->
                 builder.field(
-                    "#${index + 1} - ${by(statsUser)} $leaderboardName",
+                    "#${index + 1} - ${statsUserLeaderboard.keyExtractor(statsUser)} ${statsUserLeaderboard.name}",
                     mention(statsUser.userId)
                 )
             },
-            entryCount = users.size,
-            title = "Users ranked by $leaderboardName",
+            entryCount = statsUserLeaderboard.getEntryCount(),
+            title = "Users ranked by ${statsUserLeaderboard.name}",
             eventWaiter = eventWaiter,
             entriesPerPage = entriesPerPage,
         ).display(channel)
