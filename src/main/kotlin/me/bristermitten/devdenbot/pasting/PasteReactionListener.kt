@@ -35,11 +35,12 @@ class PasteReactionListener : EventListener {
         }
 
         val message = event.retrieveMessage().await()
+        val mention = message.author.asMention
         val pasteUrl = HasteClient.postCode(message.contentStripped)
 
         message.delete().queue()
 
-        val pasteMessage = "${reactionMember.asMention}, your code is available at $pasteUrl"
+        val pasteMessage = "$mention, your code is available at $pasteUrl"
         event.channel.sendMessage(pasteMessage).queue()
     }
 
