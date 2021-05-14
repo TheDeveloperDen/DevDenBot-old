@@ -7,6 +7,7 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
+import me.bristermitten.devdenbot.util.VersionProvider
 import me.bristermitten.devdenbot.util.formatNumber
 import net.dv8tion.jda.api.EmbedBuilder
 import java.time.LocalDate
@@ -26,10 +27,6 @@ class InfoCommand @Inject constructor(
     aliases = arrayOf("flex", "stats")
 ) {
 
-    private val version by lazy {
-        javaClass.classLoader.getResourceAsStream("version.txt")!!.reader().readText()
-    }
-
     private fun formatDate(dt: LocalDate) = DateTimeFormatter.ofPattern("YYYY MM dd").format(dt)
 
     override suspend fun CommandEvent.execute() {
@@ -41,7 +38,7 @@ class InfoCommand @Inject constructor(
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
         val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
         val levelUps = formatForInfo(StatsUsers.all.map { it.level }.sumOf { it.get() })
-        val formattedVersion = formatForInfo(version)
+        val formattedVersion = formatForInfo(VersionProvider.version)
 
         reply(EmbedBuilder()
             .setTitle("Developer Den")

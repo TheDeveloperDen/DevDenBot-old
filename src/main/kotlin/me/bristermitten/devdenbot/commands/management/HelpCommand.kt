@@ -8,12 +8,12 @@ import com.jagrosh.jdautilities.menu.ButtonMenu
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.category.Categories
 import me.bristermitten.devdenbot.commands.category.CommandCategory
-import me.bristermitten.devdenbot.commands.isAdmin
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.util.isAdmin
 import me.bristermitten.devdenbot.util.log
 import net.dv8tion.jda.api.entities.Message
 import java.awt.Color
