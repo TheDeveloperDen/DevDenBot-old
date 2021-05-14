@@ -2,7 +2,6 @@ package me.bristermitten.devdenbot.pasting
 
 import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
 import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
-import me.bristermitten.devdenbot.discord.PASTE_EMOJI_NAME
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.util.*
