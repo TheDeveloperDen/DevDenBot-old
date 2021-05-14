@@ -8,6 +8,10 @@ const val BUMP_NOTIFICATIONS_ROLE_ID = 838500233268691005
 
 const val BOT_CONTRIBUTOR_ROLE_ID = 838733085947723786
 
+const val MODERATOR_ROLE_ID = 1234567890001 //TODO(insert role ids)
+const val ADMIN_ROLE_ID = 123456789000000
+const val HELPFUL_ROLE_ID = 12535982659782
+
 /**
  * Roles that can be self assigned with the `role` command [me.bristermitten.devdenbot.commands.roles.RoleCommand]
  */
