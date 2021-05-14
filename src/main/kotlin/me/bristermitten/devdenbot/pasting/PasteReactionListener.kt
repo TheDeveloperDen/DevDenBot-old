@@ -1,0 +1,49 @@
+package me.bristermitten.devdenbot.pasting
+
+import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
+import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
+import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.listener.EventListener
+import me.bristermitten.devdenbot.util.*
+import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+
+class PasteReactionListener : EventListener {
+
+    companion object {
+        private val log by log()
+    }
+
+    private suspend fun onReactionAdd(event: MessageReactionAddEvent) {
+
+        if (event.reactionEmote.idLong != PASTE_EMOJI_ID) {
+            return
+        }
+
+        val reactionMember =
+            event.user
+                ?.let { event.guild.getMember(it) }
+                ?: event.guild.retrieveMemberById(event.userId).await()
+
+        if (reactionMember.user.isBot) {
+            log.warn { "Bot ${reactionMember.user.name} tried to use the paste reaction command. Only humans may perform this action." }
+        }
+
+        if (!hasRoleOrIsModerator(reactionMember, HELPFUL_ROLE_ID)) { // this is vital
+            log.debug { "User ${reactionMember.user.name} has insufficient permissions to perform paste reactions." }
+            return
+        }
+
+        val message = event.retrieveMessage().await()
+        val pasteUrl = HasteClient.postCode(message.contentStripped)
+
+        message.delete().queue()
+
+        val pasteMessage = "${reactionMember.asMention}, your code is available at $pasteUrl"
+        event.channel.sendMessage(pasteMessage).queue()
+    }
+
+    override fun register(jda: JDA) {
+        jda.listenFlow<MessageReactionAddEvent>().launchEachIn(scope, this::onReactionAdd)
+    }
+}

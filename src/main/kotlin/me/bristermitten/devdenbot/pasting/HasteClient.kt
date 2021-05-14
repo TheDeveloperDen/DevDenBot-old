@@ -30,6 +30,8 @@ object HasteClient {
             }
             body = codeBlock
         }
+            .key
+            .let { baseUrl + it }
 
     @Serializable
     class HasteResponse(val key: String)
