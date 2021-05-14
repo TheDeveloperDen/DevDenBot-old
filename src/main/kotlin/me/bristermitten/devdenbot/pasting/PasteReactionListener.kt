@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.pasting
 
 import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
 import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
+import me.bristermitten.devdenbot.discord.PASTE_EMOJI_NAME
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.util.*
@@ -16,7 +17,12 @@ class PasteReactionListener : EventListener {
 
     private suspend fun onReactionAdd(event: MessageReactionAddEvent) {
 
-        if (event.reactionEmote.idLong != PASTE_EMOJI_ID) {
+        if (!event.reactionEmote.isEmote) {
+            // only consider custom emojis
+            return
+        }
+
+        if (event.reactionEmote.emote.idLong != PASTE_EMOJI_ID) {
             return
         }
 
@@ -27,6 +33,7 @@ class PasteReactionListener : EventListener {
 
         if (reactionMember.user.isBot) {
             log.warn { "Bot ${reactionMember.user.name} tried to use the paste reaction command. Only humans may perform this action." }
+            return
         }
 
         if (!hasRoleOrIsModerator(reactionMember, HELPFUL_ROLE_ID)) { // this is vital
