@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.command.Command
 import com.jagrosh.jdautilities.command.CommandEvent
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
-import me.bristermitten.devdenbot.commands.management.HelpCommand
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
@@ -24,10 +23,10 @@ abstract class DevDenCommand(
     ownerCommand: Boolean = false,
     cooldown: Int = 0,
     vararg aliases: String = emptyArray(),
-    commandChannelOnly: Boolean = true
+    commandChannelOnly: Boolean = true,
 ) : Command() {
 
-    val commandChannelOnly: Boolean;
+    private val commandChannelOnly: Boolean
 
     init {
         super.name = name
@@ -37,7 +36,7 @@ abstract class DevDenCommand(
         super.ownerCommand = ownerCommand
         super.cooldown = cooldown
         super.aliases = aliases
-        this.commandChannelOnly = commandChannelOnly;
+        this.commandChannelOnly = commandChannelOnly
     }
 
     abstract suspend fun CommandEvent.execute()
@@ -48,15 +47,16 @@ abstract class DevDenCommand(
         log.debug { "Executing command $name for ${event.member} in ${event.channel.name}." }
         scope.launch {
             if (commandChannelOnly && event.channel.idLong != botCommandsChannelId
-                    && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
-                log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}."}
+                && !event.member.hasPermission(Permission.MESSAGE_MANAGE)
+            ) {
+                log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}." }
                 event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
                 return@launch
             }
             try {
                 event.execute()
             } catch (preconditionFailed: PreconditionFailedException) {
-                log.debug(preconditionFailed){ "Preconditions were not met, command $name was not executed."}
+                log.debug(preconditionFailed) { "Preconditions were not met, command $name was not executed." }
                 preconditionFailed.reason?.let {
                     event.reply(it)
                 }
