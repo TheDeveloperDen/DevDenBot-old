@@ -64,7 +64,8 @@ class DevDen {
         try {
             load()
         } catch (e: Exception) {
-            Sentry.captureException(e, "Error occurred during bot initialisation")
+            Sentry.captureException(e)
+            e.printStackTrace()
         }
     }
 
