@@ -12,7 +12,6 @@ import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.listener.ListenersModule
-import me.bristermitten.devdenbot.log.initLogging
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.log
@@ -47,7 +46,6 @@ class DevDen {
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
 
         val jda = injector.getInstance<JDA>()
-        initLogging(jda, config.loggingChannelId)
 
         val commandClient = injector.getInstance<CommandClient>()
         val commands = injector.getInstance<Set<DevDenCommand>>()

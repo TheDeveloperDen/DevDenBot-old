@@ -99,7 +99,6 @@ class HelpCommand @Inject constructor(
     private fun sendHelpMenu(message: Message, category: CommandCategory, adminMode: Boolean) {
         val commands = commandClient.get().commands
             .filter { it.category == category }
-
         val description = """
             |${category.emoji.asMention} ${category.description}
             |${
