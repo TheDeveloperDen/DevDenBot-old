@@ -58,9 +58,7 @@ class DevDen {
     }
 
     fun start() {
-        Sentry.init { options ->
-            options.dsn = "https://646106f2298e44c6a6b5671a000ea7d3@o668259.ingest.sentry.io/5767275"
-        }
+        Sentry.init() // This will get the DSN from the SENTRY_DSN environment variable
         try {
             load()
         } catch (e: Exception) {
