@@ -136,8 +136,8 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageDeleteEvent>().launchEachIn(scope, this::onGuildMessageDelete)
-        jda.listenFlow<GuildMessageUpdateEvent>().launchEachIn(scope, this::onGuildMessageUpdate)
-        jda.listenFlow<GuildMessageReceivedEvent>().launchEachIn(scope, this::onGuildMessageReceived)
+        jda.listenFlow<GuildMessageDeleteEvent>().handleEachIn(scope, this::onGuildMessageDelete)
+        jda.listenFlow<GuildMessageUpdateEvent>().handleEachIn(scope, this::onGuildMessageUpdate)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
     }
 }

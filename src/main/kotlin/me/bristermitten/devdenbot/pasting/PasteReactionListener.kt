@@ -3,11 +3,13 @@ package me.bristermitten.devdenbot.pasting
 import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
 import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 
+@Used
 class PasteReactionListener : EventListener {
 
     companion object {
@@ -51,6 +53,6 @@ class PasteReactionListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<MessageReactionAddEvent>().launchEachIn(scope, this::onReactionAdd)
+        jda.listenFlow<MessageReactionAddEvent>().handleEachIn(scope, this::onReactionAdd)
     }
 }

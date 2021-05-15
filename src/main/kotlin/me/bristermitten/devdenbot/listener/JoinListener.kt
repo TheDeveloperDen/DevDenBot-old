@@ -1,10 +1,8 @@
 package me.bristermitten.devdenbot.listener
 
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.util.launchEachIn
+import me.bristermitten.devdenbot.util.handleEachIn
 import me.bristermitten.devdenbot.util.listenFlow
 import me.bristermitten.devdenbot.util.scope
 import me.bristermitten.devdenbot.util.welcomeChannelId
@@ -21,6 +19,6 @@ class JoinListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMemberJoinEvent>().launchEachIn(scope, this::onGuildMemberJoin)
+        jda.listenFlow<GuildMemberJoinEvent>().handleEachIn(scope, this::onGuildMemberJoin)
     }
 }

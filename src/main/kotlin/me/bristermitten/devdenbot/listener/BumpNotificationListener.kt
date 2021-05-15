@@ -10,7 +10,10 @@ import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.discord.BUMP_NOTIFICATIONS_ROLE_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.util.*
+import me.bristermitten.devdenbot.util.handleEachIn
+import me.bristermitten.devdenbot.util.listenFlow
+import me.bristermitten.devdenbot.util.log
+import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import java.util.concurrent.TimeUnit
@@ -62,6 +65,6 @@ class BumpNotificationListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().launchEachIn(scope, this::onGuildMessageReceived)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
     }
 }
