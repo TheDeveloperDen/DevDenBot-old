@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import javax.inject.Inject
 
-class PasteReactionListener @Inject constructor(jda: JDA) : EventListener {
+class PasteReactionListener @Inject constructor(val jda: JDA) : EventListener {
 
     companion object {
         private val log by log()
