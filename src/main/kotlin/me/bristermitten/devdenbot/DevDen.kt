@@ -26,11 +26,8 @@ import kotlin.system.measureTimeMillis
 
 class DevDen {
     private val log by log()
-    fun start() {
-        Sentry.init { options ->
-            options.dsn = "https://646106f2298e44c6a6b5671a000ea7d3@o668259.ingest.sentry.io/5767275"
-        }
 
+    private fun load() {
         val config = Json.decodeFromString(DDBConfig.serializer(), javaClass.getResource("/config.json")!!.readText())
             .let {
                 it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
@@ -58,6 +55,17 @@ class DevDen {
         jda.awaitReady()
         GraphicsContext.init()
         startTasks(jda)
+    }
+
+    fun start() {
+        Sentry.init { options ->
+            options.dsn = "https://646106f2298e44c6a6b5671a000ea7d3@o668259.ingest.sentry.io/5767275"
+        }
+        try {
+            load()
+        } catch (e: Exception) {
+            Sentry.captureException(e, "Error occurred during bot initialisation")
+        }
     }
 
     private fun startTasks(jda: JDA) {
