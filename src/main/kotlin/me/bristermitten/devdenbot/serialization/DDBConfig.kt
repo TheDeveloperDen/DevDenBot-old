@@ -7,6 +7,5 @@ data class DDBConfig(
     val token: String,
     val prefix: String,
     val ownerID: Long,
-    val colour: Int,
-    val loggingChannelId: Long
+    val colour: Int
 )
