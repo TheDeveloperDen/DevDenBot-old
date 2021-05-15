@@ -1,4 +1,4 @@
-package me.bristermitten.devdenbot.commands.management
+package me.bristermitten.devdenbot.commands.info
 
 import com.google.inject.Provider
 import com.jagrosh.jdautilities.command.CommandClient
@@ -25,12 +25,12 @@ import javax.inject.Inject
 @Used
 class HelpCommand @Inject constructor(
     private val commandClient: Provider<CommandClient>,
-    private val DDBConfig: DDBConfig,
-    private val eventWaiter: EventWaiter
+    private val ddbConfig: DDBConfig,
+    private val eventWaiter: EventWaiter,
 ) : DevDenCommand(
     name = "help",
     help = "View help",
-    category = ManagingCategory
+    category = InfoCategory
 ) {
 
     companion object {
@@ -43,12 +43,12 @@ class HelpCommand @Inject constructor(
 
     override suspend fun CommandEvent.execute() {
         val args = arguments().args
-        val adminMode = arguments().flags.any { it.equals("owner") || it.equals("admin") };
+        val adminMode = arguments().flags.any { it.equals("owner") || it.equals("admin") }
 
         if (adminMode && !isAdmin(member)) {
             log.trace { "Blocked ${member.user.name} from calling the help command in admin mode." }
             reply("You need to have administrator permissions to execute this command in admin mode.")
-            return;
+            return
         }
 
         if (args.isEmpty()) {
@@ -71,7 +71,7 @@ class HelpCommand @Inject constructor(
 
     private fun sendMainMessage(message: Message, adminMode: Boolean) {
         ButtonMenu.Builder()
-            .setColor(Color(DDBConfig.colour))
+            .setColor(Color(ddbConfig.colour))
             .setDescription(
                 Categories.joinToString("\n\n") {
                     "${it.emoji.asMention} ${it.name}"
@@ -104,16 +104,16 @@ class HelpCommand @Inject constructor(
             |${category.emoji.asMention} ${category.description}
             |${
             commands.filter { adminMode || !it.isOwnerCommand }
-                .joinToString("\n") { "`${DDBConfig.prefix}${it.name}` - ${it.help}" }
+                .joinToString("\n") { "`${ddbConfig.prefix}${it.name}` - ${it.help}" }
         }
             |
-            |Type `ddhelp ${category.shortName}` for more detail.
+            |Type `${ddbConfig.prefix}help ${category.shortName}` for more detail.
             ${footer(adminMode)}
         """.trimMargin()
 
 
         ButtonMenu.Builder()
-            .setColor(Color(DDBConfig.colour))
+            .setColor(Color(ddbConfig.colour))
             .setDescription(description)
             .setEventWaiter(eventWaiter)
             .addChoices("⬅️")
