@@ -1,7 +1,6 @@
 package me.bristermitten.devdenbot.extensions
 
 import com.jagrosh.jdautilities.command.CommandEvent
-import java.util.*
 
 val WHITESPACE_REGEX = Regex("\\s+")
 
@@ -29,7 +28,7 @@ class Arguments(val command: String, val args: List<Argument>, val flags: List<A
 
 
 class Argument(unformattedContent: String) {
-    val isFlag: Boolean = unformattedContent.startsWith('-')
+    val isFlag = unformattedContent.startsWith('-')
     val content = unformattedContent.removePrefix("-")
 
     inline fun validate(predicate: (String) -> Boolean, orElse: () -> Unit) {
@@ -38,7 +37,7 @@ class Argument(unformattedContent: String) {
     }
 
     override fun equals(other: Any?) = if (other is String) content.equals(other, true) else content == other
-    override fun hashCode(): Int = content.toLowerCase(Locale.ROOT).hashCode()
+    override fun hashCode(): Int = content.lowercase().hashCode()
 }
 
 

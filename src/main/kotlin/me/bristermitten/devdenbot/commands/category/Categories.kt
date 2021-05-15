@@ -8,7 +8,7 @@ import java.util.*
  */
 object Categories : Iterable<CommandCategory> {
 
-    private val categories = TreeSet(Comparator.comparing(CommandCategory::getName))
+    private val categories = TreeSet(compareBy(CommandCategory::getName))
     private val log by log()
 
     fun register(commandCategory: CommandCategory) {

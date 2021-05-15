@@ -129,6 +129,8 @@ class HelpCommand @Inject constructor(
 
     private fun footer(adminMode: Boolean) = if (adminMode)
         """|
-           | *This message was executed in admin mode and may contain commands that need admin permissions.*""".trimIndent()
+           | *This message was executed in admin mode and may contain commands that need admin permissions.*
+           """
+            .trimIndent()
     else ""
 }
