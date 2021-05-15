@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.bristermitten"
-version = "1.5.3"
+version = "1.6.0"
 
 
 repositories {
@@ -49,6 +49,8 @@ dependencies {
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
+
+    implementation("io.sentry:sentry:4.3.0")
 
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")

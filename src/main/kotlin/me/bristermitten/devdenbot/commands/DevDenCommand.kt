@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.commands
 
 import com.jagrosh.jdautilities.command.Command
 import com.jagrosh.jdautilities.command.CommandEvent
+import io.sentry.Sentry
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
 import me.bristermitten.devdenbot.extensions.commands.tempReply
@@ -9,8 +10,6 @@ import me.bristermitten.devdenbot.util.botCommandsChannelId
 import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.Permission
-import java.io.PrintWriter
-import java.io.StringWriter
 
 /**
  * @author Alexander Wood (BristerMitten)
@@ -61,13 +60,9 @@ abstract class DevDenCommand(
                     event.reply(it)
                 }
             } catch (exception: Exception) {
-                val stringWriter = StringWriter()
-                exception.printStackTrace(PrintWriter(stringWriter))
-
-                log.error(exception) { "Could not execute command for event $event." }
-                event.channel.sendMessage(
-                    "Could not execute command. Stacktrace: ```$stringWriter```"
-                ).queue()
+                Sentry.captureException(exception)
+                event.channel.sendMessage("**An error occurred when executing this command. This has been logged.**")
+                    .queue()
             }
         }
     }
