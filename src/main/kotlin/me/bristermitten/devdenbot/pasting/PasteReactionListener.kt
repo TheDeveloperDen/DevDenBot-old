@@ -7,12 +7,16 @@ import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import javax.inject.Inject
 
-class PasteReactionListener : EventListener {
+class PasteReactionListener @Inject constructor(jda: JDA) : EventListener {
 
     companion object {
         private val log by log()
     }
+
+    //Getting started category
+    private val category = jda.getCategoryById(821743100657270874L)
 
     private suspend fun onReactionAdd(event: MessageReactionAddEvent) {
 
@@ -23,6 +27,10 @@ class PasteReactionListener : EventListener {
 
         if (event.reactionEmote.emote.idLong != PASTE_EMOJI_ID) {
             return
+        }
+
+        category?.textChannels?.contains(event.channel)?.also {
+            if (it) return@onReactionAdd
         }
 
         val reactionMember =
