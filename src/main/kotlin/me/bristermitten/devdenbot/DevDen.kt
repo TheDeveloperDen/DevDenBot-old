@@ -1,5 +1,6 @@
 package me.bristermitten.devdenbot
 
+import ch.qos.logback.classic.Level
 import com.google.inject.Guice
 import com.jagrosh.jdautilities.command.CommandClient
 import dev.misfitlabs.kotlinguice4.getInstance
@@ -12,6 +13,7 @@ import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.listener.ListenersModule
+import me.bristermitten.devdenbot.log.setLoggingLevel
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.log
@@ -28,6 +30,7 @@ class DevDen {
     private val log by log()
 
     private fun load() {
+        throw Exception()
         val config = Json.decodeFromString(DDBConfig.serializer(), javaClass.getResource("/config.json")!!.readText())
             .let {
                 it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
@@ -58,12 +61,15 @@ class DevDen {
     }
 
     fun start() {
-        Sentry.init() // This will get the DSN from the SENTRY_DSN environment variable
+        setLoggingLevel(Level.DEBUG)
+        Sentry.init { options ->
+            options.dsn = "https://eda094eeafb546a8a9114d20e9f39d37@sentry.bristermitten.me/2"
+        }
+        // This will get the DSN from the SENTRY_DSN environment variable
         try {
             load()
         } catch (e: Exception) {
             Sentry.captureException(e)
-            e.printStackTrace()
         }
     }
 
