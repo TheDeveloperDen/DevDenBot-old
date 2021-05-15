@@ -3,6 +3,7 @@ package me.bristermitten.devdenbot
 import com.google.inject.Guice
 import com.jagrosh.jdautilities.command.CommandClient
 import dev.misfitlabs.kotlinguice4.getInstance
+import io.sentry.Sentry
 import kotlinx.serialization.json.Json
 import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
@@ -27,6 +28,10 @@ import kotlin.system.measureTimeMillis
 class DevDen {
     private val log by log()
     fun start() {
+        Sentry.init { options ->
+            options.dsn = "https://646106f2298e44c6a6b5671a000ea7d3@o668259.ingest.sentry.io/5767275"
+        }
+
         val config = Json.decodeFromString(DDBConfig.serializer(), javaClass.getResource("/config.json")!!.readText())
             .let {
                 it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
@@ -36,6 +41,7 @@ class DevDen {
             loadStats()
             Leaderboards.initializeLeaderboards()
         }
+
         log.debug { "Loading stats took $loadStatsTime ms." }
 
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
