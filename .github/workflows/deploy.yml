@@ -6,6 +6,23 @@ on:
       - master
 
 jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
+          registry: ghcr.io
+          repository: thedeveloperden/devdenbot
+          tag_with_ref: true
   deploy:
     if: github.ref == 'refs/heads/master'
     runs-on: [ ubuntu-latest ]
