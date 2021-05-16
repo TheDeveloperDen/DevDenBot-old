@@ -61,16 +61,13 @@ class DevDen {
     }
 
     fun start() {
-        setLoggingLevel(Level.DEBUG)
-        Sentry.init { options ->
-            options.dsn = "https://eda094eeafb546a8a9114d20e9f39d37@sentry.bristermitten.me/2"
-        }
-        // This will get the DSN from the SENTRY_DSN environment variable
+        Sentry.init() // This will get the DSN from the SENTRY_DSN environment variable
         try {
             load()
         } catch (e: Exception) {
             Sentry.captureException(e)
         }
+        Thread.sleep(1000)
     }
 
     private fun startTasks(jda: JDA) {
