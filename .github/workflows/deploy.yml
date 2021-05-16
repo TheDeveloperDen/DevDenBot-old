@@ -6,17 +6,6 @@ on:
       - master
 
 jobs:
-  setup:
-    name: Read value from Properties-file
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-      - id: read_property
-        uses: christian-draeger/read-properties@1.0.1
-        with:
-          path: './gradle.properties'
-          property: 'version'
   push_to_registry:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
@@ -26,6 +15,11 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      - id: read_property
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: './gradle.properties'
+          property: 'version'        
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
