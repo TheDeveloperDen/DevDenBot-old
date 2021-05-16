@@ -15,20 +15,20 @@ import java.util.concurrent.atomic.AtomicReference
 class AtomicBigInteger(v: BigInteger) : AtomicReference<BigInteger>(v), Comparable<AtomicBigInteger> {
 
     operator fun plusAssign(other: BigInteger) {
-        getAndAccumulate(other, BigInteger::add)
+        accumulateAndGet(other, BigInteger::add)
     }
 
     operator fun plus(other: AtomicBigInteger) = AtomicBigInteger(get() + other.get())
 
     operator fun minusAssign(other: BigInteger) {
-        getAndAccumulate(other, BigInteger::minus)
+        accumulateAndGet(other, BigInteger::minus)
     }
 
     operator fun compareTo(other: BigInteger) = get().compareTo(other)
 
-    operator fun inc() = getAndAccumulate(BigInteger.ONE, BigInteger::add).atomic()
+    operator fun inc() = accumulateAndGet(BigInteger.ONE, BigInteger::add).atomic()
 
-    operator fun dec() = getAndAccumulate(BigInteger.ONE, BigInteger::minus).atomic()
+    operator fun dec() = accumulateAndGet(BigInteger.ONE, BigInteger::minus).atomic()
 
 
     companion object {
