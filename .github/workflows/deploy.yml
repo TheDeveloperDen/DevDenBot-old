@@ -30,7 +30,7 @@ jobs:
           tags: ${{ steps.read_property.outputs.value }}
           tag_with_ref: true
   deploy:
-    if: github.ref == 'refs/heads/master'
+    needs: [push_to_registry]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -38,8 +38,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          password: ${{ secrets.DEPLOY_PASSWORD }}
           script: |
             docker pull ghcr.io/thedeveloperden/devdenbot:latest
             docker run --env SENTRY_DSN=${{ secrets.SENTRY_DSN }} --env DDB_TOKEN=${{ secrets.DDB_TOKEN }} -d --restart unless-stopped ghcr.io/thedeveloperden/devdenbot
