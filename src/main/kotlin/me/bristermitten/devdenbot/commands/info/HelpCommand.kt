@@ -57,7 +57,6 @@ class HelpCommand @Inject constructor(
             return
         }
 
-
         val category = Categories.byName(args.first().content)
         if (category == null) {
             awaitReply("I couldn't find a category named \"$category\"")
