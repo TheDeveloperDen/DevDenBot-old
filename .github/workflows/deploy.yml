@@ -43,4 +43,5 @@ jobs:
           script: |
             docker pull ghcr.io/thedeveloperden/devdenbot:latest
             docker stop devdenbot
+            docker rm devdenbot
             docker run --name devdenbot --env SENTRY_DSN=${{ secrets.SENTRY_DSN }} --env DDB_TOKEN=${{ secrets.DDB_TOKEN }} --mount source=devden,target=/var/data -d --restart unless-stopped ghcr.io/thedeveloperden/devdenbot
