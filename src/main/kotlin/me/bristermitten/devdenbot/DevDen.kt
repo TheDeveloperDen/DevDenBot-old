@@ -1,6 +1,5 @@
 package me.bristermitten.devdenbot
 
-import ch.qos.logback.classic.Level
 import com.google.inject.Guice
 import com.jagrosh.jdautilities.command.CommandClient
 import dev.misfitlabs.kotlinguice4.getInstance
@@ -13,7 +12,6 @@ import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.listener.ListenersModule
-import me.bristermitten.devdenbot.log.setLoggingLevel
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.log
