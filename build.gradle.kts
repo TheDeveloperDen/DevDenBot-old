@@ -6,7 +6,6 @@ plugins {
 }
 
 group = "me.bristermitten"
-version = "1.6.0"
 
 
 repositories {
