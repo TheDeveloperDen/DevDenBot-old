@@ -32,7 +32,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT }}
           registry: ghcr.io
-          tags: thedeveloperden/devdenbot:${{ steps.read_property.outputs.value }}
+          repository: thedeveloperden/devdenbot
+          tags: ${{ steps.read_property.outputs.value }}
           tag_with_ref: true
   deploy:
     if: github.ref == 'refs/heads/master'
