@@ -30,7 +30,6 @@ class DevDen {
     private val log by log()
 
     private fun load() {
-        throw Exception()
         val config = Json.decodeFromString(DDBConfig.serializer(), javaClass.getResource("/config.json")!!.readText())
             .let {
                 it.copy(token = System.getenv("DDB_TOKEN") ?: it.token)
