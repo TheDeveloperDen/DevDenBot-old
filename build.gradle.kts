@@ -55,6 +55,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
+    implementation("org.jetbrains.exposed", "exposed-java-time", "0.31.1")
     implementation("mysql:mysql-connector-java:5.1.48")
 
     testImplementation(kotlin("test-junit5"))
