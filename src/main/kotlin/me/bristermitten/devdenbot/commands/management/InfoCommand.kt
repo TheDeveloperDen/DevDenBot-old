@@ -6,7 +6,6 @@ import me.bristermitten.devdenbot.data.AtomicBigInteger
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.VersionProvider
 import me.bristermitten.devdenbot.util.formatNumber
 import net.dv8tion.jda.api.EmbedBuilder
@@ -36,7 +35,7 @@ class InfoCommand @Inject constructor(
         val totalXP = formatForInfo(StatsUsers.all.map { it.xp }.reduce(AtomicBigInteger::plus).get())
         val totalMembers = formatForInfo(event.guild.memberCount)
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
-        val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
+//        val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
         val levelUps = formatForInfo(StatsUsers.all.map { it.level }.sumOf { it.get() })
         val formattedVersion = formatForInfo(VersionProvider.version)
 
@@ -48,7 +47,7 @@ class InfoCommand @Inject constructor(
             .addField("Total XP Given", totalXP, true)
             .addField("Total Members", totalMembers, true)
             .addField("Date Created", dateCreated, true)
-            .addField("Total Messages Sent", totalMessages, true)
+            .addField("Total Messages Sent", "Currently disabled :frowning2:", true)
             .addField("Level Ups", levelUps, true)
             .build())
     }

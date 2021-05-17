@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 class StatsListener : EventListener {
 
     private fun onGuildMessageReceived() {
-        GlobalStats.totalMessagesSent++
+//        GlobalStats.totalMessagesSent++ TODO implement
     }
 
     override fun register(jda: JDA) {
