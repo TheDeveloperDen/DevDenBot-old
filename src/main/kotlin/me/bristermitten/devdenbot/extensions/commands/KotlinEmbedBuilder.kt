@@ -9,30 +9,34 @@ import java.awt.Color
 @Suppress("MemberVisibilityCanBePrivate")
 class KotlinEmbedBuilder : EmbedBuilder() {
 
-    var title: String?
-        get() = writeOnly()
+    var title: String? = null
         set(value) {
             setTitle(value, url)
+            field = value
         }
 
     var author: String? = null
         set(value) {
             setAuthor(value, authorUrl)
+            field = value
         }
 
     var authorUrl: String? = null
         set(value) {
             setAuthor(author, value, authorImage)
+            field = value
         }
 
     var authorImage: String? = null
         set(value) {
             setAuthor(author, authorUrl, value)
+            field = value
         }
 
     var url: String? = null
         set(value) {
             setTitle(title, value)
+            field = value
         }
 
     var thumbnail: String?
