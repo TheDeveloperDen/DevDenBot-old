@@ -1,17 +1,20 @@
 package me.bristermitten.devdenbot.pasting
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
+import me.bristermitten.devdenbot.discord.SUGGESTIONS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.extensions.commands.KotlinEmbedBuilder
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import java.awt.Color
+import java.time.Instant
 import javax.inject.Inject
 
 class CodeBlockMessageListener @Inject constructor(
@@ -20,9 +23,19 @@ class CodeBlockMessageListener @Inject constructor(
 
     companion object {
         private val log by log()
-        private const val MIN_ROWS_FOR_CONVERSION = 5
+        private const val MIN_ROWS_FOR_CONVERSION = 10
 
-        internal val largeCodeBlock = Regex("```(?:[a-zA-Z]*\n)?((?:(?!.*```).*?\n){${MIN_ROWS_FOR_CONVERSION + 1},}.*?)```")
+        //regex v1: "```(?:[a-zA-Z]*\n)?((?:(?!.*```).*?\n){${MIN_ROWS_FOR_CONVERSION + 1},}.*?)```"
+        //regex v2: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:[a-zA-Z]*\n)?((?:(?!.*```).*?\n){6,}.*?)```
+        //regex v3(kill): (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n)?((?:(?!\k<lang>\n)(?!.*```).*?\n)(?:(?!.*```).*?\n){5,}.*?)```
+        //regex v4: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n(?<body>(?:(?!.*```).*?\n){5,}.*?)|(?<body2>(?![a-zA-Z]+\n)(?!.*```).*?\n(?:(?!.*```).*?\n){4,}.*?))```
+        //regex v5: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n((?:(?!.*```).*?\n){5,}.*?)|((?![a-zA-Z]*\n)(?!.*```).*?\n(?:(?!.*```).*?\n){4,}.*?))```
+        //regex v6: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n((?:(?!.*```).*?\n){5,}.*?)|((?![a-zA-Z]*\n)(?!.*```).*?\n(?:(?!.*```).*?\n){3,}(?!.*```).*?))```
+        //regex v7: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n((?:(?!.*```).*?\n){5,}.*?)|((?![a-zA-Z]*\n)(?!.*```).*?\n(?:(?!.*```).*?\n){3,}(?!.*```).*?\n?))```
+        //regex v8: (?:(?:.|\n)*?(?=```)(?:```(?:.|\n)*?```)*)```(?:(?<lang>[a-zA-Z]+)?\n((?:(?!.*```).*?\n){4,}(?!.*```).*?\n?\s*)(?:\n?\s*)*|((?![a-zA-Z]*\n)(?!.*```).*?\n(?:(?!.*```).*?\n){3,}(?!.*```).*?)\n?\s*)```
+        //regex v9: ```(?:(?<lang>[a-zA-Z]+)?\n)?((?:.|\n)*?)```
+        internal val codeBlock = Regex("```(?:(?<lang>[a-zA-Z]+)?\\n)?((?:.|\\n)*?)```")
+
     }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
@@ -33,7 +46,7 @@ class CodeBlockMessageListener @Inject constructor(
         if (rawText.startsWith("${ddbConfig.prefix}keep")) {
             return
         }
-        if (!rawText.contains(largeCodeBlock)){
+        if (!rawText.contains(codeBlock)) {
             return
         }
         val member = event.member ?: event.guild.retrieveMemberById(event.author.id).await()
@@ -42,19 +55,50 @@ class CodeBlockMessageListener @Inject constructor(
             return
         }
 
-        convertMessage(event.message, member)
+        val embed = createEmbed(event.message, member) ?: return
+
+        event.channel.sendMessage(embed).queue()
+        event.message.delete().queue()
 
     }
 
-    internal suspend fun convertMessage(message: Message, author: Member) {
-        var content = message.contentRaw
-        val codeBlock = largeCodeBlock
-            .findAll(content)
-            .map { it.groupValues[1] }
-            .map { scope.async { HasteClient.postCode(it) }}
+    private suspend fun createEmbed(message: Message, member: Member): MessageEmbed? {
+        var index = 0;
+        val urls = codeBlock.findAll(message.contentRaw)
+            .map { it.groups.last()?.value }
+            .filter { it?.lines()?.size ?: 0 >= MIN_ROWS_FOR_CONVERSION }
+            .filterNotNull()
+            .map { scope.async { HasteClient.postCode(it) } }
             .toList()
             .awaitAll()
-            .forEach{println(it)}
+
+        if (urls.size == null) { // this is a bit hacky
+            return null
+        }
+
+        val dc = codeBlock.replace(message.contentRaw) {
+            if (it.groups.last()?.value?.lines()?.size ?: 0 >= MIN_ROWS_FOR_CONVERSION) {
+                urls[index].also { index++ }
+            } else {
+                it.value
+            }
+        }
+            .removePrefix("${ddbConfig.prefix}convert")
+            .trim()
+
+        val embedBuilder = KotlinEmbedBuilder().apply {
+            author = member.effectiveName
+            authorImage = member.user.effectiveAvatarUrl
+            color = Color(ddbConfig.colour)
+            description = dc
+            setTimestamp(Instant.now())
+
+            setFooter("This message was converted automatically to keep the channels clean from large code blocks.")
+
+        }
+
+        return embedBuilder.build()
+
 
     }
 
