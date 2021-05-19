@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.pasting
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.discord.SUGGESTIONS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.KotlinEmbedBuilder
@@ -31,6 +32,9 @@ class CodeBlockMessageListener @Inject constructor(
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.author.isBot) {
+            return
+        }
+        if (event.channel.idLong == BOT_COMMANDS_CHANNEL_ID){
             return
         }
         val rawText = event.message.contentRaw
