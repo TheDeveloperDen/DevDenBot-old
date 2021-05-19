@@ -3,7 +3,7 @@ package me.bristermitten.devdenbot.xp
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.util.botCommandsChannelId
+import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.util.levenshtein
 import mu.KotlinLogging
 import net.dv8tion.jda.api.entities.MessageChannel
@@ -27,7 +27,7 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
     if (author.isBot) {
         return false
     }
-    if (channel.idLong == botCommandsChannelId) {
+    if (channel.idLong == BOT_COMMANDS_CHANNEL_ID) {
         return false
     }
     val now = System.currentTimeMillis()

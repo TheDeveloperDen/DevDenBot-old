@@ -6,7 +6,7 @@ import io.sentry.Sentry
 import kotlinx.coroutines.launch
 import me.bristermitten.devdenbot.commands.category.MiscCategory
 import me.bristermitten.devdenbot.extensions.commands.tempReply
-import me.bristermitten.devdenbot.util.botCommandsChannelId
+import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.Permission
@@ -45,11 +45,10 @@ abstract class DevDenCommand(
     final override fun execute(event: CommandEvent) {
         log.debug { "Executing command $name for ${event.member} in ${event.channel.name}." }
         scope.launch {
-            if (commandChannelOnly && event.channel.idLong != botCommandsChannelId
-                && !event.member.hasPermission(Permission.MESSAGE_MANAGE)
-            ) {
-                log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}." }
-                event.tempReply("Commands can only be used in<#$botCommandsChannelId>.", 5)
+            if (commandChannelOnly && event.channel.idLong != BOT_COMMANDS_CHANNEL_ID
+                    && !event.member.hasPermission(Permission.MESSAGE_MANAGE)) {
+                log.trace { "Member ${event.member.user.name} has insufficient permissions to execute commands in channel ${event.channel.name}."}
+                event.tempReply("Commands can only be used in<#$BOT_COMMANDS_CHANNEL_ID>.", 5)
                 return@launch
             }
             try {
