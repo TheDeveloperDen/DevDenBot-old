@@ -99,7 +99,7 @@ class CodeBlockMessageListener @Inject constructor(
 
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().launchEachIn(scope, this::onGuildMessageReceived)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
     }
 
 }
