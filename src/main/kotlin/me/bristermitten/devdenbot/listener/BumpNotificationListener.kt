@@ -46,7 +46,7 @@ class BumpNotificationListener : EventListener {
         }
 
         val user = StatsUsers.get(event.author.idLong)
-        user.bumps++
+        user.setBumps(user.bumps + 1)
 
         log.trace {
             "Increased bump stat for user ${event.author.name} from ${

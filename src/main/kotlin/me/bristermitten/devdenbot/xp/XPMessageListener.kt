@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import kotlin.math.roundToInt
 
 /**
@@ -94,7 +93,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val diff = curXP.roundToInt() - prevXP.roundToInt()
 
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
-        user.xp += diff
+        user.addXP(diff)
         checkLevelUp(member, user)
         log.debug {
             "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
@@ -121,7 +120,8 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     private suspend fun checkLevelUp(member: Member, user: StatsUser) {
         val requiredForNextLevel = xpForLevel(user.level + 1)
         if (user.xp >= requiredForNextLevel) {
-            processLevelUp(member, ++user.level)
+            user.setLevel(user.level + 1)
+            processLevelUp(member, user.level)
         }
     }
 
