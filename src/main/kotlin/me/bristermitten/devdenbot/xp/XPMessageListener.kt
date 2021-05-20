@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import kotlin.math.roundToInt
 
 /**
@@ -63,7 +64,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         user.recentMessages.add(toCache)
         MessageCache.cache(toCache)
         user.lastMessageSentTime = System.currentTimeMillis()
-        user.xp += gained
+        user.addXP(gained)
 
         checkLevelUp(member, user)
 
@@ -111,7 +112,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
         val gained = xpForMessage(message.msg).roundToInt()
 
-        user.xp -= gained
+        user.addXP(-gained.toLong())
         log.debug {
             "Took $gained XP from ${author.name} for deleting a message (${message.id})"
         }

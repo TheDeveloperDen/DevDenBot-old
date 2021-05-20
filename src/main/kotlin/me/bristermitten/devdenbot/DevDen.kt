@@ -68,8 +68,8 @@ class DevDen {
             load()
         } catch (e: Exception) {
             Sentry.captureException(e)
+            e.printStackTrace()
         }
-        Thread.sleep(1000)
     }
 
 
@@ -79,15 +79,14 @@ class DevDen {
         val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
         val dbPassword = System.getenv("DDB_DB_PASSWORD")
         val config = HikariConfig().apply {
-            jdbcUrl = "jdbc:mysql://$host/$db"
-            driverClassName = "com.mysql.cj.jdbc.Driver"
+            jdbcUrl = "jdbc:mysql://$host:3306/$db"
+            driverClassName = "com.mysql.jdbc.Driver"
             username = dbUsername
             password = dbPassword
             maximumPoolSize = 10
         }
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
-
         newSuspendedTransaction {
             SchemaUtils.create(Events, Users)
         }
