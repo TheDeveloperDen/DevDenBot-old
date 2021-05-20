@@ -67,7 +67,7 @@ class CodeBlockMessageListener @Inject constructor(
             .toList()
             .awaitAll()
 
-        if (urls.size == null) { // this is a bit hacky
+        if (urls.size == 0) { // this is a bit hacky
             return null
         }
 
