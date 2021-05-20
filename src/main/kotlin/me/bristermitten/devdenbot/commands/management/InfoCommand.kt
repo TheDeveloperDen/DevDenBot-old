@@ -32,11 +32,10 @@ class InfoCommand @Inject constructor(
         fun formatForInfo(s: String) = "`$s`"
         fun formatForInfo(s: Number) = "`${formatNumber(s)}`"
 
-        val totalXP = formatForInfo(StatsUsers.all.map { it.xp }.reduce(AtomicBigInteger::plus).get())
+        val totalXP = formatForInfo(StatsUsers.all().sumOf { it.xp })
         val totalMembers = formatForInfo(event.guild.memberCount)
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
-//        val totalMessages = formatForInfo(GlobalStats.totalMessagesSent.get())
-        val levelUps = formatForInfo(StatsUsers.all.map { it.level }.sumOf { it.get() })
+        val levelUps = formatForInfo(StatsUsers.all().sumOf { it.level })
         val formattedVersion = formatForInfo(VersionProvider.version)
 
         reply(EmbedBuilder()

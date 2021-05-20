@@ -6,15 +6,15 @@ import java.math.BigInteger
 
 object Leaderboards {
 
-    val XP = StatsUserLeaderboard("XP") { it.xp.get() }
-    val LEVEL = StatsUserLeaderboard("Level") { it.level.get() }
-    val BUMPS = StatsUserLeaderboard("Bumps") { it.bumps.get() }
+    val XP = StatsUserLeaderboard("XP") { it.xp }
+    val LEVEL = StatsUserLeaderboard("Level") { it.level }
+    val BUMPS = StatsUserLeaderboard("Bumps") { it.bumps }
 
-    fun initializeLeaderboards() {
-        val users = StatsUsers.all
-        XP.addAll(users.filter { it.xp.get() != BigInteger.ZERO })
-        LEVEL.addAll(users.filter { it.level.get() != 0 })
-        BUMPS.addAll(users.filter { it.bumps.get() != 0 })
+    suspend fun initializeLeaderboards() {
+        val users = StatsUsers.all()
+        XP.addAll(users.filter { it.xp != 0L })
+        LEVEL.addAll(users.filter { it.level != 0 })
+        BUMPS.addAll(users.filter { it.bumps != 0 })
     }
 }
 

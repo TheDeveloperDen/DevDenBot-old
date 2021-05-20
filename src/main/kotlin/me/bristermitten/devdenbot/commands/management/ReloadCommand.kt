@@ -22,14 +22,7 @@ class ReloadCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val statsFile = File("/var/data/stats.json")
-        if (!statsFile.exists()) {
-            return
-        }
-        val content = statsFile.readText()
-        StatsUsers.loadFrom(content)
-
-        reply(":white_check_mark: Reloaded.")
+        reply("currently borked soz")
     }
 
 

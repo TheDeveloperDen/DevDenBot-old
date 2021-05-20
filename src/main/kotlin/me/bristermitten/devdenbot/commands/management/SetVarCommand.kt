@@ -66,7 +66,7 @@ class SetVarCommand @Inject constructor(
 
         val value = amount.content.parseTo(stat.returnType)
 
-        val statsUser = StatsUsers[targetUser.idLong]
+        val statsUser = StatsUsers.get(targetUser.idLong)
         stat.set(statsUser, value)
         awaitReply("Successfully set value of `${stat.name}` for ${targetUser.asMention} to `$value`")
     }

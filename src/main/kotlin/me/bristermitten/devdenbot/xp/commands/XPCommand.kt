@@ -42,8 +42,8 @@ class XPCommand @Inject constructor(
 
     override suspend fun CommandEvent.execute() {
         val targetUser = firstMentionedUser() ?: event.message.author
-        val targetStatsUser = StatsUsers[targetUser.idLong]
-        val text = formatNumber(targetStatsUser.xp.get()) + " XP"
+        val targetStatsUser = StatsUsers.get(targetUser.idLong)
+        val text = formatNumber(targetStatsUser.xp) + " XP"
 
         val photo = createTextImage(width = 400,
             height = 200,

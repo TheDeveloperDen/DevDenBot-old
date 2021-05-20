@@ -1,59 +1,21 @@
-@file:UseSerializers(BigIntegerSerializer::class, AtomicIntegerSerializer::class)
-
 package me.bristermitten.devdenbot.data
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlinx.serialization.UseSerializers
-import me.bristermitten.devdenbot.leaderboard.Leaderboards
-import me.bristermitten.devdenbot.serialization.AtomicIntegerSerializer
-import me.bristermitten.devdenbot.serialization.BigIntegerSerializer
-import me.bristermitten.devdenbot.serialization.PrettyName
-import me.bristermitten.devdenbot.util.atomic
-import me.bristermitten.devdenbot.util.inc
-import java.math.BigInteger
-import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 
 /**
  * @author AlexL
  */
-@Serializable
-data class StatsUser(
-    val userId: Long,
-    @PrettyName("XP")
-    var xp: AtomicBigInteger = AtomicBigInteger(BigInteger.ZERO),
-    var level: AtomicInteger = 0.atomic(),
-    var bumps: AtomicInteger = 0.atomic(),
-) {
-    @Transient
+class StatsUser(
+    id: EntityID<Long>,
+) : LongEntity(id) {
+    companion object : LongEntityClass<StatsUser>(Users)
+    var xp by Users.xp
+    var level by Users.level
+    var bumps by Users.bumps
+
     val recentMessages = SafeCircularFifoQueue<CachedMessage>(10)
     var lastMessageSentTime: Long = -1
-
-    fun giveXP(amount: BigInteger) {
-        this.xp += amount
-        Leaderboards.XP.update(this)
-    }
-
-    fun incrementLevel(): Int {
-        this.level++
-        Leaderboards.LEVEL.update(this)
-        return this.level.get()
-    }
-
-    fun incrementBumps(): Int {
-        this.bumps++
-        Leaderboards.BUMPS.update(this)
-        return this.bumps.get()
-    }
-
-    override fun hashCode() = userId.hashCode()
-
-    override fun equals(other: Any?): Boolean {
-        if (other !is StatsUser) {
-            return false
-        }
-        return other.userId == userId
-    }
 
 }

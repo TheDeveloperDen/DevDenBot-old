@@ -6,9 +6,11 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import dev.misfitlabs.kotlinguice4.getInstance
 import io.sentry.Sentry
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.data.Users
 import me.bristermitten.devdenbot.events.Events
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
@@ -20,7 +22,7 @@ import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import net.dv8tion.jda.api.JDA
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
@@ -35,8 +37,10 @@ class DevDen {
             }
 
         val loadStatsTime = measureTimeMillis {
-            loadDatabase()
-            Leaderboards.initializeLeaderboards()
+            runBlocking {
+                loadDatabase()
+                Leaderboards.initializeLeaderboards()
+            }
         }
 
         log.debug { "Loading stats and connecting to database took $loadStatsTime ms." }
@@ -69,7 +73,7 @@ class DevDen {
     }
 
 
-    private fun loadDatabase() {
+    private suspend fun loadDatabase() {
         val host = System.getenv("DDB_DB_HOST") ?: "localhost"
         val db = System.getenv("DDB_DB_NAME")
         val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
@@ -84,8 +88,8 @@ class DevDen {
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
 
-        transaction {
-            SchemaUtils.create(Events)
+        newSuspendedTransaction {
+            SchemaUtils.create(Events, Users)
         }
     }
 

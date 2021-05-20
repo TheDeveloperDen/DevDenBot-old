@@ -10,7 +10,10 @@ import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.util.*
+import me.bristermitten.devdenbot.util.handleEachIn
+import me.bristermitten.devdenbot.util.listenFlow
+import me.bristermitten.devdenbot.util.log
+import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
@@ -39,7 +42,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val strippedMessage = stripMessage(message.contentStripped)
 
         val gained = xpForMessage(strippedMessage).roundToInt()
-        val user = StatsUsers[message.author.idLong]
+        val user = StatsUsers.get(message.author.idLong)
 
         if (isTooSimilar(user, strippedMessage)) {
             log.debug {
@@ -60,7 +63,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         user.recentMessages.add(toCache)
         MessageCache.cache(toCache)
         user.lastMessageSentTime = System.currentTimeMillis()
-        user.giveXP(gained.toBigInteger())
+        user.xp += gained
 
         checkLevelUp(member, user)
 
@@ -72,7 +75,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     private suspend fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
         val message = event.message
 
-        val user = StatsUsers[message.author.idLong]
+        val user = StatsUsers.get(message.author.idLong)
         val member = event.member ?: return
 
         val prevMessage = MessageCache.getCached(event.messageIdLong) ?: return
@@ -90,7 +93,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val diff = curXP.roundToInt() - prevXP.roundToInt()
 
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
-        user.giveXP(diff.toBigInteger())
+        user.xp += diff
         checkLevelUp(member, user)
         log.debug {
             "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
@@ -100,7 +103,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     private suspend fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         val message = MessageCache.getCached(event.messageIdLong) ?: return
 
-        val user = StatsUsers[message.authorId]
+        val user = StatsUsers.get(message.authorId)
         val author = event.jda.retrieveUserById(message.authorId).await() ?: return
 
         if (!shouldCountForStats(author, message.msg, event.channel, config)) {
@@ -108,16 +111,16 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
         val gained = xpForMessage(message.msg).roundToInt()
 
-        user.giveXP((-gained).toBigInteger())
+        user.xp -= gained
         log.debug {
             "Took $gained XP from ${author.name} for deleting a message (${message.id})"
         }
     }
 
     private suspend fun checkLevelUp(member: Member, user: StatsUser) {
-        val requiredForNextLevel = xpForLevel(user.level.get() + 1)
+        val requiredForNextLevel = xpForLevel(user.level + 1)
         if (user.xp >= requiredForNextLevel) {
-            processLevelUp(member, (user.incrementLevel()))
+            processLevelUp(member, ++user.level)
         }
     }
 

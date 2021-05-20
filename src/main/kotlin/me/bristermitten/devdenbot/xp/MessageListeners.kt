@@ -2,8 +2,8 @@ package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
-import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
+import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.levenshtein
 import mu.KotlinLogging
 import net.dv8tion.jda.api.entities.MessageChannel
@@ -20,7 +20,7 @@ fun similarityProportion(a: String, b: String) = levenshtein(a, b) / b.length.to
 
 private val log = KotlinLogging.logger("MessageListeners")
 
-fun shouldCountForStats(author: User, content: String, channel: MessageChannel, config: DDBConfig): Boolean {
+suspend fun shouldCountForStats(author: User, content: String, channel: MessageChannel, config: DDBConfig): Boolean {
     if (content.startsWith(config.prefix)) {
         return false
     }
@@ -37,7 +37,7 @@ fun shouldCountForStats(author: User, content: String, channel: MessageChannel, 
         return false
     }
 
-    val user = StatsUsers[author.idLong]
+    val user = StatsUsers.get(author.idLong)
     if (now - user.lastMessageSentTime < MESSAGE_MIN_DELAY_MILLIS) {
         log.info { "Message $content was discarded as $user typed ${now - user.lastMessageSentTime}ms ago" }
         return false

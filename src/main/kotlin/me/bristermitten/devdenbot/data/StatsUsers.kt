@@ -1,37 +1,20 @@
 package me.bristermitten.devdenbot.data
 
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import me.bristermitten.devdenbot.util.log
-import java.util.concurrent.ConcurrentHashMap
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 /**
  * @author AlexL
  */
 object StatsUsers {
 
-    private val users = ConcurrentHashMap<Long, StatsUser>()
-    private val log by log()
-
-    operator fun get(userId: Long): StatsUser {
-        return users.getOrPut(userId) {
-            StatsUser(userId)
+    suspend fun get(userId: Long) = newSuspendedTransaction {
+        StatsUser.findById(userId) ?: StatsUser.new(userId) {
+            this.bumps = 0
+            this.level = 0
         }
     }
 
-    fun loadFrom(text: String) {
-        val map = Json.decodeFromString<Map<Long, StatsUser>>(text)
-        users.clear()
-        users.putAll(map)
-        log.debug("Loaded stats for ${users.size} users.")
+    suspend fun all() = newSuspendedTransaction {
+        StatsUser.all()
     }
-
-    fun saveToString(): String {
-        return Json.encodeToString(MapSerializer(Long.serializer(), StatsUser.serializer()), users)
-    }
-
-    val all
-        get() = users.values.toList()
 }
