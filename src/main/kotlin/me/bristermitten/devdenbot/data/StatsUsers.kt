@@ -12,6 +12,6 @@ object StatsUsers {
     }
 
     suspend fun all() = newSuspendedTransaction {
-        StatsUser.all()
+        StatsUser.all().toList()
     }
 }
