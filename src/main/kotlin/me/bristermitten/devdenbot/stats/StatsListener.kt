@@ -1,9 +1,8 @@
 package me.bristermitten.devdenbot.stats
 
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
+import me.bristermitten.devdenbot.util.handleEachIn
 import me.bristermitten.devdenbot.util.listenFlow
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
@@ -17,8 +16,6 @@ class StatsListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>()
-            .onEach { this.onGuildMessageReceived() }
-            .launchIn(scope)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope) { this.onGuildMessageReceived() }
     }
 }

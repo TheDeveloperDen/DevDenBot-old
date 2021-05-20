@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
@@ -121,7 +122,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
     }
 
     private suspend fun processLevelUp(user: Member, level: Int) {
-        val channel = user.jda.getGuildChannelById(botCommandsChannelId) as? TextChannel ?: return
+        val channel = user.jda.getGuildChannelById(BOT_COMMANDS_CHANNEL_ID) as? TextChannel ?: return
         channel.sendMessage("${user.asMention}, you levelled up to level **$level**!").await()
         val tier = tierOf(level)
         val tierRole = tierRole(user.jda, tier)
