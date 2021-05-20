@@ -45,12 +45,13 @@ class BumpNotificationListener : EventListener {
             return
         }
 
-        StatsUsers[event.author.idLong].incrementBumps()
+        val user = StatsUsers.get(event.author.idLong)
+        user.bumps++
 
         log.trace {
             "Increased bump stat for user ${event.author.name} from ${
-                StatsUsers[event.author.idLong].bumps.get() - 1
-            } to ${StatsUsers[event.author.idLong].bumps}."
+                user.bumps - 1
+            } to ${user.bumps}."
         }
 
         delay(BUMP_COOLDOWN)

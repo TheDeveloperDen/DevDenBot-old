@@ -51,6 +51,13 @@ dependencies {
 
     implementation("io.sentry:sentry:4.3.0")
 
+    implementation("com.zaxxer:HikariCP:4.0.3")
+    implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.31.1")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
+    implementation("org.jetbrains.exposed", "exposed-java-time", "0.31.1")
+    implementation("mysql:mysql-connector-java:5.1.48")
+
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")

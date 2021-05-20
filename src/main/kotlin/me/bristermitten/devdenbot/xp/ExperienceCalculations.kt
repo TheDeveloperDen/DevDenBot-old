@@ -1,7 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
 import me.bristermitten.devdenbot.data.CharTree
-import java.math.BigInteger
 import kotlin.math.pow
 import kotlin.math.tanh
 
@@ -56,6 +55,6 @@ fun xpForMessage(message: String): Double {
     return ((1 - compressibility) * (0.5 + 0.5 * wordiness)) * tanh(length / 25.0) * length.pow(0.73)
 }
 
-fun xpForLevel(level: Int): BigInteger = level.toBigDecimal()
-    .let { n -> (5 / 3).toBigDecimal() * n.pow(3) + (55 / 2).toBigDecimal() * n.pow(2) + (755 / 6).toBigDecimal() * n }
-    .toBigInteger()
+fun xpForLevel(level: Int) = level.toDouble()
+    .let { n -> (5 / 3) * n.pow(3) + (55 / 2).toDouble() * n.pow(2) + (755 / 6).toDouble() * n }
+    .toLong()

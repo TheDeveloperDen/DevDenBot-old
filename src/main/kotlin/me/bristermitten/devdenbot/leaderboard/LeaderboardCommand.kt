@@ -88,7 +88,7 @@ class LeaderboardCommand @Inject constructor(
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${statsUserLeaderboard.keyExtractor(statsUser)} ${statsUserLeaderboard.name}",
-                    mention(statsUser.userId)
+                    mention(statsUser.id.value)
                 )
             },
             entryCount = statsUserLeaderboard.getEntryCount(),

@@ -24,14 +24,14 @@ class ProfileCommand @Inject constructor(
 
     override suspend fun CommandEvent.execute() {
         val targetUser = event.message.mentionedMembers.firstOrNull()?.user ?: event.message.author
-        val statsUser = StatsUsers[targetUser.idLong]
+        val statsUser = StatsUsers.get(targetUser.idLong)
 
         val action = prepareReply {
             title = "Your Statistics"
-            field("XP", formatNumber(statsUser.xp.get()), true)
+            field("XP", formatNumber(statsUser.xp), true)
             field("Level", statsUser.level.toString(), true)
             field("Disboard Bumps", statsUser.bumps.toString(), true)
-            field("XP to Level", formatNumber(xpForLevel(statsUser.level.toInt() + 1)), true)
+            field("XP to Level", formatNumber(xpForLevel(statsUser.level + 1)), true)
             setFooter("Statistics for ${targetUser.name}")
         }
 

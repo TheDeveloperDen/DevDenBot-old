@@ -2,26 +2,29 @@ package me.bristermitten.devdenbot
 
 import com.google.inject.Guice
 import com.jagrosh.jdautilities.command.CommandClient
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import dev.misfitlabs.kotlinguice4.getInstance
 import io.sentry.Sentry
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
-import me.bristermitten.devdenbot.data.StatsUsers
+import me.bristermitten.devdenbot.data.Users
+import me.bristermitten.devdenbot.events.Events
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.leaderboard.Leaderboards
 import me.bristermitten.devdenbot.listener.ListenersModule
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.stats.GlobalStats
 import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.xp.VoiceChatXPTask
 import net.dv8tion.jda.api.JDA
-import java.io.File
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.schedule
-import kotlin.concurrent.thread
 import kotlin.system.measureTimeMillis
 
 class DevDen {
@@ -34,11 +37,13 @@ class DevDen {
             }
 
         val loadStatsTime = measureTimeMillis {
-            loadStats()
-            Leaderboards.initializeLeaderboards()
+            runBlocking {
+                loadDatabase()
+                Leaderboards.initializeLeaderboards()
+            }
         }
 
-        log.debug { "Loading stats took $loadStatsTime ms." }
+        log.debug { "Loading stats and connecting to database took $loadStatsTime ms." }
 
         val injector = Guice.createInjector(DevDenModule(config), CommandsModule(), ListenersModule())
 
@@ -63,50 +68,33 @@ class DevDen {
             load()
         } catch (e: Exception) {
             Sentry.captureException(e)
+            e.printStackTrace()
         }
-        Thread.sleep(1000)
+    }
+
+
+    private suspend fun loadDatabase() {
+        val host = System.getenv("DDB_DB_HOST") ?: "localhost"
+        val db = System.getenv("DDB_DB_NAME")
+        val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
+        val dbPassword = System.getenv("DDB_DB_PASSWORD")
+        val config = HikariConfig().apply {
+            jdbcUrl = "jdbc:mysql://$host:3306/$db"
+            driverClassName = "com.mysql.jdbc.Driver"
+            username = dbUsername
+            password = dbPassword
+            maximumPoolSize = 10
+        }
+        val dataSource = HikariDataSource(config)
+        Database.connect(dataSource)
+        newSuspendedTransaction {
+            SchemaUtils.create(Events, Users)
+        }
     }
 
     private fun startTasks(jda: JDA) {
         log.info { "starting tasks..." }
         val timer = Timer()
-        timer.schedule(0, TimeUnit.MINUTES.toMillis(5)) {
-            saveStats()
-        }
-        Runtime.getRuntime().addShutdownHook(thread(start = false) {
-            saveStats()
-        })
-
         timer.schedule(VoiceChatXPTask(jda), 0L, TimeUnit.SECONDS.toMillis(60))
     }
-
-    private val statsFilePath = "/var/data/stats.json"
-    private val globalStatsFilePath = "/var/data/globalstats.json"
-
-    private fun loadStats() {
-        log.trace("loading stats...")
-        val statsFile = File(statsFilePath)
-        if (statsFile.exists()) {
-            val content = statsFile.readText()
-            StatsUsers.loadFrom(content)
-            log.trace { "Loading stats from $statsFilePath finished." }
-        }
-
-        val globalStatsFile = File(globalStatsFilePath)
-        if (globalStatsFile.exists()) {
-            GlobalStats.loadFrom(globalStatsFile.readText())
-            log.trace { "Loading global stats from $globalStatsFilePath finished." }
-        }
-    }
-
-    private fun saveStats() {
-        log.trace("saving stats...")
-        val statsFile = File(statsFilePath)
-        val content = StatsUsers.saveToString()
-        statsFile.writeText(content)
-
-        val globalStatsFile = File(globalStatsFilePath)
-        globalStatsFile.writeText(GlobalStats.saveToString())
-    }
-
 }
