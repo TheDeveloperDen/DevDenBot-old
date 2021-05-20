@@ -19,7 +19,7 @@ jobs:
         uses: christian-draeger/read-properties@1.0.1
         with:
           path: './gradle.properties'
-          property: 'version'        
+          property: 'version'
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -30,7 +30,7 @@ jobs:
           tags: ${{ steps.read_property.outputs.value }}
           tag_with_ref: true
   deploy:
-    needs: [push_to_registry]
+    needs: [ push_to_registry ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -44,4 +44,4 @@ jobs:
             docker pull ghcr.io/thedeveloperden/devdenbot:latest
             docker stop devdenbot
             docker rm devdenbot
-            docker run --name devdenbot --env SENTRY_DSN=${{ secrets.SENTRY_DSN }} --env DDB_TOKEN=${{ secrets.DDB_TOKEN }} --mount source=devden,target=/var/data -d --restart unless-stopped ghcr.io/thedeveloperden/devdenbot
+            docker run --name devdenbot --env SENTRY_DSN=${{ secrets.SENTRY_DSN }} --env DDB_TOKEN=${{ secrets.DDB_TOKEN }} --env DDB_DB_NAME=devden --env DDB_DB_PASSWORD=${{ secrets.DDB_DB_PASSWORD }} --mount source=devden,target=/var/data -d --restart unless-stopped ghcr.io/thedeveloperden/devdenbot

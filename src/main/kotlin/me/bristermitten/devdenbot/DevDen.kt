@@ -70,9 +70,9 @@ class DevDen {
 
 
     private fun loadDatabase() {
-        val host = System.getenv("DDB_DB_HOST")
+        val host = System.getenv("DDB_DB_HOST") ?: "localhost"
         val db = System.getenv("DDB_DB_NAME")
-        val dbUsername = System.getenv("DDB_DB_USERNAME")
+        val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
         val dbPassword = System.getenv("DDB_DB_PASSWORD")
         val config = HikariConfig().apply {
             jdbcUrl = "jdbc:mysql://$host/$db"
