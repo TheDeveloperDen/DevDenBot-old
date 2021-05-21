@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.info.InfoCategory
 import me.bristermitten.devdenbot.commands.requireLength
+import me.bristermitten.devdenbot.commands.requireLengthAtLeast
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.commands.embed
 import me.bristermitten.devdenbot.extensions.commands.tempReply
@@ -25,7 +26,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
 
         val args = arguments()
         val arguments = args.args
-
+        args.requireLengthAtLeast(this@FAQCommand, 1)
         when (arguments.size) {
             1 -> replyFAQ(arguments.first().content)
             else -> {
