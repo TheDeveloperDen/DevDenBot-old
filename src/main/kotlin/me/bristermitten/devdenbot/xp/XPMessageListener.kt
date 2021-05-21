@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import kotlin.math.roundToInt
 
 /**
@@ -117,11 +118,10 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
     }
 
-    private suspend fun checkLevelUp(member: Member, user: StatsUser) {
+    private suspend fun checkLevelUp(member: Member, user: StatsUser) = newSuspendedTransaction {
         val requiredForNextLevel = xpForLevel(user.level + 1)
         if (user.xp >= requiredForNextLevel) {
-            user.setLevel(user.level + 1)
-            processLevelUp(member, user.level)
+            processLevelUp(member, ++user.level)
         }
     }
 
