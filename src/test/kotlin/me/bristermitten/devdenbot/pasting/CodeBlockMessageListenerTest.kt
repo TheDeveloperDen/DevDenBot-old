@@ -23,9 +23,9 @@ internal class CodeBlockMessageListenerTest {
         ```public static void main(String[] args) {
                 Scanner Msg = new Scanner(System.in);
                 int x = 1;
-                System.out.prinln();
-                System.out.prinln();
-                System.out.prinln();
+                System.out.println();
+                System.out.println();
+                System.out.println();
         }```
         Hey guys this is some work i had, this i what i've done so far but it needs to use try/catch and im not sure how to make it so.
     """.trimIndent()
@@ -48,9 +48,9 @@ internal class CodeBlockMessageListenerTest {
         public static void main(String[] args) {
                 Scanner Msg = new Scanner(System.in);
                 int x = 1;
-                System.out.prinln();
-                System.out.prinln();
-                System.out.prinln();
+                System.out.println();
+                System.out.println();
+                System.out.println();
         }
         """.trimIndent()
 
