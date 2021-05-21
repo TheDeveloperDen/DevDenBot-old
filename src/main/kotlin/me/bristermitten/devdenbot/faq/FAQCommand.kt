@@ -34,20 +34,20 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
                     tempReply("**No permission.**", 5)
                     return
                 }
-                when (arguments[1].content) {
+                when (arguments[0].content) {
                     "set" -> {
                         args.requireLength(this@FAQCommand, 4)
-                        val name = arguments[2].content
-                        val title = arguments[3].content
+                        val name = arguments[1].content
+                        val title = arguments[2].content
                         val content = arguments.drop(3).joinToString(" ") { it.content }
                         return createOrUpdateFAQ(name, title, content)
                     }
                     "delete" -> {
                         args.requireLength(this@FAQCommand, 2)
-                        val name = arguments[2].content
+                        val name = arguments[1].content
                         return deleteFAQ(name)
                     }
-                    else -> reply("Unknown subcommand ${arguments[1].content}")
+                    else -> reply("Unknown subcommand ${arguments[0].content}")
                 }
             }
         }
