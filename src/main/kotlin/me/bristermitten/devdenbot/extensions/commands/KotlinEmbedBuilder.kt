@@ -39,12 +39,6 @@ class KotlinEmbedBuilder : EmbedBuilder() {
             field = value
         }
 
-    var thumbnail: String?
-        get() = writeOnly()
-        set(value) {
-            setThumbnail(value)
-        }
-
 
     var description: String?
         get() = writeOnly()

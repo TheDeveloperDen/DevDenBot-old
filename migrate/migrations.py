@@ -21,6 +21,6 @@ for uid, properties in data.items():
     bumps = properties['bumps']
     cursor.execute('INSERT INTO Users(id, xp, level, bumps) VALUES (%s, %s, %s, %s)', (
         uid, xp, level, bumps
-    )) # yeah this will fail if there are duplicate entries, i don't care
+    ))  # yeah this will fail if there are duplicate entries, i don't care
 
 db.commit()

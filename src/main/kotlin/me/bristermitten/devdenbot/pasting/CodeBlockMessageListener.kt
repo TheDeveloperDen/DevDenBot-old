@@ -57,7 +57,7 @@ class CodeBlockMessageListener @Inject constructor(
     }
 
     private suspend fun createEmbed(message: Message, member: Member): MessageEmbed? {
-        var index = 0;
+        var index = 0
         val urls = codeBlock.findAll(message.contentRaw)
             .map { it.groups.last()?.value }
             .filter { it?.lines()?.size ?: 0 >= MIN_ROWS_FOR_CONVERSION }

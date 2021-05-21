@@ -22,7 +22,7 @@ open class Leaderboard<T> (private val comparator: Comparator<T>) {
         return entries[position]
     }
 
-    fun getPosition(entry: T): Int? {
+    private fun getPosition(entry: T): Int? {
         return indices[entry]
     }
 

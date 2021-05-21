@@ -3,21 +3,13 @@ package me.bristermitten.devdenbot.leaderboard
 import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import me.bristermitten.devdenbot.commands.DevDenCommand
-import me.bristermitten.devdenbot.data.StatsUser
-import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.serialization.PrettyName
 import me.bristermitten.devdenbot.util.mention
 import me.bristermitten.devdenbot.xp.commands.XPCategory
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
-import kotlin.reflect.KTypeProjection
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.isSubtypeOf
 
 
 /**
@@ -67,7 +59,7 @@ class LeaderboardCommand @Inject constructor(
         }.lowercase(Locale.getDefault())
 
         val leaderboard = when (leaderboardBy) {
-            "xp" ->Leaderboards.XP
+            "xp" -> Leaderboards.XP
             "level", "lvl" -> Leaderboards.LEVEL
             "bump", "bumps" -> Leaderboards.BUMPS
             else -> {
@@ -81,10 +73,10 @@ class LeaderboardCommand @Inject constructor(
 
     private fun <C : Comparable<C>> CommandEvent.sendLeaderboard(
         entriesPerPage: Int,
-        statsUserLeaderboard: StatsUserLeaderboard<C>
+        statsUserLeaderboard: StatsUserLeaderboard<C>,
     ) {
         DevDenPaginator(
-            { statsUserLeaderboard.getEntry(it)},
+            { statsUserLeaderboard.getEntry(it) },
             { builder, statsUser, index ->
                 builder.field(
                     "#${index + 1} - ${statsUserLeaderboard.keyExtractor(statsUser)} ${statsUserLeaderboard.name}",
