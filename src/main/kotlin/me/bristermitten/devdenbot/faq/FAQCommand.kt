@@ -93,7 +93,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
         }
 
         if (faq == null) {
-            reply("**Unknown FAQ `$name`.**")
+            reply("**Unknown FAQ `$name`**")
             return
         }
 
@@ -104,7 +104,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
             authorImage = "https://developerden.net/logo.png"
             title = faq.title
             description = faq.content
-            setFooter("Requested by ${member.asMention} | $name", member.user.avatarUrl)
+            setFooter("Requested by ${member.user.name}#${member.user.discriminator} | $name", member.user.avatarUrl)
         })
     }
 }
