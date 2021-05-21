@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.extensions.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import java.awt.Color
+import java.time.LocalDateTime
 
 /**
  * @author Alexander Wood (BristerMitten)
@@ -58,6 +59,8 @@ class KotlinEmbedBuilder : EmbedBuilder() {
             setColor(value)
         }
 
+    fun timestampNow() = setTimestamp(LocalDateTime.now())
+
     fun field(name: String?, value: String = " ", inline: Boolean = false): EmbedBuilder {
         return addField(name, value, inline)
     }
@@ -65,3 +68,4 @@ class KotlinEmbedBuilder : EmbedBuilder() {
     private fun writeOnly(): Nothing = throw UnsupportedOperationException("Write-only var")
 }
 
+inline fun embed(body: KotlinEmbedBuilder.() -> Unit) = KotlinEmbedBuilder().apply(body).build()
