@@ -41,10 +41,9 @@ class InfoCommand @Inject constructor(
         val dateCreated = formatForInfo(formatDate(event.guild.timeCreated.toLocalDate()))
         val levelUps = formatForInfo(all.sumOf { it.level })
         val formattedVersion = formatForInfo(VersionProvider.version)
-        val messageCount = newSuspendedTransaction {
-            Events.select { Events.action eq EventType.USER_MESSAGE }
-                .count()
-        }
+        val messageCount = formatForInfo(newSuspendedTransaction {
+            Events.select { Events.action eq EventType.USER_MESSAGE }.count()
+        })
         reply(EmbedBuilder()
             .setTitle("Developer Den")
             .setDescription("Mildly interesting stats and info")
@@ -53,7 +52,7 @@ class InfoCommand @Inject constructor(
             .addField("Total XP Given", totalXP, true)
             .addField("Total Members", totalMembers, true)
             .addField("Date Created", dateCreated, true)
-            .addField("Total Messages Sent", messageCount.toString(), true)
+            .addField("Total Messages Sent", messageCount, true)
             .addField("Level Ups", levelUps, true)
             .build())
     }
