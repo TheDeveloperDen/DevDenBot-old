@@ -84,8 +84,8 @@ internal class CodeBlockMessageListenerTest {
         val firstMatchGroups = matches.elementAt(0).groups.filterNotNull()
         // first group is the whole match, 2nd group the language if given and 3rd group is the code block
         assertEquals(3, firstMatchGroups.size)
-        assertEquals(multipleCodeBlocksFirstCodeBlock, firstMatchGroups.last()!!.value.trimEnd())
-        assertEquals("java", firstMatchGroups[1]!!.value)
+        assertEquals(multipleCodeBlocksFirstCodeBlock, firstMatchGroups.last().value.trimEnd())
+        assertEquals("java", firstMatchGroups[1].value)
 
         val secondMatchGroups = matches.elementAt(1).groups.filterNotNull()
         assertEquals(2,  secondMatchGroups.size)
@@ -98,8 +98,8 @@ internal class CodeBlockMessageListenerTest {
         assertEquals(1, matches.count())
         val firstMatchGroups = matches.elementAt(0).groups.filterNotNull()
         assertEquals(3, firstMatchGroups.size)
-        assertEquals(multipleCodeBlocksOneTooSmallSecondCodeBlock, firstMatchGroups.last()!!.value.trimEnd())
-        assertEquals("somelang", firstMatchGroups[1]!!.value)
+        assertEquals(multipleCodeBlocksOneTooSmallSecondCodeBlock, firstMatchGroups.last().value.trimEnd())
+        assertEquals("somelang", firstMatchGroups[1].value)
 
     }
 
@@ -109,7 +109,7 @@ internal class CodeBlockMessageListenerTest {
         assertEquals(1, matches.count())
         val firstMatchGroups = matches.elementAt(0).groups.filterNotNull()
         assertEquals(2, firstMatchGroups.size)
-        assertEquals(multipleCodeBlocksOneTooSmallSecondCodeBlock, firstMatchGroups.last()!!.value.trimEnd())
+        assertEquals(multipleCodeBlocksOneTooSmallSecondCodeBlock, firstMatchGroups.last().value.trimEnd())
 
     }
 }
