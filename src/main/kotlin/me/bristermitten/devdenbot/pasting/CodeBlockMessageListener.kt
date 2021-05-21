@@ -3,7 +3,6 @@ package me.bristermitten.devdenbot.pasting
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
-import me.bristermitten.devdenbot.discord.SUGGESTIONS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.KotlinEmbedBuilder
 import me.bristermitten.devdenbot.listener.EventListener
@@ -34,7 +33,7 @@ class CodeBlockMessageListener @Inject constructor(
         if (event.author.isBot) {
             return
         }
-        if (event.channel.idLong == BOT_COMMANDS_CHANNEL_ID){
+        if (event.channel.idLong == BOT_COMMANDS_CHANNEL_ID) {
             return
         }
         val rawText = event.message.contentRaw
@@ -67,7 +66,7 @@ class CodeBlockMessageListener @Inject constructor(
             .toList()
             .awaitAll()
 
-        if (urls.size == 0) { // this is a bit hacky
+        if (urls.isEmpty()) { // this is a bit hacky
             return null
         }
 
