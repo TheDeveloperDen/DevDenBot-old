@@ -83,7 +83,6 @@ class DevDen {
             driverClassName = "com.mysql.jdbc.Driver"
             username = dbUsername
             password = dbPassword
-            maximumPoolSize = 10
         }
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
