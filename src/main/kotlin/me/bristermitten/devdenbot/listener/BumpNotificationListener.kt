@@ -16,6 +16,7 @@ import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.util.concurrent.TimeUnit
 
 @Used
@@ -46,12 +47,14 @@ class BumpNotificationListener : EventListener {
         }
 
         val user = StatsUsers.get(event.author.idLong)
-        user.setBumps(user.bumps + 1)
 
-        log.trace {
-            "Increased bump stat for user ${event.author.name} from ${
-                user.bumps - 1
-            } to ${user.bumps}."
+        newSuspendedTransaction {
+            user.bumps++
+            log.trace {
+                "Increased bump stat for user ${event.author.name} from ${
+                    user.bumps - 1
+                } to ${user.bumps}."
+            }
         }
 
         delay(BUMP_COOLDOWN)
