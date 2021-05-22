@@ -20,15 +20,6 @@ jobs:
         with:
           path: './gradle.properties'
           property: 'version'
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -38,12 +29,6 @@ jobs:
           repository: thedeveloperden/devdenbot
           tags: ${{ steps.read_property.outputs.value }}
           tag_with_ref: true
-      - name: Cleanup Gradle Cache
-        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
   deploy:
     needs: [ push_to_registry ]
     runs-on: ubuntu-latest
