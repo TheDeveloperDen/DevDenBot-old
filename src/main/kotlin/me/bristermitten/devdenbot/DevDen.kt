@@ -12,6 +12,7 @@ import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.Users
 import me.bristermitten.devdenbot.events.Events
+import me.bristermitten.devdenbot.faq.FAQs
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
 import me.bristermitten.devdenbot.leaderboard.Leaderboards
@@ -87,7 +88,7 @@ class DevDen {
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
         newSuspendedTransaction {
-            SchemaUtils.create(Events, Users)
+            SchemaUtils.create(Events, Users, FAQs)
         }
     }
 

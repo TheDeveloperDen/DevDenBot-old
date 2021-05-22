@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.info.InfoCategory
 import me.bristermitten.devdenbot.commands.requireLength
+import me.bristermitten.devdenbot.commands.requireLengthAtLeast
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.commands.embed
 import me.bristermitten.devdenbot.extensions.commands.tempReply
@@ -25,7 +26,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
 
         val args = arguments()
         val arguments = args.args
-
+        args.requireLengthAtLeast(this@FAQCommand, 1)
         when (arguments.size) {
             1 -> replyFAQ(arguments.first().content)
             else -> {
@@ -33,20 +34,20 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
                     tempReply("**No permission.**", 5)
                     return
                 }
-                when (arguments[1].content) {
+                when (arguments[0].content) {
                     "set" -> {
                         args.requireLength(this@FAQCommand, 4)
-                        val name = arguments[2].content
-                        val title = arguments[3].content
+                        val name = arguments[1].content
+                        val title = arguments[2].content
                         val content = arguments.drop(3).joinToString(" ") { it.content }
                         return createOrUpdateFAQ(name, title, content)
                     }
                     "delete" -> {
                         args.requireLength(this@FAQCommand, 2)
-                        val name = arguments[2].content
+                        val name = arguments[1].content
                         return deleteFAQ(name)
                     }
-                    else -> reply("Unknown subcommand ${arguments[1].content}")
+                    else -> reply("Unknown subcommand ${arguments[0].content}")
                 }
             }
         }
@@ -92,7 +93,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
         }
 
         if (faq == null) {
-            reply("**Unknown FAQ `$name`.**")
+            reply("**Unknown FAQ `$name`**")
             return
         }
 
@@ -103,7 +104,7 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
             authorImage = "https://developerden.net/logo.png"
             title = faq.title
             description = faq.content
-            setFooter("Requested by ${member.asMention} | $name", member.user.avatarUrl)
+            setFooter("Requested by ${member.user.name}#${member.user.discriminator} | $name", member.user.avatarUrl)
         })
     }
 }
