@@ -40,6 +40,9 @@ class CodeBlockMessageListener @Inject constructor(
         if (rawText.startsWith("${ddbConfig.prefix}keep")) {
             return
         }
+        if (rawText.startsWith("/run")){
+            return
+        }
         if (!rawText.contains(codeBlock)) {
             return
         }
