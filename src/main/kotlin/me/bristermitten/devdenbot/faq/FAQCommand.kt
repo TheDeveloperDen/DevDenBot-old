@@ -20,7 +20,8 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
     name = "faq",
     help = "View or set FAQ topics",
     arguments = "<set> <name> <title> <content> | <name> | <delete> <name>",
-    category = InfoCategory
+    category = InfoCategory,
+    commandChannelOnly = false
 ) {
     override suspend fun CommandEvent.execute() {
 
