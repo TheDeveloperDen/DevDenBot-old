@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.prepareReply
+import me.bristermitten.devdenbot.extensions.getMentionedMember
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.formatNumber
 import me.bristermitten.devdenbot.xp.xpForLevel
@@ -23,18 +24,20 @@ class ProfileCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val targetUser = event.message.mentionedMembers.firstOrNull()?.user ?: event.message.author
-        val statsUser = StatsUsers.get(targetUser.idLong)
+        event.message.getMentionedMember(0) { targetMember ->
+            val targetUser = targetMember?.user ?: event.author
+            val statsUser = StatsUsers.get(targetUser.idLong)
 
-        val action = prepareReply {
-            title = "Your Statistics"
-            field("XP", formatNumber(statsUser.xp), true)
-            field("Level", statsUser.level.toString(), true)
-            field("Disboard Bumps", statsUser.bumps.toString(), true)
-            field("XP to Level", formatNumber(xpForLevel(statsUser.level + 1)), true)
-            setFooter("Statistics for ${targetUser.name}")
+            val action = prepareReply {
+                title = "Your Statistics"
+                field("XP", formatNumber(statsUser.xp), true)
+                field("Level", statsUser.level.toString(), true)
+                field("Disboard Bumps", statsUser.bumps.toString(), true)
+                field("XP to Level", formatNumber(xpForLevel(statsUser.level + 1)), true)
+                setFooter("Statistics for ${targetUser.name}")
+            }
+
+            action.await()
         }
-
-        action.await()
     }
 }
