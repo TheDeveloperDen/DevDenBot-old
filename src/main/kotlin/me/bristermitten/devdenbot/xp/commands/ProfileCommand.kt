@@ -24,7 +24,7 @@ class ProfileCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val targetMember = event.message.getMentionedMember(0)
+        val targetMember = event.message.getMentionedMember(1)
         val targetUser = targetMember?.user ?: event.author
         val statsUser = StatsUsers.get(targetUser.idLong)
 
