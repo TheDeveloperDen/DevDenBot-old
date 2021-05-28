@@ -75,18 +75,24 @@ class DevDen {
 
 
     private suspend fun loadDatabase() {
-        val host = System.getenv("DDB_DB_HOST") ?: "localhost"
-        val db = System.getenv("DDB_DB_NAME")
-        val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
-        val dbPassword = System.getenv("DDB_DB_PASSWORD")
-        val config = HikariConfig().apply {
-            jdbcUrl = "jdbc:mysql://$host:3306/$db"
-            driverClassName = "com.mysql.jdbc.Driver"
-            username = dbUsername
-            password = dbPassword
+        val hikariConfig = if (System.getenv("DDB_MOCK_DB") != null) {
+            HikariConfig().apply {
+                jdbcUrl = "jdbc:h2:mem:db;DB_CLOSE_DELAY=-1"
+                driverClassName = "org.h2.jdbcx.JdbcDataSource"
+            }
+        } else {
+            val host = System.getenv("DDB_DB_HOST") ?: "localhost"
+            val db = System.getenv("DDB_DB_NAME")
+            val dbUsername = System.getenv("DDB_DB_USERNAME") ?: "root"
+            val dbPassword = System.getenv("DDB_DB_PASSWORD")
+            HikariConfig().apply {
+                jdbcUrl = "jdbc:mysql://$host:3306/$db"
+                driverClassName = "com.mysql.jdbc.Driver"
+                username = dbUsername
+                password = dbPassword
+            }
         }
-        val dataSource = HikariDataSource(config)
-        Database.connect(dataSource)
+        Database.connect(HikariDataSource(hikariConfig))
         newSuspendedTransaction {
             SchemaUtils.create(Events, Users, FAQs)
         }

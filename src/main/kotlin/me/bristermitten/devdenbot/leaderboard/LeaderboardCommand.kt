@@ -11,7 +11,6 @@ import me.bristermitten.devdenbot.xp.commands.XPCategory
 import java.util.*
 import javax.inject.Inject
 
-
 /**
  * @author AlexL
  */

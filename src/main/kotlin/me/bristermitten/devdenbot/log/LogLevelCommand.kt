@@ -3,10 +3,10 @@ package me.bristermitten.devdenbot.log
 import ch.qos.logback.classic.Level
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.commands.management.ManagingCategory
 import me.bristermitten.devdenbot.commands.senderMustHaveRole
 import me.bristermitten.devdenbot.discord.BOT_CONTRIBUTOR_ROLE_ID
-import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 
