@@ -12,8 +12,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 @Used
 class ShowcaseMessageListener : EventListener {
     companion object {
-        private const val PLUS_ONE = "thumbsup"
-        private const val MINUS_ONE = "thumbsdown"
+        private const val PLUS_ONE = "U+1F44D"
+        private const val MINUS_ONE = "U+1F44E"
     }
 
     suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
