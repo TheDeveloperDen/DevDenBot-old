@@ -7,7 +7,7 @@ internal class ArgumentLexerTest {
 
     @Test
     fun lex() {
-        val tokens = ArgumentLexer().lex("""
+        val tokens = ArgumentLexer.lex("""
             command name "quoted value"
         """.trimIndent())
         assertEquals(

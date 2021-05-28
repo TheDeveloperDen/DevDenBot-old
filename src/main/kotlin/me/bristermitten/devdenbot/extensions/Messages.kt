@@ -37,9 +37,9 @@ class Arguments(val command: String, val args: List<Argument>, val flags: List<A
 }
 
 
-class Argument(unformattedContent: String) {
-    val isFlag = unformattedContent.startsWith('-')
-    val content = unformattedContent.removePrefix("-")
+class Argument(rawContent: String) {
+    val isFlag = rawContent.startsWith('-')
+    val content = rawContent.removePrefix("-")
 
     inline fun validate(predicate: (String) -> Boolean, orElse: () -> Unit) {
         if (predicate(content)) return

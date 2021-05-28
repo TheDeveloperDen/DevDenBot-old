@@ -8,11 +8,11 @@ internal class ArgumentParserTest {
 
     @Test
     fun parse() {
-        val tokens = ArgumentLexer().lex("""
+        val tokens = ArgumentLexer.lex("""
             command name "quoted value"
         """.trimIndent())
 
-        val parsed = ArgumentParser().parse(tokens)
+        val parsed = ArgumentParser.parse(tokens)
 
         assertEquals(
             listOf(

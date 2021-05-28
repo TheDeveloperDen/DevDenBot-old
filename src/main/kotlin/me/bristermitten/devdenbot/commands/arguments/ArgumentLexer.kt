@@ -1,6 +1,6 @@
 package me.bristermitten.devdenbot.commands.arguments
 
-class ArgumentLexer {
+object ArgumentLexer {
     fun lex(message: String): List<Token> {
         val tokenTypes = message.map {
             it to when (it) {

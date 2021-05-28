@@ -3,7 +3,7 @@ package me.bristermitten.devdenbot.commands.arguments
 import me.bristermitten.devdenbot.extensions.Argument
 import me.bristermitten.devdenbot.extensions.Arguments
 
-class ArgumentParser {
+object ArgumentParser {
 
     /**
      * Compress all the tokens into 1 until we reach another quote
