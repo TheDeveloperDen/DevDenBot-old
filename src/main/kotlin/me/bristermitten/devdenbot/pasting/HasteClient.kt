@@ -10,7 +10,7 @@ import me.bristermitten.devdenbot.util.VersionProvider
 
 object HasteClient {
 
-    private const val baseUrl = "https://paste.bristermitten.me/"
+    const val baseUrl = "https://paste.developerden.net/"
     private const val documentsEndpoint = baseUrl + "documents"
 
     private val client by lazy {
