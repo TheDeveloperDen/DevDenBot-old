@@ -15,28 +15,19 @@ fun CommandEvent.arguments(): Arguments {
         , args.filter { !it.isFlag }, args.filter { it.isFlag })
 }
 
-suspend fun Message.getMentionedMember(index: Int, action: suspend (Member?) -> Unit = {}) {
-    val str = contentRaw.split(WHITESPACE_REGEX).getOrNull(index) ?: let {
-        action(null)
-        return
-    }
+suspend fun Message.getMentionedMember(index: Int): Member? {
+    val str = contentRaw.split(WHITESPACE_REGEX).getOrNull(index) ?: return null
     val id = str.toLongOrNull()
     if (id != null) {
-        action(guild.retrieveMemberById(id.toString(), false).await { cont, _ ->
+        return (guild.retrieveMemberById(id.toString(), false).await { cont, _ ->
             cont.resume(null)
         })
-        return
     }
-    val first = mentionedMembers.getOrNull(index) ?: let {
-        action(null)
-        return
-    }
+    val first = mentionedMembers.getOrNull(index) ?: return null
     if (str.contains(first.id)) {
-        action(first)
-        return
+        return first
     }
-    action(null)
-    return
+    return null
 }
 
 class Arguments(val command: String, val args: List<Argument>, val flags: List<Argument>) {
