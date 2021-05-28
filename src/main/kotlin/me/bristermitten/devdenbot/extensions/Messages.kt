@@ -5,11 +5,20 @@ import com.jagrosh.jdautilities.command.CommandEvent
 val WHITESPACE_REGEX = Regex("\\s+")
 
 fun CommandEvent.arguments(): Arguments {
-    val split = this.message.contentRaw.split(WHITESPACE_REGEX)
+    return parseArguments(client.prefix,
+        message.contentRaw)!! //should never be null, command client already validated it's a valid command
+}
+
+fun parseArguments(prefix: String, content: String): Arguments? {
+    if (!content.startsWith(prefix)) {
+        return null
+    }
+    val split = content.split(WHITESPACE_REGEX)
     val args = split.drop(1).map(::Argument)
     return Arguments(
-        split.first() //This might break in future for prefixes that don't require a space. deal with it
-        , args.filter { !it.isFlag }, args.filter { it.isFlag })
+        split.first().removePrefix(prefix), //This might break in future for prefixes that don't require a space. deal with it
+        args.filter { !it.isFlag },
+        args.filter { it.isFlag })
 }
 
 
