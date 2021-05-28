@@ -29,7 +29,22 @@ class ShowcaseMessageListener : EventListener {
         if (event.channel.idLong != SHOWCASE_CHANNEL_ID) {
             return
         }
-        if (event.user.idLong == event.retrieveMessage().await().author.idLong) {
+        val message = event.retrieveMessage().await()
+        if (event.userIdLong == message.author.idLong) {
+            event.reaction.removeReaction(event.user).await()
+            return
+        }
+        if ( // looks ugly, idk how to improve it lol
+            message.reactions
+                .filter {
+                    it.retrieveUsers().await()
+                        .any { user ->
+                            user.idLong == event.userIdLong
+                        }
+                }.filter {
+                    it.reactionEmote.asCodepoints == PLUS_ONE || it.reactionEmote.asCodepoints == MINUS_ONE
+                }.size >= 2
+        ) {
             event.reaction.removeReaction(event.user).await()
         }
     }
