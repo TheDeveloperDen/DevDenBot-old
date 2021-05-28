@@ -16,7 +16,8 @@ fun parseArguments(prefix: String, content: String): Arguments? {
     val split = content.split(WHITESPACE_REGEX)
     val args = split.drop(1).map(::Argument)
     return Arguments(
-        split.first().removePrefix(prefix), //This might break in future for prefixes that don't require a space. deal with it
+        split.first()
+            .removePrefix(prefix), //This might break in future for prefixes that don't require a space. deal with it
         args.filter { !it.isFlag },
         args.filter { it.isFlag })
 }
@@ -45,8 +46,20 @@ class Argument(unformattedContent: String) {
         orElse()
     }
 
-    override fun equals(other: Any?) = if (other is String) content.equals(other, true) else content == other
+    override fun equals(other: Any?) =
+        when (other) {
+            is String -> content.equals(other, true)
+            is Argument -> content == other.content && isFlag == other.isFlag
+            else -> false
+        } // Doesn't this break the symmetrical contract?
+
     override fun hashCode(): Int = content.lowercase().hashCode()
+
+    override fun toString(): String {
+        return "Argument(isFlag=$isFlag, content='$content')"
+    }
+
+
 }
 
 
