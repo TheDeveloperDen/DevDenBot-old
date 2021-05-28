@@ -8,27 +8,30 @@ import me.bristermitten.devdenbot.commands.requireLength
 import me.bristermitten.devdenbot.commands.requireLengthAtLeast
 import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.commands.embed
+import me.bristermitten.devdenbot.extensions.commands.embedDefaults
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.trait.HasConfig
 import me.bristermitten.devdenbot.util.isModerator
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.awt.Color
 
 @Used
-class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
+class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDenCommand(
     name = "faq",
     help = "View or set FAQ topics",
     arguments = "<set> <name> <title> <content> | <name> | <delete> <name>",
     category = InfoCategory,
     commandChannelOnly = false
-) {
+), HasConfig {
     override suspend fun CommandEvent.execute() {
 
         val args = arguments()
         val arguments = args.args
         args.requireLengthAtLeast(this@FAQCommand, 1)
         when (arguments.size) {
+            0 -> replyAllFAQs()
             1 -> replyFAQ(arguments.first().content)
             else -> {
                 if (!isModerator(member)) {
@@ -52,6 +55,19 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
                 }
             }
         }
+    }
+
+    private suspend fun CommandEvent.replyAllFAQs() {
+        val faqs = newSuspendedTransaction {
+            FAQDAO.all().map { it.toPOJO() }
+        }
+
+        val faqNames = faqs.joinToString(", ") { it.name }
+        reply(embedDefaults {
+            author = "FAQ List"
+            description = faqNames
+            setFooter("Requested by ${member.user.name}#${member.user.discriminator} | $name", member.user.avatarUrl)
+        })
     }
 
     private suspend fun CommandEvent.createOrUpdateFAQ(name: String, title: String, content: String) =
@@ -98,11 +114,8 @@ class FAQCommand @Inject constructor(val ddbConfig: DDBConfig) : DevDenCommand(
             return
         }
 
-        reply(embed {
-            timestampNow()
-            color = Color(ddbConfig.colour)
+        reply(embedDefaults {
             author = "FAQ Answer"
-            authorImage = "https://developerden.net/logo.png"
             title = faq.title
             description = faq.content
             setFooter("Requested by ${member.user.name}#${member.user.discriminator} | $name", member.user.avatarUrl)

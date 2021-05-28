@@ -1,5 +1,6 @@
 package me.bristermitten.devdenbot.extensions.commands
 
+import me.bristermitten.devdenbot.trait.HasConfig
 import net.dv8tion.jda.api.EmbedBuilder
 import java.awt.Color
 import java.time.LocalDateTime
@@ -69,3 +70,10 @@ class KotlinEmbedBuilder : EmbedBuilder() {
 }
 
 inline fun embed(body: KotlinEmbedBuilder.() -> Unit) = KotlinEmbedBuilder().apply(body).build()
+
+inline fun HasConfig.embedDefaults(body: KotlinEmbedBuilder.() -> Unit) = embed {
+    timestampNow()
+    color = Color(ddbConfig.colour)
+    authorImage = "https://developerden.net/logo.png"
+    body()
+}
