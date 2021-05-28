@@ -60,6 +60,7 @@ abstract class DevDenCommand(
                 }
             } catch (exception: Exception) {
                 Sentry.captureException(exception)
+                exception.printStackTrace()
                 event.channel.sendMessage("**An error occurred when executing this command. This has been logged.**")
                     .queue()
             }

@@ -9,17 +9,17 @@ object ArgumentParser {
      */
     private fun compressQuotedTokens(tokens: List<Token>): Pair<Argument, List<Token>> {
         val indexOfQuote = tokens.indexOfFirst { it.type == TokenType.QUOTE }
-        val compressed = tokens.subList(0, indexOfQuote)
-        if (compressed.size == tokens.size) {
+        if(indexOfQuote == -1) {
             // No quote was found
             throw InvalidCommandSyntaxException("Unmatched quotation in command")
         }
+        val compressed = tokens.subList(0, indexOfQuote)
 
         val compressedArgument = Argument(
             compressed.joinToString(" ") { it.content }
         )
 
-        val remaining = tokens.subList(indexOfQuote, tokens.size - 1)
+        val remaining = tokens.subList(indexOfQuote + 1, tokens.size)
         return compressedArgument to remaining
     }
 

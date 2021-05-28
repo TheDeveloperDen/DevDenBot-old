@@ -3,11 +3,9 @@ package me.bristermitten.devdenbot.faq
 import com.google.inject.Inject
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.commands.info.InfoCategory
 import me.bristermitten.devdenbot.commands.requireLength
-import me.bristermitten.devdenbot.commands.requireLengthAtLeast
-import me.bristermitten.devdenbot.commands.arguments.arguments
-import me.bristermitten.devdenbot.extensions.commands.embed
 import me.bristermitten.devdenbot.extensions.commands.embedDefaults
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.inject.Used
@@ -15,7 +13,6 @@ import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.trait.HasConfig
 import me.bristermitten.devdenbot.util.isModerator
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import java.awt.Color
 
 @Used
 class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDenCommand(
@@ -26,10 +23,8 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
     commandChannelOnly = false
 ), HasConfig {
     override suspend fun CommandEvent.execute() {
-
         val args = arguments()
         val arguments = args.args
-        //args.requireLengthAtLeast(this@FAQCommand, 1)
         when (arguments.size) {
             0 -> replyAllFAQs()
             1 -> replyFAQ(arguments.first().content)
