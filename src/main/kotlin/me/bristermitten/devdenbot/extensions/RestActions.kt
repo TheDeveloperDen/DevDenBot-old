@@ -11,7 +11,9 @@ import kotlin.coroutines.suspendCoroutine
  */
 
 suspend fun <T> RestAction<T>.await(
-    failure: (Continuation<T>, Throwable) -> Unit = { continuation: Continuation<T>, throwable: Throwable ->
+    failure: (Continuation<T>, Throwable) -> Unit = { continuation, throwable ->
         continuation.resumeWithException(throwable)
-    }
-): T = suspendCoroutine { cont -> this.queue({ cont.resume(it) }, { failure(cont, it) }) }
+    },
+): T = suspendCoroutine { cont ->
+    this.queue({ cont.resume(it) }, { failure(cont, it) })
+}
