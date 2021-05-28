@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.prepareReply
+import me.bristermitten.devdenbot.extensions.getMentionedMember
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.formatNumber
 import me.bristermitten.devdenbot.xp.xpForLevel
@@ -23,7 +24,8 @@ class ProfileCommand @Inject constructor(
 ) {
 
     override suspend fun CommandEvent.execute() {
-        val targetUser = event.message.mentionedMembers.firstOrNull()?.user ?: event.message.author
+        val targetMember = event.message.getMentionedMember(1)
+        val targetUser = targetMember?.user ?: event.author
         val statsUser = StatsUsers.get(targetUser.idLong)
 
         val action = prepareReply {

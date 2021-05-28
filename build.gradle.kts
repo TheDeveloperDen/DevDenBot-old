@@ -63,7 +63,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
 
-    testImplementation("org.mockito.kotlin:mockito-kotlin:3.1.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
 
