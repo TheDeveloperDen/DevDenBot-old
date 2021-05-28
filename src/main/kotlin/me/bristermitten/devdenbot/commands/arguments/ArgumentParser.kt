@@ -1,8 +1,5 @@
 package me.bristermitten.devdenbot.commands.arguments
 
-import me.bristermitten.devdenbot.extensions.Argument
-import me.bristermitten.devdenbot.extensions.Arguments
-
 object ArgumentParser {
 
     /**

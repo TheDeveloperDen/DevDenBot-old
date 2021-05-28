@@ -4,8 +4,8 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.mapNotNull
-import me.bristermitten.devdenbot.extensions.Argument
-import me.bristermitten.devdenbot.extensions.arguments
+import me.bristermitten.devdenbot.commands.arguments.Argument
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.extensions.await
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User

@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
-import me.bristermitten.devdenbot.extensions.arguments
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
 import me.bristermitten.devdenbot.inject.Used

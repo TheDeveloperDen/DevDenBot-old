@@ -6,7 +6,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.info.InfoCategory
 import me.bristermitten.devdenbot.commands.requireLength
 import me.bristermitten.devdenbot.commands.requireLengthAtLeast
-import me.bristermitten.devdenbot.extensions.arguments
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.extensions.commands.embed
 import me.bristermitten.devdenbot.extensions.commands.embedDefaults
 import me.bristermitten.devdenbot.extensions.commands.tempReply

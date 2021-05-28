@@ -6,9 +6,9 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import com.jagrosh.jdautilities.menu.ButtonMenu
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.commands.category.Categories
 import me.bristermitten.devdenbot.commands.category.CommandCategory
-import me.bristermitten.devdenbot.extensions.arguments
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.inject.Used

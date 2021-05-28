@@ -3,7 +3,6 @@ package me.bristermitten.devdenbot.leaderboard
 import com.jagrosh.jdautilities.command.CommandEvent
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import me.bristermitten.devdenbot.commands.DevDenCommand
-import me.bristermitten.devdenbot.extensions.WHITESPACE_REGEX
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.util.mention
@@ -26,6 +25,7 @@ class LeaderboardCommand @Inject constructor(
 ) {
     private companion object {
         const val DEFAULT_LEADERBOARD_COUNT = 10
+        private val WHITESPACE_REGEX = "\\s".toRegex()
     }
 
 
