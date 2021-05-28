@@ -10,10 +10,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.GenericEvent
+import kotlin.reflect.KClass
 
 val scope = CoroutineScope(Dispatchers.Default)
 
 inline fun <reified T : GenericEvent> JDA.listenFlow() = on<T>().asFlow()
+inline fun <T : GenericEvent> JDA.listenFlow(type: KClass<T>) = on(type.java).asFlow()
 
 
 inline fun <T> Flow<T>.handleEachIn(scope: CoroutineScope, crossinline run: suspend (T) -> Unit) = scope.launch {

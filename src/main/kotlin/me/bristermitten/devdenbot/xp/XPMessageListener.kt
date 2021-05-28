@@ -5,18 +5,12 @@ import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
-import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
-import me.bristermitten.devdenbot.listener.EventListener
+import me.bristermitten.devdenbot.listener.ReflectiveEventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
-import me.bristermitten.devdenbot.util.handleEachIn
-import me.bristermitten.devdenbot.util.listenFlow
 import me.bristermitten.devdenbot.util.log
-import me.bristermitten.devdenbot.util.scope
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
@@ -27,13 +21,14 @@ import kotlin.math.roundToInt
  * @author AlexL
  */
 @Used
-class XPMessageListener @Inject constructor(private val config: DDBConfig) : EventListener {
+class XPMessageListener @Inject constructor(private val config: DDBConfig) : ReflectiveEventListener() {
 
     companion object {
         private val log by log()
     }
 
-    private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
+    @Listener
+    suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (!shouldCountForStats(event.author, event.message.contentRaw, event.message.channel, config)) {
             return
         }
@@ -73,7 +68,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
     }
 
-    private suspend fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
+    suspend fun onGuildMessageUpdate(event: GuildMessageUpdateEvent) {
         val message = event.message
 
         val user = StatsUsers.get(message.author.idLong)
@@ -101,7 +96,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
     }
 
-    private suspend fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
+    suspend fun onGuildMessageDelete(event: GuildMessageDeleteEvent) {
         val message = MessageCache.getCached(event.messageIdLong) ?: return
 
         val user = StatsUsers.get(message.authorId)
@@ -125,10 +120,4 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         }
     }
 
-
-    override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageDeleteEvent>().handleEachIn(scope, this::onGuildMessageDelete)
-        jda.listenFlow<GuildMessageUpdateEvent>().handleEachIn(scope, this::onGuildMessageUpdate)
-        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
-    }
 }

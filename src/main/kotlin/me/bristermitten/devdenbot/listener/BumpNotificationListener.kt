@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import java.util.concurrent.TimeUnit
 
 @Used
-class BumpNotificationListener : EventListener {
+class BumpNotificationListener : ReflectiveEventListener() {
 
     companion object {
         private const val DISBOARD_BOT_ID = 302050872383242240
@@ -28,7 +28,7 @@ class BumpNotificationListener : EventListener {
         private val log by log()
     }
 
-    private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
+    suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.message.contentRaw != "!d bump") {
             return
         }
@@ -66,9 +66,5 @@ class BumpNotificationListener : EventListener {
         event.channel.sendMessage(
             "${bumpNotificationRole.asMention}, the server is ready to be bumped! **!d bump**"
         ).await()
-    }
-
-    override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
     }
 }
