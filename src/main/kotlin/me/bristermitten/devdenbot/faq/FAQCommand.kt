@@ -29,7 +29,7 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
 
         val args = arguments()
         val arguments = args.args
-        args.requireLengthAtLeast(this@FAQCommand, 1)
+        //args.requireLengthAtLeast(this@FAQCommand, 1)
         when (arguments.size) {
             0 -> replyAllFAQs()
             1 -> replyFAQ(arguments.first().content)
