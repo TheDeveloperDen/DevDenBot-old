@@ -19,8 +19,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : EventListener, HasConfig {
 
     suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot { it.canBePinged() }
-        if(thoseWhoShouldNotHaveBeenPinged.isEmpty()) {
+        val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot {
+                it.canBePinged() && it != event.member
+            }
+        if (thoseWhoShouldNotHaveBeenPinged.isEmpty()) {
             return
         }
         val formattedNoPinged = thoseWhoShouldNotHaveBeenPinged.joinToString(",") {
