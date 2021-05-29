@@ -8,9 +8,15 @@ import net.dv8tion.jda.api.entities.Member
  * Otherwise a formatted string mentioning the user is returned
  */
 fun Member.getPing(): String {
-    return if (roles.any { it.idLong == NO_PING_ROLE_ID }) {
+    return if (canBePinged()) {
         "${user.name}#${user.discriminator}"
     } else {
         user.asMention
     }
 }
+
+/**
+ * Return if a given member should be pinged by the bot or users
+ * This is defined by them not having the "No Ping" role
+ */
+fun Member.canBePinged() = roles.none { it.idLong == NO_PING_ROLE_ID }
