@@ -33,7 +33,7 @@ class VoiceChatXPTask(val jda: JDA) : TimerTask() {
                 .collect {
                     val user = StatsUsers.get(it.idLong)
                     val gained = (1..3).random()
-                    user.addXP(gained)
+                    user.addXP(gained.toLong())
                     log.debug {
                         "Gave ${it.user.name} $gained XP for being in voice channel ${it.voiceState?.channel?.name} (${it.voiceState?.channel?.id})"
                     }

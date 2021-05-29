@@ -3,7 +3,7 @@ package me.bristermitten.devdenbot.xp
 import com.google.inject.Inject
 import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
-import me.bristermitten.devdenbot.data.StatsUser
+import me.bristermitten.devdenbot.data.StatsUserDAO
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
@@ -63,7 +63,7 @@ class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) :
         user.recentMessages.add(toCache)
         MessageCache.cache(toCache)
         user.lastMessageSentTime = System.currentTimeMillis()
-        user.addXP(gained)
+        user.addXP(gained.toLong())
 
         checkLevelUp(member, user)
 
@@ -93,7 +93,7 @@ class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) :
         val diff = curXP.roundToInt() - prevXP.roundToInt()
 
         MessageCache.update(event.messageIdLong, event.message.contentRaw)
-        user.addXP(diff)
+        user.addXP(diff.toLong())
         checkLevelUp(member, user)
         log.debug {
             "Adjusted XP of ${member.user.name} by $diff for an edited message (${message.idLong})"
@@ -117,10 +117,11 @@ class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) :
         }
     }
 
-    private suspend fun checkLevelUp(member: Member, user: StatsUser) = newSuspendedTransaction {
-        val requiredForNextLevel = xpForLevel(user.level + 1)
-        if (user.xp >= requiredForNextLevel) {
-            processLevelUp(member, ++user.level)
+    private suspend fun checkLevelUp(member: Member, userDAO: StatsUserDAO) = newSuspendedTransaction {
+        val requiredForNextLevel = xpForLevel(userDAO.level + 1)
+        if (userDAO.xp >= requiredForNextLevel) {
+            userDAO.setLevel(userDAO.level + 1)
+            processLevelUp(member, userDAO.level)
         }
     }
 

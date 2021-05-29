@@ -1,6 +1,6 @@
 package me.bristermitten.devdenbot.leaderboard
 
-import me.bristermitten.devdenbot.data.StatsUser
+import me.bristermitten.devdenbot.data.StatsUserDAO
 import me.bristermitten.devdenbot.data.StatsUsers
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
@@ -18,5 +18,5 @@ object Leaderboards {
     }
 }
 
-class StatsUserLeaderboard<T : Comparable<T>>(val name: String, val keyExtractor: (StatsUser) -> T) :
-    Leaderboard<StatsUser>(Comparator.comparing(keyExtractor))
+class StatsUserLeaderboard<T : Comparable<T>>(val name: String, val keyExtractor: (StatsUserDAO) -> T) :
+    Leaderboard<StatsUserDAO>(Comparator.comparing(keyExtractor))

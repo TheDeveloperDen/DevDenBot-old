@@ -48,13 +48,11 @@ class BumpNotificationListener : EventListener {
 
         val user = StatsUsers.get(event.author.idLong)
 
-        newSuspendedTransaction {
-            user.bumps++
-            log.trace {
-                "Increased bump stat for user ${event.author.name} from ${
-                    user.bumps - 1
-                } to ${user.bumps}."
-            }
+        user.setBumps(user.bumps + 1)
+        log.info {
+            "Increased bump stat for user ${event.author.name} from ${
+                user.bumps - 1
+            } to ${user.bumps}."
         }
 
         delay(BUMP_COOLDOWN)

@@ -1,5 +1,8 @@
 package me.bristermitten.devdenbot.leaderboard
 
+import me.bristermitten.devdenbot.data.Users
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.selectAll
 import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
