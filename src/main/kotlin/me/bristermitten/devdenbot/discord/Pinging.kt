@@ -19,4 +19,5 @@ fun Member.getPing(): String {
  * Return if a given member should be pinged by the bot or users
  * This is defined by them not having the "No Ping" role
  */
-fun Member.canBePinged() = roles.none { it.idLong == NO_PING_ROLE_ID }
+fun Member.canBePinged() = !shouldNotBePinged()
+fun Member.shouldNotBePinged() = roles.any { it.idLong == NO_PING_ROLE_ID }

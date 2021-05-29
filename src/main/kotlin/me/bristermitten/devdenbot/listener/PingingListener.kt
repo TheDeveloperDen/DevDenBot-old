@@ -3,6 +3,7 @@ package me.bristermitten.devdenbot.listener
 import com.google.inject.Inject
 import me.bristermitten.devdenbot.discord.canBePinged
 import me.bristermitten.devdenbot.discord.getPing
+import me.bristermitten.devdenbot.discord.shouldNotBePinged
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.extensions.commands.embedDefaults
 import me.bristermitten.devdenbot.inject.Used
@@ -22,8 +23,8 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
         if (event.author.isBot || event.message.referencedMessage != null) {
             return
         }
-        val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot {
-            it.canBePinged() && it.idLong == event.author.idLong
+        val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filter {
+            it.shouldNotBePinged() && it.idLong != event.author.idLong
         }
         if (thoseWhoShouldNotHaveBeenPinged.isEmpty()) {
             return
