@@ -20,6 +20,9 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
 
     suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot { it.canBePinged() }
+        if(thoseWhoShouldNotHaveBeenPinged.isEmpty()) {
+            return
+        }
         val formattedNoPinged = thoseWhoShouldNotHaveBeenPinged.joinToString(",") {
             it.getPing()
         }.addAndToCommaSeparated()
