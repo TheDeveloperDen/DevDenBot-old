@@ -14,7 +14,6 @@ open class Leaderboard<T> (private val comparator: Comparator<T>) {
     private val entries = Vector<T>()
 
     fun addAll(entries: Collection<T>) {
-//        Users.selectAll().orderBy(Users.xp to SortOrder.DESC).limit(10)
         entries.filter { !indices.contains(it) }.forEach { this.entries.add(it) }
         this.entries.sortWith(comparator.reversed())
         indices.clear()
