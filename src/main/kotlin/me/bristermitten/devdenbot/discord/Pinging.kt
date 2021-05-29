@@ -9,9 +9,9 @@ import net.dv8tion.jda.api.entities.Member
  */
 fun Member.getPing(): String {
     return if (canBePinged()) {
-        "${user.name}#${user.discriminator}"
-    } else {
         user.asMention
+    } else {
+        "${user.name}#${user.discriminator}"
     }
 }
 
