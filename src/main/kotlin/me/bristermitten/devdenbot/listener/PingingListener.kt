@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : EventListener, HasConfig {
 
     suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        if (event.author.isBot) {
+        if (event.author.isBot || event.message.referencedMessage != null) {
             return
         }
         val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot {
@@ -33,13 +33,12 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
         }.addAndToCommaSeparated()
 
         val authorPing = event.member?.getPing() ?: return
-        event.channel.sendMessage(embedDefaults {
-            title = "Anti Ping"
-            description = """
-                ${authorPing}, the following users have asked to not be pinged: $formattedNoPinged
+        event.channel.sendMessage("""
+                ${authorPing}, the following users have asked to not be pinged: 
+                $formattedNoPinged
                 Please respect their decisions and try not to ping them!
             """.trimIndent()
-        }).await()
+        ).await()
     }
 
     override fun register(jda: JDA) {
