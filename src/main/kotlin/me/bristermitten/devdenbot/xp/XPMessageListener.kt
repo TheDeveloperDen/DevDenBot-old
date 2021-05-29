@@ -5,18 +5,17 @@ import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
-import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
 import me.bristermitten.devdenbot.serialization.DDBConfig
+import me.bristermitten.devdenbot.trait.HasConfig
 import me.bristermitten.devdenbot.util.handleEachIn
 import me.bristermitten.devdenbot.util.listenFlow
 import me.bristermitten.devdenbot.util.log
 import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent
@@ -27,14 +26,14 @@ import kotlin.math.roundToInt
  * @author AlexL
  */
 @Used
-class XPMessageListener @Inject constructor(private val config: DDBConfig) : EventListener {
+class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) : EventListener, HasConfig {
 
     companion object {
         private val log by log()
     }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        if (!shouldCountForStats(event.author, event.message.contentRaw, event.message.channel, config)) {
+        if (!shouldCountForStats(event.author, event.message.contentRaw, event.message.channel, ddbConfig)) {
             return
         }
         val message = event.message
@@ -81,13 +80,13 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
 
         val prevMessage = MessageCache.getCached(event.messageIdLong) ?: return
 
-        val prevXP = if (shouldCountForStats(event.author, prevMessage.msg, event.channel, config))
+        val prevXP = if (shouldCountForStats(event.author, prevMessage.msg, event.channel, ddbConfig))
             xpForMessage(prevMessage.msg)
         else 0.0
 
         val strippedMessage = stripMessage(event.message.contentRaw)
 
-        val curXP = if (shouldCountForStats(event.author, event.message.contentRaw, event.channel, config))
+        val curXP = if (shouldCountForStats(event.author, event.message.contentRaw, event.channel, ddbConfig))
             xpForMessage(strippedMessage)
         else 0.0
 
@@ -107,7 +106,7 @@ class XPMessageListener @Inject constructor(private val config: DDBConfig) : Eve
         val user = StatsUsers.get(message.authorId)
         val author = event.jda.retrieveUserById(message.authorId).await() ?: return
 
-        if (!shouldCountForStats(author, message.msg, event.channel, config)) {
+        if (!shouldCountForStats(author, message.msg, event.channel, ddbConfig)) {
             return
         }
         val gained = xpForMessage(message.msg).roundToInt()
