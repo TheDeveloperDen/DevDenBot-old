@@ -23,7 +23,7 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
             return
         }
         val thoseWhoShouldNotHaveBeenPinged = event.message.mentionedMembers.filterNot {
-            it.canBePinged() && it == event.member
+            it.canBePinged() && it.idLong == event.author.idLong
         }
         if (thoseWhoShouldNotHaveBeenPinged.isEmpty()) {
             return
