@@ -5,6 +5,7 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUser
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.commands.arguments.arguments
+import me.bristermitten.devdenbot.discord.getPing
 import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
 import me.bristermitten.devdenbot.inject.Used
@@ -68,7 +69,8 @@ class SetVarCommand @Inject constructor(
 
         val statsUser = StatsUsers.get(targetUser.idLong)
         stat.set(statsUser, value)
-        awaitReply("Successfully set value of `${stat.name}` for ${targetUser.asMention} to `$value`")
+        val targetMember = guild.getMember(targetUser) ?: member
+        awaitReply("Successfully set value of `${stat.name}` for ${targetMember.getPing()} to `$value`")
     }
 
     private fun String.parseTo(type: KType) = when (type) {
