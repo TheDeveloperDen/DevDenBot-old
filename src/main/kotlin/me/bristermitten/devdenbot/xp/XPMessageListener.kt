@@ -3,7 +3,7 @@ package me.bristermitten.devdenbot.xp
 import com.google.inject.Inject
 import me.bristermitten.devdenbot.data.CachedMessage
 import me.bristermitten.devdenbot.data.MessageCache
-import me.bristermitten.devdenbot.data.StatsUser
+import me.bristermitten.devdenbot.data.StatsUserDAO
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
@@ -117,10 +117,10 @@ class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) :
         }
     }
 
-    private suspend fun checkLevelUp(member: Member, user: StatsUser) = newSuspendedTransaction {
-        val requiredForNextLevel = xpForLevel(user.level + 1)
-        if (user.xp >= requiredForNextLevel) {
-            processLevelUp(member, ++user.level)
+    private suspend fun checkLevelUp(member: Member, userDAO: StatsUserDAO) = newSuspendedTransaction {
+        val requiredForNextLevel = xpForLevel(userDAO.level + 1)
+        if (userDAO.xp >= requiredForNextLevel) {
+            processLevelUp(member, ++userDAO.level)
         }
     }
 

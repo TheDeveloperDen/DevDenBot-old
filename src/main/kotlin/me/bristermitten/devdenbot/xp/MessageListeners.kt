@@ -1,6 +1,6 @@
 package me.bristermitten.devdenbot.xp
 
-import me.bristermitten.devdenbot.data.StatsUser
+import me.bristermitten.devdenbot.data.StatsUserDAO
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import me.bristermitten.devdenbot.serialization.DDBConfig
@@ -52,6 +52,6 @@ suspend fun shouldCountForStats(author: User, content: String, channel: MessageC
     return true
 }
 
-fun isTooSimilar(user: StatsUser, content: String): Boolean =
-    user.recentMessages.copy().any { similarityProportion(it.msg, content) < MIN_DISTANCE }
+fun isTooSimilar(userDAO: StatsUserDAO, content: String): Boolean =
+    userDAO.recentMessages.copy().any { similarityProportion(it.msg, content) < MIN_DISTANCE }
 

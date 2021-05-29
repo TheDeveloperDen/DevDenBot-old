@@ -8,10 +8,10 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 /**
  * @author AlexL
  */
-class StatsUser(
+class StatsUserDAO(
     id: EntityID<Long>,
 ) : LongEntity(id) {
-    companion object : LongEntityClass<StatsUser>(Users)
+    companion object : LongEntityClass<StatsUserDAO>(Users)
 
     // Accessing any of these properties requires a transaction!
     var xp by Users.xp

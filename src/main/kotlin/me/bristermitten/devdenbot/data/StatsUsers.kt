@@ -8,10 +8,10 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 object StatsUsers {
 
     suspend fun get(userId: Long) = newSuspendedTransaction {
-        StatsUser.findById(userId) ?: StatsUser.new(userId) {}
+        StatsUserDAO.findById(userId) ?: StatsUserDAO.new(userId) {}
     }
 
     suspend fun all() = newSuspendedTransaction {
-        StatsUser.all().toList()
+        StatsUserDAO.all().toList()
     }
 }

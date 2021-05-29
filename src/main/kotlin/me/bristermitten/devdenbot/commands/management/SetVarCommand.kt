@@ -2,7 +2,7 @@ package me.bristermitten.devdenbot.commands.management
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
-import me.bristermitten.devdenbot.data.StatsUser
+import me.bristermitten.devdenbot.data.StatsUserDAO
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.discord.getPing
@@ -46,9 +46,9 @@ class SetVarCommand @Inject constructor(
         val field = args[1].content
 
         @Suppress("UNCHECKED_CAST")
-        val stat = StatsUser::class.memberProperties.firstOrNull {
+        val stat = StatsUserDAO::class.memberProperties.firstOrNull {
             it.name.equals(field, true)
-        } as KProperty1<StatsUser, Any>?
+        } as KProperty1<StatsUserDAO, Any>?
 
         if (stat == null) {
             awaitReply("I don't recognise $field")
