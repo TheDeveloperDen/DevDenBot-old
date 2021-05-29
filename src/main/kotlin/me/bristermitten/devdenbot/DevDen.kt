@@ -78,7 +78,7 @@ class DevDen {
         val hikariConfig = if (System.getenv("DDB_MOCK_DB") != null) {
             HikariConfig().apply {
                 jdbcUrl = "jdbc:h2:mem:db;DB_CLOSE_DELAY=-1"
-                driverClassName = "org.h2.jdbcx.JdbcDataSource"
+                driverClassName = "org.h2.Driver"
             }
         } else {
             val host = System.getenv("DDB_DB_HOST") ?: "localhost"
