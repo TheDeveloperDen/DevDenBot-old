@@ -1,6 +1,5 @@
 package me.bristermitten.devdenbot.events
 
-import me.bristermitten.devdenbot.events.JoinLeaves.autoIncrement
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.datetime
 
