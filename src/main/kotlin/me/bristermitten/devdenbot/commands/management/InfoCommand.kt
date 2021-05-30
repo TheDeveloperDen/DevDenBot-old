@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.StatsUsers
 import me.bristermitten.devdenbot.events.EventType
-import me.bristermitten.devdenbot.events.Events
+import me.bristermitten.devdenbot.events.Messages
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.util.VersionProvider
@@ -42,7 +42,7 @@ class InfoCommand @Inject constructor(
         val levelUps = formatForInfo(all.sumOf { it.level })
         val formattedVersion = formatForInfo(VersionProvider.version)
         val messageCount = formatForInfo(newSuspendedTransaction {
-            Events.select { Events.action eq EventType.USER_MESSAGE }.count()
+            Messages.select { Messages.type eq Messages.Type.CREATE }.count()
         })
         reply(EmbedBuilder()
             .setTitle("Developer Den")

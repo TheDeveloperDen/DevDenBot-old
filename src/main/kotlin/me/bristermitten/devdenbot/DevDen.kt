@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 import me.bristermitten.devdenbot.commands.CommandsModule
 import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.data.Users
-import me.bristermitten.devdenbot.events.Events
+import me.bristermitten.devdenbot.events.EventsTables
 import me.bristermitten.devdenbot.faq.FAQs
 import me.bristermitten.devdenbot.graphics.GraphicsContext
 import me.bristermitten.devdenbot.inject.DevDenModule
@@ -94,7 +94,7 @@ class DevDen {
         }
         Database.connect(HikariDataSource(hikariConfig))
         newSuspendedTransaction {
-            SchemaUtils.create(Events, Users, FAQs)
+            SchemaUtils.create(Users, FAQs, *EventsTables)
         }
     }
 
