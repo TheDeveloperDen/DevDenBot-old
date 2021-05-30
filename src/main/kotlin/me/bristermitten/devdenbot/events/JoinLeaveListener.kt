@@ -8,7 +8,6 @@ import me.bristermitten.devdenbot.util.scope
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
@@ -21,6 +20,7 @@ class JoinLeaveListener : EventListener {
             it[timestamp] = LocalDateTime.now()
             it[uid] = event.user.idLong
             it[username] = "${event.user.name}#${event.user.discriminator}"
+            it[type] = JoinLeaves.Type.JOIN
         }
     }
 
@@ -29,6 +29,7 @@ class JoinLeaveListener : EventListener {
             it[timestamp] = LocalDateTime.now()
             it[uid] = event.user.idLong
             it[username] = "${event.user.name}#${event.user.discriminator}"
+            it[type] = JoinLeaves.Type.LEAVE
         }
     }
 
