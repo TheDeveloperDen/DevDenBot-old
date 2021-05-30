@@ -43,4 +43,11 @@ class StatsUserDAO(
     val recentMessages = SafeCircularFifoQueue<CachedMessage>(10)
     var lastMessageSentTime = -1L
 
+    override fun equals(other: Any?): Boolean {
+        return other is StatsUserDAO && other.id == this.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }
