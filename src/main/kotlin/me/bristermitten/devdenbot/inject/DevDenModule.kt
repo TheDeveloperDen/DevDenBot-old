@@ -10,12 +10,12 @@ import net.dv8tion.jda.api.entities.SelfUser
 /**
  * @author Alexander Wood (BristerMitten)
  */
-class DevDenModule(private val DDBConfig: DDBConfig) : KotlinModule() {
+class DevDenModule(private val ddbConfig: DDBConfig) : KotlinModule() {
 
     override fun configure() {
         bind<JDA>().toProvider<JDAProvider>().`in`<Singleton>()
         bind<EventWaiter>().asEagerSingleton()
         bind<SelfUser>().toProvider<SelfUserProvider>()
-        bind<DDBConfig>().toInstance(DDBConfig)
+        bind<DDBConfig>().toInstance(ddbConfig)
     }
 }

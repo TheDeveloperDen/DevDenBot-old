@@ -22,6 +22,7 @@ class JDAProvider @Inject constructor(
     private val listeners: Set<EventListener>,
 ) : Provider<JDA> {
     private val log by log()
+
     override fun get(): JDA {
         val manager = ReactiveEventManager()
         val jda = JDABuilder.createDefault(config.token)
