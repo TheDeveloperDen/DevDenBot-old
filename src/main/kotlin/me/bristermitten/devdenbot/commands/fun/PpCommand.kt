@@ -2,7 +2,9 @@ package me.bristermitten.devdenbot.commands.info
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import me.bristermitten.devdenbot.commands.DevDenCommand
+import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.extensions.await
+import me.bristermitten.devdenbot.extensions.commands.awaitReply
 import me.bristermitten.devdenbot.extensions.commands.firstMentionedUser
 import me.bristermitten.devdenbot.inject.Used
 import net.dv8tion.jda.api.EmbedBuilder
@@ -24,11 +26,7 @@ class PpCommand @Inject constructor(
 
     override suspend fun CommandEvent.execute() {
 
-        if(args[0].equals(null)) { message.channel.sendMessage("Please specify args.").await(); return }
-
-        val user = firstMentionedUser() ?: jda.getUserById(args[0].toString())
-
-        if(user == null) { message.channel.sendMessage("Unable to find that user.").await(); return }
+        val user = firstMentionedUser() ?: event.message.author
 
         val length = StringUtils.repeat('=', (0..16).random())
 
