@@ -28,20 +28,20 @@ class UrbanDictionaryCommand @Inject constructor(
         val args = arguments().args
 
         if(args.isEmpty()){
-            message.channel.sendMessage("Please specify an urban dictionary url.").await()
+            message.channel.sendMessage("Please specify an urban dictionary term.").await()
             return
         }
 
-        val url = args.first().content
+        val term = args.first().content
 
         try{
-            val res = Unirest.get("http://api.urbandictionary.com/v0/define?term=" + URLEncoder.encode(url, "UTF-8")).asJsonAsync()
+            val res = Unirest.get("http://api.urbandictionary.com/v0/define?term=" + URLEncoder.encode(term, "UTF-8")).asJsonAsync()
 
             val json = res.get(30, TimeUnit.SECONDS)
             val list = json.body.`object`.getJSONArray("list")
 
             if(list.length() == 0) {
-                message.channel.sendMessage("Unable to find a definition from that url.").await()
+                message.channel.sendMessage("Unable to find a definition from that term.").await()
                 return
             }
 
