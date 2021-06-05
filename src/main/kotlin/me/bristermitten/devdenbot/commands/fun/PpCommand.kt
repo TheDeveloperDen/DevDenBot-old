@@ -32,7 +32,7 @@ class PpCommand @Inject constructor(
 
         message.channel.sendMessage(EmbedBuilder()
             .setAuthor("PP Size Detector")
-            .setDescription("${user.name}'s penis:\n8${length}")
+            .setDescription("${user.name}'s penis:\n8${length}D")
             .build()).await()
     }
 }

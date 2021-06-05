@@ -59,6 +59,8 @@ dependencies {
     implementation("mysql:mysql-connector-java:5.1.48")
     implementation("com.h2database:h2:1.4.200")
 
+    implementation ("com.konghq:unirest-java:3.11.09:standalone")
+
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
