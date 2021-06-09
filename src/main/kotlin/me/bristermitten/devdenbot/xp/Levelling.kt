@@ -11,12 +11,15 @@ import net.dv8tion.jda.api.entities.TextChannel
 
 private val log = KotlinLogging.logger("Levelling")
 
-suspend fun HasConfig.processLevelUp(user: Member, level: Int) {
+suspend fun processLevelUp(user: Member, level: Int) {
     val channel = user.jda.getGuildChannelById(BOT_COMMANDS_CHANNEL_ID) as? TextChannel ?: return
-    channel.sendMessage(embedDefaults {
-        title = "Level Up!"
-        description = "${user.getPing()}, you levelled up to level **$level**!"
-    }).await()
+    channel.sendMessage(
+        """
+            ${user.getPing()}, you levelled up to level **$level**!
+            
+            Don't want to be pinged? `ddrole No Ping`
+            """.trimIndent()
+    ).await()
     val tier = tierOf(level)
     val tierRole = tierRole(user.jda, tier)
     if (tierRole !in user.roles) {
