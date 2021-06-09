@@ -27,7 +27,7 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
         val arguments = args.args
         when (arguments.size) {
             0 -> replyAllFAQs()
-            1 -> replyFAQ(arguments.first().content)
+            1 -> reply(displayFAQ(arguments.first().content, author))
             else -> {
                 if (!isModerator(member)) {
                     tempReply("**No permission.**", 5)
@@ -97,23 +97,5 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
         reply("**Deleted FAQ `$name`**")
     }
 
-    private suspend fun CommandEvent.replyFAQ(name: String) {
-        val faq = newSuspendedTransaction {
-            FAQDAO.find {
-                FAQs.name eq name
-            }.firstOrNull()?.toPOJO()
-        }
 
-        if (faq == null) {
-            reply("**Unknown FAQ `$name`**")
-            return
-        }
-
-        reply(embedDefaults {
-            author = "FAQ Answer"
-            title = faq.title
-            description = faq.content
-            setFooter("Requested by ${member.user.name}#${member.user.discriminator} | $name", member.user.avatarUrl)
-        })
-    }
 }
