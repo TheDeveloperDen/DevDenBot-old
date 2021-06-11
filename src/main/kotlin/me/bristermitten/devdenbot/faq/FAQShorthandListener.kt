@@ -25,7 +25,7 @@ class FAQShorthandListener @Inject constructor(override val ddbConfig: DDBConfig
             return
         }
         val faq = event.message.contentRaw.drop(1)
-        if (!FAQ_IDENTIFIER_REGEX.matches(faq){
+        if (!FAQ_IDENTIFIER_REGEX.matches(faq)){
             return   
         }
         event.channel.sendMessage(
