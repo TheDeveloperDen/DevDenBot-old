@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 class FAQShorthandListener @Inject constructor(override val ddbConfig: DDBConfig) : EventListener, HasConfig {
     companion object {
         private const val FAQ_PREFIX = "?"
+        private val FAQ_IDENTIFIER_REGEX = Regex("\\w+") // TODO: also use on faq creation
 
     }
 
@@ -24,6 +25,9 @@ class FAQShorthandListener @Inject constructor(override val ddbConfig: DDBConfig
             return
         }
         val faq = event.message.contentRaw.drop(1)
+        if (!FAQ_IDENTIFIER_REGEX.matches(faq){
+            return   
+        }
         event.channel.sendMessage(
             displayFAQ(faq, event.author)
         ).await()
