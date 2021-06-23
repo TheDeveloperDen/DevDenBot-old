@@ -6,12 +6,13 @@ import me.bristermitten.devdenbot.commands.DevDenCommand
 import me.bristermitten.devdenbot.commands.arguments.arguments
 import me.bristermitten.devdenbot.commands.info.InfoCategory
 import me.bristermitten.devdenbot.commands.requireLength
+import me.bristermitten.devdenbot.discord.SUPPORT_ROLE_ID
 import me.bristermitten.devdenbot.extensions.commands.embedDefaults
 import me.bristermitten.devdenbot.extensions.commands.tempReply
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.serialization.DDBConfig
 import me.bristermitten.devdenbot.trait.HasConfig
-import me.bristermitten.devdenbot.util.isModerator
+import me.bristermitten.devdenbot.util.hasRoleOrAbove
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 @Used
@@ -29,11 +30,23 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
             0 -> replyAllFAQs()
             1 -> reply(displayFAQ(arguments.first().content, author))
             else -> {
-                if (!isModerator(member)) {
+                if (!member.hasRoleOrAbove(SUPPORT_ROLE_ID)) {
                     tempReply("**No permission.**", 5)
                     return
                 }
                 when (arguments[0].content) {
+                    "help" -> {
+                        reply(embedDefaults {
+                            description = """
+                            `${ddbConfig.prefix}faq <name>` - Show a FAQ
+                            `?name` - Show a FAQ 
+                            `${ddbConfig.prefix}faq set <name> <title> <content>` - Create or update a FAQ
+                            `${ddbConfig.prefix}faq delete <name>` - Delete a FAQ
+                            `${ddbConfig.prefix}faq help - Show this menu
+                            """.trimIndent()
+                            footer = "You can use quote marks for multiple word arguments (\"content here \")"
+                        })
+                    }
                     "set" -> {
                         args.requireLength(this@FAQCommand, 4)
                         val name = arguments[1].content
@@ -46,7 +59,7 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
                         val name = arguments[1].content
                         return deleteFAQ(name)
                     }
-                    else -> reply("Unknown subcommand ${arguments[0].content}")
+                    else -> reply("Unknown subcommand ${arguments[0].content}. Type `${ddbConfig.prefix}faq help` for help.")
                 }
             }
         }
