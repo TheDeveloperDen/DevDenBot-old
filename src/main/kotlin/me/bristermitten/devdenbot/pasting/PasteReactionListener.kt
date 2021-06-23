@@ -2,6 +2,7 @@ package me.bristermitten.devdenbot.pasting
 
 import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
 import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
+import me.bristermitten.devdenbot.discord.SUPPORT_ROLE_ID
 import me.bristermitten.devdenbot.discord.getPing
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
@@ -38,7 +39,7 @@ class PasteReactionListener : EventListener {
             return
         }
 
-        if (!hasRoleOrIsModerator(reactionMember, HELPFUL_ROLE_ID)) { // this is vital
+        if (!reactionMember.hasRoleOrAbove(SUPPORT_ROLE_ID)) {
             log.debug { "User ${reactionMember.user.name} has insufficient permissions to perform paste reactions." }
             return
         }
