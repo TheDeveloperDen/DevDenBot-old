@@ -1,9 +1,7 @@
 package me.bristermitten.devdenbot.listener
 
 import com.google.inject.Inject
-import me.bristermitten.devdenbot.discord.canBePinged
 import me.bristermitten.devdenbot.discord.getPing
-import me.bristermitten.devdenbot.discord.inSupportChannel
 import me.bristermitten.devdenbot.discord.isStaff
 import me.bristermitten.devdenbot.discord.shouldNotBePinged
 import me.bristermitten.devdenbot.extensions.await
@@ -23,10 +21,6 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
 
     suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.author.isBot || event.message.referencedMessage != null) {
-            return
-        }
-
-        if (!event.message.inSupportChannel()) {
             return
         }
 
