@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.5.10"
-    kotlin("plugin.serialization") version "1.5.0"
+    kotlin("plugin.serialization") version "1.5.20"
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
@@ -23,7 +23,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-native-mt")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.0-native-mt")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
 
