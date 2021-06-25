@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.5.10"
-    kotlin("plugin.serialization") version "1.5.0"
+    kotlin("plugin.serialization") version "1.5.20"
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
@@ -30,7 +30,7 @@ dependencies {
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
     implementation("net.dv8tion:JDA:4.2.1_262")
-    implementation("com.github.MinnDevelopment:jda-reactor:b3968f8e4e")
+    implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha1")
