@@ -21,3 +21,8 @@ fun Member.getPing(): String {
  */
 fun Member.canBePinged() = !shouldNotBePinged()
 fun Member.shouldNotBePinged() = roles.any { it.idLong == NO_PING_ROLE_ID }
+
+/**
+ * Returns if the member is a staff member, to prevent staff from getting ping warning.
+ */
+fun Member.isStaff() = roles.any { it.idLong == STAFF_ROLE_ID }
