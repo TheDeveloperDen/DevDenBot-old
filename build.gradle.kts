@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.3")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.20")
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
