@@ -24,27 +24,31 @@ class ProfileCommand @Inject constructor(
 ) {
 
     companion object {
-        val idRegex = Regex("""<@(\d+)>|(\d+)""")
+        val idRegex = Regex("""<@!?(\d+)>""")
     }
 
     override suspend fun CommandEvent.execute() {
         val args = event.message.contentRaw.removePrefix(client.prefix)
-            .dropWhile { !it.isWhitespace() }
+            .dropWhile { !it.isWhitespace() }.trimStart()
 
         // what is this monstrosity
         val targetUser = if (args.isNullOrBlank()) event.author else
-            idRegex.matchEntire(args)?.groups?.first()
+            idRegex.matchEntire(args)?.groups?.get(1)
                 ?.let {
                     guild.retrieveMemberById(it.value, false).await { cont, _ ->
                         cont.resume(null)
                     }
                 }?.user
-                ?: guild.retrieveMembersByPrefix(args, 1).await().firstOrNull()
+                ?: guild.retrieveMembersByPrefix(args, 1).await()
+                    .firstOrNull()
                     ?.takeIf { it.user.name == args || it.nickname == args }
                     ?.user
-                ?: event.author
 
-        val statsUser = StatsUsers.get(targetUser.idLong)
+        if (targetUser == null){
+            channel.sendMessage("Unknown user: $args").queue().also { return }
+        }
+
+        val statsUser = StatsUsers.get(targetUser!!.idLong)
 
         val action = prepareReply {
             title = "Your Statistics"
