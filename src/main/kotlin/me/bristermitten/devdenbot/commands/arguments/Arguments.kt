@@ -24,7 +24,7 @@ class Argument(rawContent: String) {
             is String -> content.equals(other, true)
             is Argument -> content == other.content && isFlag == other.isFlag
             else -> false
-        } // Doesn't this break the symmetrical contract?
+        } // Doesn't this break the symmetrical contract? // yes this is bad and should be fixed
 
     override fun hashCode(): Int = content.lowercase().hashCode()
 
