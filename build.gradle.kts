@@ -45,7 +45,7 @@ dependencies {
 
     implementation("io.github.classgraph:classgraph:4.8.90")
     implementation("com.google.inject:guice:5.0.1")
-    implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
+    implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
