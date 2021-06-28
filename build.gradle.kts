@@ -49,7 +49,7 @@ dependencies {
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:4.3.0")
+    implementation("io.sentry:sentry:5.0.1")
 
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
