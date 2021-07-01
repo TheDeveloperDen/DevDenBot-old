@@ -56,5 +56,5 @@ fun xpForMessage(message: String): Double {
 }
 
 fun xpForLevel(level: Int) = level.toDouble()
-    .let { n -> 2 * n.pow(3) + (55 / 2).toDouble() * n.pow(2) + (755 / 6).toDouble() * n }
+    .let { n -> n.pow(3) + (55 / 2).toDouble() * n.pow(2) + (755 / 6).toDouble() * n }
     .toLong()
