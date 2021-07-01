@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
@@ -21,7 +21,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.0-native-mt")
 
@@ -29,27 +29,27 @@ dependencies {
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.2.1_262")
+    implementation("net.dv8tion:JDA:4.3.0_288")
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha1")
-    implementation("io.ktor:ktor-client-core:1.6.0")
-    implementation("io.ktor:ktor-client-cio:1.6.0")
-    implementation("io.ktor:ktor-client-serialization:1.6.0")
+    implementation("io.ktor:ktor-client-core:1.6.1")
+    implementation("io.ktor:ktor-client-cio:1.6.1")
+    implementation("io.ktor:ktor-client-serialization:1.6.1")
 
     implementation("ch.qos.logback:logback-core:1.3.0-alpha5")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha5")
 
     implementation("io.github.microutils:kotlin-logging:2.0.8")
 
-    implementation("io.github.classgraph:classgraph:4.8.90")
+    implementation("io.github.classgraph:classgraph:4.8.108")
     implementation("com.google.inject:guice:5.0.1")
-    implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
+    implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:4.3.0")
+    implementation("io.sentry:sentry:5.0.1")
 
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
