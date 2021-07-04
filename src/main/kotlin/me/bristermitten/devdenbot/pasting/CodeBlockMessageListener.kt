@@ -23,7 +23,7 @@ class CodeBlockMessageListener @Inject constructor(
 
     companion object {
         private val log by log()
-        private const val MIN_ROWS_FOR_CONVERSION = 10
+        private const val MIN_ROWS_FOR_CONVERSION = 15
 
         internal val codeBlock = Regex("```(?:(?<lang>[a-zA-Z]+)?\\n)?((?:.|\\n)*?)```")
 
