@@ -1,9 +1,6 @@
 package me.bristermitten.devdenbot.pasting
 
-import me.bristermitten.devdenbot.discord.HELPFUL_ROLE_ID
-import me.bristermitten.devdenbot.discord.PASTE_EMOJI_ID
-import me.bristermitten.devdenbot.discord.SUPPORT_ROLE_ID
-import me.bristermitten.devdenbot.discord.getPing
+import me.bristermitten.devdenbot.discord.*
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
@@ -45,7 +42,7 @@ class PasteReactionListener : EventListener {
         }
 
         val message = event.retrieveMessage().await()
-        val mention = requireNotNull(message.member?.getPing()) { "Member not in guild" }
+        val mention = message.fetchMember().getPing()
         val pasteUrl = HasteClient.postCode(message.contentStripped)
 
         message.delete().queue()
