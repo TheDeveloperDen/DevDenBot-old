@@ -1,6 +1,7 @@
 package me.bristermitten.devdenbot.faq
 
 import com.google.inject.Inject
+import me.bristermitten.devdenbot.discord.awaitThenDelete
 import me.bristermitten.devdenbot.extensions.await
 import me.bristermitten.devdenbot.inject.Used
 import me.bristermitten.devdenbot.listener.EventListener
@@ -26,11 +27,11 @@ class FAQShorthandListener @Inject constructor(override val ddbConfig: DDBConfig
         }
         val faq = event.message.contentRaw.drop(1)
         if (!FAQ_IDENTIFIER_REGEX.matches(faq)){
-            return   
+            return
         }
-        event.channel.sendMessage(
+        event.channel.sendMessageEmbeds(
             displayFAQ(faq, event.author)
-        ).await()
+        ).awaitThenDelete()
     }
 
     override fun register(jda: JDA) {

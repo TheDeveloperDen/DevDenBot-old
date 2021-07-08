@@ -31,12 +31,12 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
             1 -> reply(displayFAQ(arguments.first().content, author))
             else -> {
                 if (!member.hasRoleOrAbove(SUPPORT_ROLE_ID)) {
-                    tempReply("**No permission.**", 5)
+                    tempReply("**No permission.**")
                     return
                 }
                 when (arguments[0].content) {
                     "help" -> {
-                        reply(embedDefaults {
+                        tempReply(embedDefaults {
                             description = """
                             `${ddbConfig.prefix}faq <name>` - Show a FAQ
                             `?name` - Show a FAQ 
@@ -59,7 +59,7 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
                         val name = arguments[1].content
                         return deleteFAQ(name)
                     }
-                    else -> reply("Unknown subcommand ${arguments[0].content}. Type `${ddbConfig.prefix}faq help` for help.")
+                    else -> tempReply("Unknown subcommand ${arguments[0].content}. Type `${ddbConfig.prefix}faq help` for help.")
                 }
             }
         }
@@ -102,7 +102,7 @@ class FAQCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDen
         val existingFAQ = FAQDAO.find {
             FAQs.name eq name
         }.firstOrNull() ?: run {
-            reply("**Unknown FAQ `$name`**")
+            tempReply("**Unknown FAQ `$name`**")
             return@newSuspendedTransaction
         }
 
