@@ -5,7 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
-group = "me.bristermitten"
+group = "net.developerden"
 
 
 repositories {
@@ -81,7 +81,7 @@ tasks {
 
     application {
         // Define the main class for the application.
-        mainClass.set("me.bristermitten.devdenbot.AppKt")
+        mainClass.set("net.developerden.devdenbot.AppKt")
         applicationName = "DevDenBot"
     }
 
