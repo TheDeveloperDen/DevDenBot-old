@@ -23,7 +23,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-native-mt")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.0-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.1")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.20")
 
