@@ -12,4 +12,4 @@ VOLUME /var/data
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--add-exports", "java.desktop/sun.font=ALL-UNNAMED"]
