@@ -5,7 +5,7 @@ COPY --chown=gradle:gradle . .
 
 RUN gradle shadowJar
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk
 
 RUN mkdir /app
 VOLUME /var/data
