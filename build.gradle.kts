@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.1-native-mt")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.20")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
@@ -51,7 +51,7 @@ dependencies {
 
     implementation("io.sentry:sentry:5.0.1")
 
-    implementation("com.zaxxer:HikariCP:4.0.3")
+    implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
