@@ -5,7 +5,7 @@ COPY --chown=gradle:gradle . .
 
 RUN gradle shadowJar
 
-FROM neduekwunife/openjdk8-jre-alpine-with-fontconfig
+FROM neduekwunife/openjdk11-jre-alpine-with-fontconfig
 
 RUN mkdir /app
 VOLUME /var/data
