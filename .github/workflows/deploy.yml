@@ -85,7 +85,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           password: ${{ secrets.DEPLOY_PASSWORD }}
           script: |
-            docker pull ghcr.io/thedeveloperden/devdenbot # DO NOT REMOVE THIS OR EVERYTHING WILL BREAK
+            docker pull ghcr.io/thedeveloperden/devdenbot:master # DO NOT REMOVE THIS OR EVERYTHING WILL BREAK
             docker stop devdenbot
             docker rm devdenbot
             docker run --name devdenbot --env SENTRY_DSN=${{ secrets.SENTRY_DSN }} --env DDB_TOKEN=${{ secrets.DDB_TOKEN }} --env DDB_DB_USERNAME=${{ secrets.DDB_DB_USERNAME }} --env DDB_DB_NAME=devden --env DDB_DB_PASSWORD=${{ secrets.DDB_DB_PASSWORD }} --env DDB_DB_HOST=${{ secrets.DDB_DB_HOST }} --mount source=devden,target=/var/data -d --restart unless-stopped ghcr.io/thedeveloperden/devdenbot
