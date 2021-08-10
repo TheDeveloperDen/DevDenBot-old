@@ -43,7 +43,7 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging:2.0.10")
 
-    implementation("io.github.classgraph:classgraph:4.8.110")
+    implementation("io.github.classgraph:classgraph:4.8.112")
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
