@@ -14,6 +14,7 @@ const val MEME_ROLE_4 = 874646724759674951 // AbstractRoleFactoryStrategyObserve
 const val MEME_ROLE_5 = 874646841432633354 // 100% memory safe brain
 const val MEME_ROLE_6 = 874646941416452136 // Overdosing on Functional Programming
 const val MEME_ROLE_7 = 839761451471208448 // Tier 5 + 2i
+const val MEME_ROLE_8 = 874654444090978304 // Tier 5 + 2i
 
 const val NO_PING_ROLE_ID = 848197427617595393
 
@@ -46,6 +47,7 @@ val SELF_ROLES = setOf(
     MEME_ROLE_4,
     MEME_ROLE_5,
     MEME_ROLE_6,
-    MEME_ROLE_7
+    MEME_ROLE_7,
+    MEME_ROLE_8
 )
 
