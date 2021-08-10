@@ -33,14 +33,6 @@ const val STAFF_ROLE_ID = 857288092741009478
  * Roles that can be self assigned with the `role` command [net.developerden.devdenbot.commands.roles.RoleCommand]
  */
 val SELF_ROLES = setOf(
-    SHE_HER_ROLE_ID,
-    HE_HIM_ROLE_ID,
-    THEY_THEM_ROLE_ID,
-    CLASH_OF_CODE_ROLE_ID,
-    BUMP_NOTIFICATIONS_ROLE_ID,
-    NO_PING_ROLE_ID,
-    SERIOUS_ROLE_ID,
-    ANNOUNCEMENTS_ROLE_ID,
     MEME_ROLE_1,
     MEME_ROLE_2,
     MEME_ROLE_3,
