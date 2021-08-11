@@ -33,7 +33,7 @@ dependencies {
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
-    implementation("org.slf4j:slf4j-api:2.0.0-alpha2")
+    implementation("org.slf4j:slf4j-api:2.0.0-alpha3")
     implementation("io.ktor:ktor-client-core:1.6.2")
     implementation("io.ktor:ktor-client-cio:1.6.2")
     implementation("io.ktor:ktor-client-serialization:1.6.2")
