@@ -117,11 +117,17 @@ class XPMessageListener @Inject constructor(override val ddbConfig: DDBConfig) :
         }
     }
 
-    private suspend fun checkLevelUp(member: Member, userDAO: StatsUserDAO) = newSuspendedTransaction {
+    suspend fun checkLevelUp(member: Member, userDAO: StatsUserDAO) = newSuspendedTransaction {
         val requiredForNextLevel = xpForLevel(userDAO.level + 1)
         if (userDAO.xp >= requiredForNextLevel) {
             userDAO.setLevel(userDAO.level + 1)
             processLevelUp(member, userDAO.level)
+        } else {
+            val currentTier = tierRole(member.jda, tierOf(userDAO.level))
+            if (currentTier.isPublicRole) {
+                return@newSuspendedTransaction
+            }
+            member.guild.addRoleToMember(member.idLong, currentTier).await() // just in case they dont already have it
         }
     }
 
