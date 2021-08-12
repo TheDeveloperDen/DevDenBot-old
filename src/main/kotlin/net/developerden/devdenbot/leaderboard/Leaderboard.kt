@@ -1,14 +1,15 @@
 package net.developerden.devdenbot.leaderboard
 
-import java.util.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.ConcurrentHashMap
 
 open class Leaderboard<T>(private val comparator: Comparator<T>) {
-
+    private val mutex = Mutex()
     private val indices = ConcurrentHashMap<T, Int>()
-    private val entries = Vector<T>()
+    private val entries = ArrayList<T>()
 
-    fun addAll(entries: Collection<T>) {
+    suspend fun addAll(entries: Collection<T>) = mutex.withLock {
         entries.filter { !indices.contains(it) }.forEach { this.entries.add(it) }
         this.entries.sortWith(comparator.reversed())
         indices.clear()
@@ -25,7 +26,9 @@ open class Leaderboard<T>(private val comparator: Comparator<T>) {
         return indices[entry]
     }
 
-    @Synchronized
+    /**
+     * This function should **ALWAYS** be called under a lock with `mutex.withLock`
+     */
     private fun add(entry: T) {
         if (!indices.containsKey(entry)) {
             indices[entry] = entries.size
@@ -33,8 +36,7 @@ open class Leaderboard<T>(private val comparator: Comparator<T>) {
         }
     }
 
-    @Synchronized
-    fun update(entry: T) {
+    suspend fun update(entry: T) = mutex.withLock {
         if (!indices.containsKey(entry)) {
             add(entry)
         }
