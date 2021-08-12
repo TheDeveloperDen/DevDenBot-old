@@ -50,16 +50,28 @@ suspend fun CommandEvent.tempReply(message: Collection<MessageEmbed>, cooldown: 
     channel.sendMessageEmbeds(message)
         .awaitThenDelete(cooldown)
 
-suspend fun CommandEvent.firstMentionedUser(): User? {
-    if (message.mentionedUsers.isNotEmpty()) {
-        return message.mentionedUsers.first()
-    }
-    return arguments()
-        .args
-        .asSequence()
-        .map(Argument::content)
-        .mapNotNull(String::toLongOrNull)
-        .asFlow()
-        .mapNotNull { jda.retrieveUserById(it).await() }
-        .firstOrNull()
+
+val mentionRegex = Regex("""<@!?(\d+)>""")
+val idRegex = Regex("""\d{17,}""")
+
+
+suspend fun CommandEvent.getUser(): User? {
+    return if (args.isBlank()) event.author else
+        mentionRegex.matchEntire(args)?.groups?.get(1)
+            ?.let {
+                guild.retrieveMemberById(it.value, false).await { cont, _ ->
+                    cont.resume(null)
+                }
+            }?.user
+            ?: idRegex.matchEntire(args)?.groups?.get(1)
+                ?.let {
+                    guild.retrieveMemberById(it.value, false).await { cont, _ ->
+                        cont.resume(null)
+                    }
+                }?.user
+            ?: guild.retrieveMembersByPrefix(args, 1).await()
+                .firstOrNull()
+                ?.takeIf { it.user.name == args || it.nickname == args }
+                ?.user
+
 }

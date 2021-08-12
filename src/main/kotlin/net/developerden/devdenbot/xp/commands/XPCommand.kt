@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import net.developerden.devdenbot.commands.DevDenCommand
 import net.developerden.devdenbot.data.StatsUsers
 import net.developerden.devdenbot.extensions.await
-import net.developerden.devdenbot.extensions.commands.firstMentionedUser
+import net.developerden.devdenbot.extensions.commands.getUser
 import net.developerden.devdenbot.extensions.commands.prepareReply
 import net.developerden.devdenbot.graphics.createTextImage
 import net.developerden.devdenbot.inject.Used
@@ -41,7 +41,7 @@ class XPCommand @Inject constructor(
     }
 
     override suspend fun CommandEvent.execute() {
-        val targetUser = firstMentionedUser() ?: event.message.author
+        val targetUser = getUser() ?: event.author
         val targetStatsUser = StatsUsers.get(targetUser.idLong)
         val text = formatNumber(targetStatsUser.xp) + " XP"
 

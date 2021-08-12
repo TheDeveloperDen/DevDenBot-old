@@ -7,7 +7,7 @@ import net.developerden.devdenbot.data.StatsUserDAO
 import net.developerden.devdenbot.data.StatsUsers
 import net.developerden.devdenbot.discord.getPing
 import net.developerden.devdenbot.extensions.commands.awaitReply
-import net.developerden.devdenbot.extensions.commands.firstMentionedUser
+import net.developerden.devdenbot.extensions.commands.getUser
 import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.serialization.DDBConfig
 import java.math.BigInteger
@@ -40,7 +40,7 @@ class SetVarCommand @Inject constructor(
             return
         }
 
-        val targetUser = firstMentionedUser() ?: event.message.author
+        val targetUser = getUser() ?: event.message.author
 
         val field = args[1].content
 

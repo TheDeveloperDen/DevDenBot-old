@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import net.developerden.devdenbot.commands.DevDenCommand
 import net.developerden.devdenbot.data.StatsUsers
 import net.developerden.devdenbot.extensions.await
+import net.developerden.devdenbot.extensions.commands.getUser
 import net.developerden.devdenbot.extensions.commands.prepareReply
 import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.util.formatNumber
@@ -23,28 +24,16 @@ class ProfileCommand @Inject constructor(
     category = XPCategory,
 ) {
 
-    companion object {
-        val idRegex = Regex("""<@!?(\d+)>""")
-    }
+
 
     override suspend fun CommandEvent.execute() {
         val args = event.message.contentRaw.removePrefix(client.prefix)
             .dropWhile { !it.isWhitespace() }.trimStart()
 
         // what is this monstrosity
-        val targetUser = if (args.isBlank()) event.author else
-            idRegex.matchEntire(args)?.groups?.get(1)
-                ?.let {
-                    guild.retrieveMemberById(it.value, false).await { cont, _ ->
-                        cont.resume(null)
-                    }
-                }?.user
-                ?: guild.retrieveMembersByPrefix(args, 1).await()
-                    .firstOrNull()
-                    ?.takeIf { it.user.name == args || it.nickname == args }
-                    ?.user
+        val targetUser = getUser()
 
-        if (targetUser == null){
+        if (targetUser == null) {
             channel.sendMessage("Unknown user: $args").queue().also { return }
         }
 
