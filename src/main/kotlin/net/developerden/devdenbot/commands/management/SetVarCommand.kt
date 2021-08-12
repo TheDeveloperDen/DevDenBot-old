@@ -29,7 +29,8 @@ class SetVarCommand @Inject constructor(
     name = "set",
     help = "Set the data of a user",
     ownerCommand = true,
-    arguments = "<user> <data> <amount>"
+    arguments = "<user> <data> <amount>",
+    category = ManagingCategory
 ) {
 
     override suspend fun CommandEvent.execute() {
