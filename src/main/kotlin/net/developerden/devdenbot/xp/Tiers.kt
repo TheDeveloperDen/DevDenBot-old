@@ -2,7 +2,7 @@ package net.developerden.devdenbot.xp
 
 import net.dv8tion.jda.api.JDA
 
-val tierRoleIds = listOf(
+val TIER_ROLE_IDS = listOf(
     821743100203368458, //@everyone (tier 0)
     823167811555033150, // tier 1
     837653180774875178, // 2
@@ -24,4 +24,4 @@ fun tierOf(level: Int): Int {
     return 1 + (level / 10)
 }
 
-fun tierRole(jda: JDA, tier: Int) = jda.getRoleById(tierRoleIds[tier]) ?: error("Could not find role for Tier $tier")
+fun tierRole(jda: JDA, tier: Int) = jda.getRoleById(TIER_ROLE_IDS[tier]) ?: error("Could not find role for Tier $tier")
