@@ -11,6 +11,7 @@ import net.developerden.devdenbot.util.log
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.MemberCachePolicy
 
 /**
  * @author AlexL
@@ -28,6 +29,7 @@ class JDAProvider @Inject constructor(
         val jda = JDABuilder.createDefault(config.token)
             .enableIntents(GatewayIntent.GUILD_MEMBERS)
             .addEventListeners(commandClient, eventWaiter)
+            .setMemberCachePolicy(MemberCachePolicy.ALL)
             .setEventManager(manager)
             .build()
 
