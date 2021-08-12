@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 @Used
 class XPCommand @Inject constructor(
-    val config: DDBConfig,
+    private val config: DDBConfig,
 ) : DevDenCommand(
     name = "xp",
     help = "View the xp of a user",

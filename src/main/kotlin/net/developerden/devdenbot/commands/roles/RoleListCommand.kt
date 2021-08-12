@@ -29,7 +29,7 @@ class RoleListCommand @Inject constructor(
             .setTitle("Role Menu")
             .setDescription("```$roleList```")
             .setColor(config.colour)
-            .setFooter("ddrole <role> to add a role")
+            .setFooter("${config.prefix}role <role> to add a role")
             .build()
 
         reply(builder)

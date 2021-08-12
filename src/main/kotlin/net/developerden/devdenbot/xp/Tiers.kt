@@ -14,7 +14,7 @@ val TIER_ROLE_IDS = listOf(
     837662908703703070,
     837663085657194546,
     837663288064999424,
-    837576412747399168 // Redempt role, highly prestigous
+    837576412747399168 // Redempt role, highly prestigious
 )
 
 fun tierOf(level: Int): Int {

@@ -15,7 +15,7 @@ class DeroleCommand @Inject constructor(
     name = "derole",
     help = "Remove your own role",
     category = RoleCategory,
-    aliases = arrayOf("roleremove", "removerole")
+    aliases = arrayOf("roleremove", "removerole", "unrole")
 ) {
 
     override suspend fun CommandEvent.execute() {
