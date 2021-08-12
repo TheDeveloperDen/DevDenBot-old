@@ -25,7 +25,7 @@ internal class ArgumentParserTest {
     @Test
     fun parse2() {
         val tokens = ArgumentLexer.lex("""
-            ddfaq set helloworld "Hello World!" "This is a test FAQ, it doesn't supports quoted messages :O"
+            faq set hello-world "Hello World!" "This is a test FAQ, it doesn't supports quoted messages :O"
         """.trimIndent())
 
         val parsed = ArgumentParser.parse(tokens)
@@ -33,7 +33,7 @@ internal class ArgumentParserTest {
         assertEquals(
             listOf(
                 Argument("set"),
-                Argument("helloworld"),
+                Argument("hello-world"),
                 Argument("Hello World!"),
                 Argument("This is a test FAQ, it doesn't supports quoted messages :O"),
             ),
