@@ -37,7 +37,7 @@ class SetVarCommand @Inject constructor(
         val args = arguments.args
 
         arguments.validateArgLength(3) {
-            awaitReply("Not enough arguments.")
+            awaitReply("Not enough arguments. Expected format: `${config.prefix}set ${this@SetVarCommand.arguments}`")
             return
         }
 
