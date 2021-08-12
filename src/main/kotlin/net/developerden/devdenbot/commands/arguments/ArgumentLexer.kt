@@ -17,6 +17,8 @@ object ArgumentLexer {
         for ((char, tokenType) in tokenTypes) {
             if (tokenType == previous) {
                 buffer.append(char)
+            } else if (tokenType == TokenType.DASH && previous != TokenType.SPACE) {
+                buffer.append(char) // flags MUST be separated by a space
             } else {
                 if (previous != TokenType.EOF && previous != TokenType.SPACE) {
                     tokens.add(Token(previous, buffer.toString()))
