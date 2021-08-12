@@ -1,14 +1,9 @@
 package net.developerden.devdenbot.leaderboard
 
-import net.developerden.devdenbot.data.Users
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.selectAll
-import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.Comparator
 
-open class Leaderboard<T> (private val comparator: Comparator<T>) {
+open class Leaderboard<T>(private val comparator: Comparator<T>) {
 
     private val indices = ConcurrentHashMap<T, Int>()
     private val entries = Vector<T>()
@@ -19,6 +14,7 @@ open class Leaderboard<T> (private val comparator: Comparator<T>) {
         indices.clear()
         this.entries.forEachIndexed { i, it -> indices[it] = i }
     }
+
     fun getEntryCount(): Int = indices.size
 
     fun getEntry(position: Int): T {
