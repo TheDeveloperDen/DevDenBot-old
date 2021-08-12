@@ -1,9 +1,9 @@
-package net.developerden.devdenbot.commands.management
+package net.developerden.devdenbot.commands.info
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import net.developerden.devdenbot.commands.DevDenCommand
+import net.developerden.devdenbot.commands.management.ManagingCategory
 import net.developerden.devdenbot.data.StatsUsers
-import net.developerden.devdenbot.events.EventType
 import net.developerden.devdenbot.events.Messages
 import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.serialization.DDBConfig
@@ -25,7 +25,7 @@ class InfoCommand @Inject constructor(
 ) : DevDenCommand(
     name = "info",
     help = "View bot info and some cool stats",
-    category = ManagingCategory,
+    category = InfoCategory,
     aliases = arrayOf("flex", "stats")
 ) {
 
