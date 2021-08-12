@@ -1,7 +1,8 @@
-package net.developerden.devdenbot.commands.management
+package net.developerden.devdenbot.commands.info
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import net.developerden.devdenbot.commands.DevDenCommand
+import net.developerden.devdenbot.commands.management.ManagingCategory
 import net.developerden.devdenbot.data.StatsUsers
 import net.developerden.devdenbot.events.EventType
 import net.developerden.devdenbot.events.Messages
