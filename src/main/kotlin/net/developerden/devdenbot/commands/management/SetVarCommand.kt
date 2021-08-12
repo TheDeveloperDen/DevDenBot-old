@@ -2,9 +2,9 @@ package net.developerden.devdenbot.commands.management
 
 import com.jagrosh.jdautilities.command.CommandEvent
 import net.developerden.devdenbot.commands.DevDenCommand
+import net.developerden.devdenbot.commands.arguments.arguments
 import net.developerden.devdenbot.data.StatsUserDAO
 import net.developerden.devdenbot.data.StatsUsers
-import net.developerden.devdenbot.commands.arguments.arguments
 import net.developerden.devdenbot.discord.getPing
 import net.developerden.devdenbot.extensions.commands.awaitReply
 import net.developerden.devdenbot.extensions.commands.firstMentionedUser
@@ -12,11 +12,9 @@ import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.serialization.DDBConfig
 import java.math.BigInteger
 import javax.inject.Inject
-import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.KProperty1
+import kotlin.reflect.KSuspendFunction2
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
-import kotlin.reflect.full.memberProperties
 
 
 /**
@@ -47,29 +45,27 @@ class SetVarCommand @Inject constructor(
         val field = args[1].content
 
         @Suppress("UNCHECKED_CAST")
-        val stat = StatsUserDAO::class.memberProperties.firstOrNull {
-            it.name.equals(field, true)
-        } as KProperty1<StatsUserDAO, Any>?
+        val stat = when (field) {
+            "xp" -> StatsUserDAO::setXP
+            "lvl", "level" -> StatsUserDAO::setLevel
+            "bump", "bumps" -> StatsUserDAO::setBumps
+            else -> {
+                awaitReply("I don't recognise $field")
+                return
+            }
+        } as KSuspendFunction2<StatsUserDAO, Any, Unit>
 
-        if (stat == null) {
-            awaitReply("I don't recognise $field")
+        val valueInput = args[2]
+        val type = stat.parameters[1].type
+        val value = try {
+            valueInput.content.parseTo(type)
+        } catch (e: Exception) {
+            awaitReply("**Invalid value**. Expected type `${type}` but could not parse `${valueInput.content}` to this type.")
             return
         }
-        if (stat !is KMutableProperty1) {
-            awaitReply("I can't change the value of ${stat.name}")
-            return
-        }
-
-        val amount = args[2]
-        amount.validate({ it.toBigIntegerOrNull() != null }) {
-            awaitReply("Invalid amount - must be an integer")
-            return
-        }
-
-        val value = amount.content.parseTo(stat.returnType)
 
         val statsUser = StatsUsers.get(targetUser.idLong)
-        stat.set(statsUser, value)
+        stat(statsUser, value)
         val targetMember = guild.getMember(targetUser) ?: member
         awaitReply("Successfully set value of `${stat.name}` for ${targetMember.getPing()} to `$value`")
     }
