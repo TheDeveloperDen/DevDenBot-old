@@ -66,6 +66,9 @@ class SetVarCommand @Inject constructor(
 
 
     override suspend fun SlashCommandEvent.execute() {
+        if(!member!!.isOwner) {
+            reply("You cannot use this command").setEphemeral(true).await()
+        }
         val target = getOption("target")?.asUser ?: error("Invalid user")
         val field = getOption("field")?.asString ?: error("Invalid field")
         val value = getOption("value")?.asLong ?: error("Invalid value")
