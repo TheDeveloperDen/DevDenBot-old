@@ -11,8 +11,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import net.developerden.devdenbot.commands.CommandsModule
 import net.developerden.devdenbot.commands.DevDenCommand
-import net.developerden.devdenbot.data.StatsUsers
+import net.developerden.devdenbot.commands.slash.DevDenSlashCommand
 import net.developerden.devdenbot.data.Users
+import net.developerden.devdenbot.discord.DEV_DEN_SERVER_ID
 import net.developerden.devdenbot.events.EventsTables
 import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.faq.FAQs
@@ -25,7 +26,6 @@ import net.developerden.devdenbot.serialization.DDBConfig
 import net.developerden.devdenbot.util.log
 import net.developerden.devdenbot.util.scope
 import net.developerden.devdenbot.xp.VoiceChatXPTask
-import net.developerden.devdenbot.xp.tierRole
 import net.dv8tion.jda.api.JDA
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -60,14 +60,27 @@ class DevDen {
         val commands = injector.getInstance<Set<DevDenCommand>>()
 
         commands.forEach {
+            if (it is DevDenSlashCommand) {
+                jda.upsertCommand(it.name, it.help)
+            }
             commandClient.addCommand(it)
             log.debug("Registered ${it.javaClass.name}!")
         }
-
         jda.awaitReady()
         GraphicsContext.init()
         startTasks(jda)
         updateRoles(jda)
+        scope.launch {
+            val guild = jda.getGuildById(DEV_DEN_SERVER_ID) ?: error("cannot find dev den")
+            commands.forEach {
+                if (it is DevDenSlashCommand) {
+                    val action = guild.upsertCommand(it.name, it.help)
+                    it.load(action)
+                    action.await()
+                    log.debug("Registered ${it.javaClass.name}!")
+                }
+            }
+        }
     }
 
     fun start() {

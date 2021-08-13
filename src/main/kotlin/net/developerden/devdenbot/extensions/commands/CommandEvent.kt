@@ -51,6 +51,8 @@ suspend fun CommandEvent.tempReply(message: Collection<MessageEmbed>, cooldown: 
         .awaitThenDelete(cooldown)
 
 
+
+
 val mentionRegex = Regex("""<@!?(\d+)>""")
 val idRegex = Regex("""\d{17,}""")
 
