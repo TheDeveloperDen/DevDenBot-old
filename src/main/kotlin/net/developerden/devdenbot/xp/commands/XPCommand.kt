@@ -28,7 +28,7 @@ class XPCommand @Inject constructor(
 ), HasConfig {
 
     companion object {
-        private val defaultColor = Color.decode("0xFFA500")
+        private val defaultColor = Color.decode("0xFAF8F6")
     }
 
     override fun load(action: CommandCreateAction) {
