@@ -60,9 +60,6 @@ class DevDen {
         val commands = injector.getInstance<Set<DevDenCommand>>()
 
         commands.forEach {
-            if (it is DevDenSlashCommand) {
-                jda.upsertCommand(it.name, it.help)
-            }
             commandClient.addCommand(it)
             log.debug("Registered ${it.javaClass.name}!")
         }
@@ -70,15 +67,15 @@ class DevDen {
         GraphicsContext.init()
         startTasks(jda)
         updateRoles(jda)
+
+        val slashCommands = injector.getInstance<Set<DevDenSlashCommand>>()
         scope.launch {
             val guild = jda.getGuildById(DEV_DEN_SERVER_ID) ?: error("cannot find dev den")
-            commands.forEach {
-                if (it is DevDenSlashCommand) {
-                    val action = guild.upsertCommand(it.name, it.help)
-                    it.load(action)
-                    action.await()
-                    log.debug("Registered ${it.javaClass.name}!")
-                }
+            slashCommands.forEach {
+                val action = guild.upsertCommand(it.name, it.help)
+                it.load(action)
+                action.await()
+                log.debug("Registered ${it.javaClass.name}!")
             }
         }
     }
