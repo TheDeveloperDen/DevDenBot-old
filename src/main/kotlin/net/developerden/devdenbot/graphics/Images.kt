@@ -30,7 +30,7 @@ fun pickOptimalFontSize(g: Graphics2D, name: String, text: String, width: Int, h
         val font = Font(name, Font.PLAIN, fontSize)
         rect = getStringBoundsRectangle2D(g, text, font)
     } while (rect.width >= width || rect.height >= height)
-    return (fontSize * 0.9).roundToInt()
+    return (fontSize * 0.75).roundToInt()
 }
 
 private fun getStringBoundsRectangle2D(g: Graphics, title: String, font: Font): Rectangle2D {
