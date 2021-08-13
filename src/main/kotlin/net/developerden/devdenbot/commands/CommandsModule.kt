@@ -6,6 +6,7 @@ import dev.misfitlabs.kotlinguice4.KotlinModule
 import dev.misfitlabs.kotlinguice4.multibindings.KotlinMultibinder
 import dev.misfitlabs.kotlinguice4.multibindings.KotlinMultibindingsScanner
 import net.developerden.devdenbot.inject.Classpath
+import java.lang.reflect.Modifier
 
 /**
  * @author Alexander Wood (BristerMitten)
@@ -18,6 +19,9 @@ class CommandsModule : KotlinModule() {
         val binder = KotlinMultibinder.newSetBinder<DevDenCommand>(kotlinBinder)
 
         for (command in commands) {
+            if (Modifier.isAbstract(command.modifiers)) {
+                continue
+            }
             binder.addBinding().to(command)
         }
 
