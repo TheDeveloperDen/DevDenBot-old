@@ -57,17 +57,13 @@ val idRegex = Regex("""\d{17,}""")
 
 suspend fun CommandEvent.getUser(): User? {
     return if (args.isBlank()) event.author else
-        mentionRegex.matchEntire(args)?.groups?.get(1)
+        mentionRegex.find(args)?.groups?.get(1)
             ?.let {
-                guild.retrieveMemberById(it.value, false).await { cont, _ ->
-                    cont.resume(null)
-                }
+                guild.retrieveMemberById(it.value, false).await()
             }?.user
-            ?: idRegex.matchEntire(args)?.groups?.get(1)
+            ?: idRegex.find(args)?.groups?.get(1)
                 ?.let {
-                    guild.retrieveMemberById(it.value, false).await { cont, _ ->
-                        cont.resume(null)
-                    }
+                    guild.retrieveMemberById(it.value, false).await()
                 }?.user
             ?: guild.retrieveMembersByPrefix(args, 1).await()
                 .firstOrNull()
