@@ -8,11 +8,10 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction
 import javax.inject.Inject
+import javax.inject.Provider
 
 @Used
-class PasteCommand @Inject constructor(
-    val jda: JDA,
-) : DevDenSlashCommand(
+class PasteCommand : DevDenSlashCommand(
     name = "paste",
     description = "Show the paste link",
 ) {
