@@ -12,6 +12,7 @@ import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.serialization.DDBConfig
 import net.developerden.devdenbot.trait.HasConfig
 import net.developerden.devdenbot.util.formatNumber
+import net.developerden.devdenbot.xp.tierOf
 import net.developerden.devdenbot.xp.xpForLevel
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -44,6 +45,7 @@ class ProfileCommand @Inject constructor(
             title = "Your Statistics"
             field("XP", formatNumber(statsUser.xp), true)
             field("Level", statsUser.level.toString(), true)
+            field("Tier", tierOf(statsUser.level).toString(), true)
             field("Disboard Bumps", statsUser.bumps.toString(), true)
             field("XP to Level", formatNumber(xpForLevel(statsUser.level + 1)), true)
             setFooter("Statistics for ${targetUser.name}#${targetUser.discriminator}")
