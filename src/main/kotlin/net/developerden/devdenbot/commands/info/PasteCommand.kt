@@ -12,7 +12,7 @@ class PasteCommand : DevDenSlashCommand(
     name = "paste",
     description = "Show the paste link",
 ) {
-    override fun load(action: CommandCreateAction) = Unit
+    override suspend fun load(action: CommandCreateAction) = Unit
 
     override suspend fun SlashCommandEvent.execute() {
         reply(HasteClient.baseUrl).await()

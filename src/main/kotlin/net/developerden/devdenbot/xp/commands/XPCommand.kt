@@ -31,7 +31,7 @@ class XPCommand @Inject constructor(
         private val defaultColor = Color.decode("0xFAF8F6")
     }
 
-    override fun load(action: CommandCreateAction) {
+    override suspend fun load(action: CommandCreateAction) {
         action.addOption(OptionType.USER, "target", "User to get the xp of", false)
     }
 

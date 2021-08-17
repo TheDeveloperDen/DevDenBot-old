@@ -13,7 +13,6 @@ import net.developerden.devdenbot.commands.CommandsModule
 import net.developerden.devdenbot.commands.DevDenCommand
 import net.developerden.devdenbot.commands.slash.DevDenSlashCommand
 import net.developerden.devdenbot.data.Users
-import net.developerden.devdenbot.discord.DEV_DEN_SERVER_ID
 import net.developerden.devdenbot.events.EventsTables
 import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.faq.FAQs
@@ -70,11 +69,8 @@ class DevDen {
 
         val slashCommands = injector.getInstance<Set<DevDenSlashCommand>>()
         scope.launch {
-            val guild = jda.getGuildById(DEV_DEN_SERVER_ID) ?: error("cannot find dev den")
             slashCommands.forEach {
-                val action = guild.upsertCommand(it.name, it.help)
-                it.load(action)
-                action.await()
+                it.register(jda)
                 log.debug("Registered ${it.javaClass.name}!")
             }
         }

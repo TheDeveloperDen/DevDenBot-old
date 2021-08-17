@@ -30,7 +30,7 @@ class InfoCommand @Inject constructor(
 ), HasConfig {
 
     private fun formatDate(dt: LocalDate) = DateTimeFormatter.ofPattern("YYYY MM dd").format(dt)
-    override fun load(action: CommandCreateAction) = Unit
+    override suspend fun load(action: CommandCreateAction) = Unit
 
 
     override suspend fun SlashCommandEvent.execute() {

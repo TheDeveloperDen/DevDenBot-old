@@ -32,7 +32,7 @@ class ProfileCommand @Inject constructor(
     description = "View your or someone else's profile"
 ), HasConfig {
 
-    override fun load(action: CommandCreateAction) {
+    override suspend fun load(action: CommandCreateAction) {
         action.addOption(OptionType.USER, "target", "User to get the profile of", false)
     }
 

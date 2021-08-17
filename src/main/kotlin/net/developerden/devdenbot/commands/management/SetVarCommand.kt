@@ -35,7 +35,7 @@ class SetVarCommand @Inject constructor(
     name = "set",
     description = "Set the data of a user"
 ), HasConfig {
-    override fun load(action: CommandCreateAction) {
+    override suspend fun load(action: CommandCreateAction) {
         action
             .addOption(OptionType.USER, "target", "the user to edit", true)
             .addOptions(OptionData(OptionType.STRING, "field", "what to edit", true).addChoices(
@@ -66,7 +66,7 @@ class SetVarCommand @Inject constructor(
 
 
     override suspend fun SlashCommandEvent.execute() {
-        if(!member!!.isOwner) {
+        if (!member!!.isOwner) {
             reply("You cannot use this command").setEphemeral(true).await()
         }
         val target = getOption("target")?.asUser ?: error("Invalid user")
@@ -91,7 +91,7 @@ class SetVarCommand @Inject constructor(
 
         val clickEvent = jda.listenFlow<ButtonClickEvent>()
             .filter {
-                it.componentId.startsWith(uuid)
+                it.componentId.startsWith(uuid) && it.user == user
             }
             .first()
 
