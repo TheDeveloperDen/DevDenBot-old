@@ -24,6 +24,5 @@ abstract class DevDenSlashCommand(name: String, description: String) : DevDenCom
         val action = guild.upsertCommand(name, help)
         load(action)
         action.await()
-
     }
 }
