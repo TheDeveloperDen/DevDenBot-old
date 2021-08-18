@@ -29,7 +29,7 @@ dependencies {
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.3.0_307")
+    implementation("net.dv8tion:JDA:4.3.0_309")
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
@@ -39,7 +39,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:1.6.2")
 
     implementation("ch.qos.logback:logback-core:1.3.0-alpha6")
-    implementation("ch.qos.logback:logback-classic:1.3.0-alpha6")
+    implementation("ch.qos.logback:logback-classic:1.3.0-alpha9")
 
     implementation("io.github.microutils:kotlin-logging:2.0.10")
 
