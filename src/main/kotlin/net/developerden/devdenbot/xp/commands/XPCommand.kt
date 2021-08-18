@@ -1,17 +1,18 @@
 package net.developerden.devdenbot.xp.commands
 
-import com.jagrosh.jdautilities.command.CommandEvent
-import net.developerden.devdenbot.commands.DevDenCommand
+import net.developerden.devdenbot.commands.slash.DevDenSlashCommand
 import net.developerden.devdenbot.data.StatsUsers
 import net.developerden.devdenbot.extensions.await
-import net.developerden.devdenbot.extensions.commands.firstMentionedUser
-import net.developerden.devdenbot.extensions.commands.prepareReply
+import net.developerden.devdenbot.extensions.commands.embedDefaults
 import net.developerden.devdenbot.graphics.createTextImage
 import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.serialization.DDBConfig
+import net.developerden.devdenbot.trait.HasConfig
 import net.developerden.devdenbot.util.formatNumber
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.interactions.commands.OptionType
+import net.dv8tion.jda.api.requests.restaction.CommandCreateAction
 import java.awt.Color
-import java.awt.LinearGradientPaint
 import javax.inject.Inject
 
 
@@ -20,47 +21,43 @@ import javax.inject.Inject
  */
 @Used
 class XPCommand @Inject constructor(
-    val config: DDBConfig,
-) : DevDenCommand(
+    override val ddbConfig: DDBConfig,
+) : DevDenSlashCommand(
     name = "xp",
-    help = "View the xp of a user",
-    cooldown = 2,
-    aliases = arrayOf("experience", "my-xp", "lvl"),
-    category = XPCategory
-) {
+    description = "View the xp of a user",
+), HasConfig {
 
     companion object {
-        private val gradient = LinearGradientPaint(
-            0f, 0f, 0f, 100f,
-            floatArrayOf(.2f, .6f),
-            arrayOf(
-                Color.decode("0xA933DC"),
-                Color.decode("0xFFA500")
-            )
-        )
+        private val defaultColor = Color.decode("0xFAF8F6")
     }
 
-    override suspend fun CommandEvent.execute() {
-        val targetUser = firstMentionedUser() ?: event.message.author
-        val targetStatsUser = StatsUsers.get(targetUser.idLong)
+    override suspend fun load(action: CommandCreateAction) {
+        action.addOption(OptionType.USER, "target", "User to get the xp of", false)
+    }
+
+    override suspend fun SlashCommandEvent.execute() {
+        val target = getOption("target")?.asUser ?: user
+        val targetStatsUser = StatsUsers.get(target.idLong)
         val text = formatNumber(targetStatsUser.xp) + " XP"
 
-        val photo = createTextImage(width = 400,
-            height = 200,
-            fontSize = 80,
+        val userColor = guild!!.getMember(target)?.color ?: defaultColor
+
+        val photo = createTextImage(
+            width = 1000,
+            height = 500,
             text = text,
-            fontColor = gradient,
+            fontColor = userColor,
             backgroundColor = Color.darkGray)
-        val message = prepareReply {
-            title = "XP of ${targetUser.name}#${targetUser.discriminator}"
-            setColor(config.colour)
-            setFooter("Developer Den", targetUser.effectiveAvatarUrl)
+
+        val message = embedDefaults {
+            title = "XP of ${target.name}#${target.discriminator}"
+            setFooter("Developer Den", target.effectiveAvatarUrl)
 
             setImage("attachment://xp.png")
         }
 
-        message.addFile(photo, "xp.png")
-
-        message.await()
+        replyEmbeds(message)
+            .addFile(photo, "xp.png")
+            .await()
     }
 }

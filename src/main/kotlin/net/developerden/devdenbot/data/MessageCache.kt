@@ -8,7 +8,7 @@ object MessageCache {
 
     private val cache = ConcurrentHashMap<Long, CachedMessage>()
 
-    @Synchronized
+
     fun cache(message: CachedMessage) {
         cache[message.id] = message
         if (cache.size > MAX_CACHE_SIZE) {
@@ -16,7 +16,7 @@ object MessageCache {
         }
     }
 
-    @Synchronized
+
     fun update(id: Long, msg: String) {
         getCached(id)?.msg = msg
     }

@@ -31,7 +31,7 @@ class FAQShorthandListener @Inject constructor(override val ddbConfig: DDBConfig
         }
         event.channel.sendMessageEmbeds(
             displayFAQ(faq, event.author)
-        ).awaitThenDelete()
+        ).await()
     }
 
     override fun register(jda: JDA) {

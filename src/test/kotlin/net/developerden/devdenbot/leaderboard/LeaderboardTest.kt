@@ -1,5 +1,6 @@
 package net.developerden.devdenbot.leaderboard
 
+import kotlinx.coroutines.runBlocking
 import java.util.Comparator.comparing
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,7 +13,7 @@ internal class LeaderboardTest {
 
 
     @Test
-    fun `Test addAll adds all entries correctly`() {
+    fun `Test addAll adds all entries correctly`() = runBlocking {
         val leaderboard = Leaderboard<LeaderboardEntry>(comparing { it.xp })
         leaderboard.addAll(users)
 
@@ -21,7 +22,7 @@ internal class LeaderboardTest {
     }
 
     @Test
-    fun `Test update adds entry correctly`() {
+    fun `Test update adds entry correctly`() = runBlocking {
         val leaderboard = Leaderboard<LeaderboardEntry>(comparing { it.xp })
         leaderboard.addAll(users)
 

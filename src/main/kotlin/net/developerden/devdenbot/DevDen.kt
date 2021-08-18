@@ -6,19 +6,24 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import dev.misfitlabs.kotlinguice4.getInstance
 import io.sentry.Sentry
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import net.developerden.devdenbot.commands.CommandsModule
 import net.developerden.devdenbot.commands.DevDenCommand
+import net.developerden.devdenbot.commands.slash.DevDenSlashCommand
 import net.developerden.devdenbot.data.Users
 import net.developerden.devdenbot.events.EventsTables
+import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.faq.FAQs
 import net.developerden.devdenbot.graphics.GraphicsContext
 import net.developerden.devdenbot.inject.DevDenModule
 import net.developerden.devdenbot.leaderboard.Leaderboards
 import net.developerden.devdenbot.listener.ListenersModule
+import net.developerden.devdenbot.listener.RoleChangeListener
 import net.developerden.devdenbot.serialization.DDBConfig
 import net.developerden.devdenbot.util.log
+import net.developerden.devdenbot.util.scope
 import net.developerden.devdenbot.xp.VoiceChatXPTask
 import net.dv8tion.jda.api.JDA
 import org.jetbrains.exposed.sql.Database
@@ -57,10 +62,18 @@ class DevDen {
             commandClient.addCommand(it)
             log.debug("Registered ${it.javaClass.name}!")
         }
-
         jda.awaitReady()
         GraphicsContext.init()
         startTasks(jda)
+        updateRoles(jda)
+
+        val slashCommands = injector.getInstance<Set<DevDenSlashCommand>>()
+        scope.launch {
+            slashCommands.forEach {
+                it.register(jda)
+                log.debug("Registered ${it.javaClass.name}!")
+            }
+        }
     }
 
     fun start() {
@@ -102,5 +115,15 @@ class DevDen {
         log.info { "Starting tasks..." }
         val timer = Timer()
         timer.schedule(VoiceChatXPTask(jda), 0L, TimeUnit.SECONDS.toMillis(60))
+    }
+
+    private fun updateRoles(jda: JDA) {
+        jda.guilds.forEach { guild ->
+            scope.launch {
+                guild.loadMembers().await().forEach {
+                    RoleChangeListener.update(it)
+                }
+            }
+        }
     }
 }

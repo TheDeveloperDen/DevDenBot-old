@@ -13,11 +13,11 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 @Used
 class ShowcaseMessageListener : EventListener {
     companion object {
-        private const val PLUS_ONE = "U+1F44D"
-        private const val MINUS_ONE = "U+1F44E"
+        private const val PLUS_ONE = "\uD83D\uDC4D"
+        private const val MINUS_ONE = "\uD83D\uDC4E"
     }
 
-    suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
+    private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.channel.idLong != SHOWCASE_CHANNEL_ID) {
             return
         }
@@ -25,7 +25,7 @@ class ShowcaseMessageListener : EventListener {
         event.message.addReaction(MINUS_ONE).await()
     }
 
-    suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
+    private suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
         if (event.channel.idLong != SHOWCASE_CHANNEL_ID) {
             return
         }
@@ -34,7 +34,7 @@ class ShowcaseMessageListener : EventListener {
             event.reaction.removeReaction(event.user).await()
             return
         }
-        if ( // looks ugly, idk how to improve it lol
+        if (
             message.reactions
                 .filter {
                     it.retrieveUsers().await()
@@ -42,7 +42,7 @@ class ShowcaseMessageListener : EventListener {
                             user.idLong == event.userIdLong
                         }
                 }.filter {
-                    it.reactionEmote.asCodepoints == PLUS_ONE || it.reactionEmote.asCodepoints == MINUS_ONE
+                    it.reactionEmote.emoji == PLUS_ONE || it.reactionEmote.emoji == MINUS_ONE
                 }.size >= 2
         ) {
             event.reaction.removeReaction(event.user).await()
