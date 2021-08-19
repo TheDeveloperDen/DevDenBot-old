@@ -33,12 +33,12 @@ dependencies {
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
-    implementation("org.slf4j:slf4j-api:2.0.0-alpha2")
+    implementation("org.slf4j:slf4j-api:2.0.0-alpha4")
     implementation("io.ktor:ktor-client-core:1.6.2")
     implementation("io.ktor:ktor-client-cio:1.6.2")
     implementation("io.ktor:ktor-client-serialization:1.6.2")
 
-    implementation("ch.qos.logback:logback-core:1.3.0-alpha6")
+    implementation("ch.qos.logback:logback-core:1.3.0-alpha9")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha9")
 
     implementation("io.github.microutils:kotlin-logging:2.0.10")
@@ -49,7 +49,7 @@ dependencies {
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.0.1")
+    implementation("io.sentry:sentry:5.1.0")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
