@@ -41,7 +41,7 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.3.0-alpha9")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha9")
 
-    implementation("io.github.microutils:kotlin-logging:2.0.10")
+    implementation("io.github.microutils:kotlin-logging:2.0.11")
 
     implementation("io.github.classgraph:classgraph:4.8.115")
     implementation("com.google.inject:guice:5.0.1")
