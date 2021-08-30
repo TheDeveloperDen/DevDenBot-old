@@ -28,7 +28,7 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
             return
         }
 
-        if (event.member?.isStaff()) {
+        if (event.member?.isStaff() == true) {
             return
         }
 
