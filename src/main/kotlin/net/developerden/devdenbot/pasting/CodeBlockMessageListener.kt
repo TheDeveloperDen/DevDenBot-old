@@ -26,7 +26,6 @@ class CodeBlockMessageListener @Inject constructor(
         private const val MIN_ROWS_FOR_CONVERSION = 15
 
         internal val codeBlock = Regex("```(?:(?<lang>[a-zA-Z]+)?\\n)?((?:.|\\n)*?)```")
-        internal val tokenRegex = Regex("[MN][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}\n")
     }
 
     private suspend fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
@@ -45,11 +44,6 @@ class CodeBlockMessageListener @Inject constructor(
         }
         if (!rawText.contains(codeBlock)) {
             return
-        }
-        if (rawText.contains(tokenRegex)) {
-            event.message.delete()
-            event.channel.sendMessage("The previous message has been deleted due to").await()
-            event.channel.sendMessage("it containing a discord bot token!").await()
         }
 
         val member = event.member ?: event.guild.retrieveMemberById(event.author.id).await()
