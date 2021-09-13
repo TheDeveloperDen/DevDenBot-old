@@ -34,7 +34,7 @@ class ShowcaseMessageListener : EventListener {
             event.reaction.removeReaction(event.user).await()
             return
         }
-        if (
+        if (!event.user.isBot() &&
             message.reactions
                 .filter {
                     it.retrieveUsers().await()
