@@ -3,9 +3,8 @@ package net.developerden.devdenbot.xp
 import net.developerden.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import net.developerden.devdenbot.discord.getPing
 import net.developerden.devdenbot.extensions.await
-import net.developerden.devdenbot.extensions.commands.embedDefaults
-import net.developerden.devdenbot.trait.HasConfig
 import mu.KotlinLogging
+import net.developerden.devdenbot.discord.canBePinged
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 
@@ -13,11 +12,12 @@ private val log = KotlinLogging.logger("Levelling")
 
 suspend fun processLevelUp(user: Member, level: Int) {
     val channel = user.jda.getGuildChannelById(BOT_COMMANDS_CHANNEL_ID) as? TextChannel ?: return
+    val pingMsg = if(user.canBePinged()) "\"Don't want to be pinged? `ddrole No Ping`\"" else ""
     channel.sendMessage(
         """
             ${user.getPing()}, you levelled up to level **$level**!
             
-            Don't want to be pinged? `ddrole No Ping`
+            $pingMsg
             """.trimIndent()
     ).await()
     val tier = tierOf(level)
