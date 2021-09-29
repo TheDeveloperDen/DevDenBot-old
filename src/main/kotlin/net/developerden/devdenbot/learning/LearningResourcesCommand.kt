@@ -60,7 +60,7 @@ class LearningResourcesCommand @Inject constructor(override val ddbConfig: DDBCo
                     val price = "**Price:** ${it.price ?: "Free!"}"
                     "$linkedName\n$price$pros$cons\n"
                 }
-                setFooter("Requested by ${user.name}#${user.discriminator} | $name", user.avatarUrl)
+                setFooter("Requested by ${user.name}#${user.discriminator} | Learning Resources", user.avatarUrl)
             }).await()
             return
         }
@@ -80,7 +80,7 @@ class LearningResourcesCommand @Inject constructor(override val ddbConfig: DDBCo
         replyEmbeds(embedDefaults {
             author = "Topic List"
             description = topicNames
-            setFooter("Requested by ${user.name}#${user.discriminator} | $name", user.avatarUrl)
+            setFooter("Requested by ${user.name}#${user.discriminator} | Learning Resources", user.avatarUrl)
         }).setEphemeral(true).await()
     }
 
