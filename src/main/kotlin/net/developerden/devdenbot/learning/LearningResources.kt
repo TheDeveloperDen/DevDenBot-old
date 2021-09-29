@@ -1,9 +1,9 @@
-package net.developerden.devdenbot.languages
+package net.developerden.devdenbot.learning
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LanguageResources(
+data class LearningResources(
     val name: String,
     val description: String,
     val resources: List<Resource>,

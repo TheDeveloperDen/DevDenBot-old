@@ -1,4 +1,4 @@
-package net.developerden.devdenbot.languages
+package net.developerden.devdenbot.learning
 
 import io.ktor.client.*
 import io.ktor.client.features.json.*
@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 import net.developerden.devdenbot.util.VersionProvider
 import net.developerden.devdenbot.util.scope
 
-object LanguageResourcesClient {
+object LearningResourcesClient {
     const val baseUrl = "https://developerden.net/learning-resources/"
 
     private val client by lazy {
@@ -26,7 +26,7 @@ object LanguageResourcesClient {
     @Serializable
     data class IndexEntry(val name: String, val type: String, val mtime: String, val size: Int)
 
-    suspend fun getAll(): List<LanguageResources> {
+    suspend fun getAll(): List<LearningResources> {
         val resources = client.request<List<IndexEntry>>(baseUrl) {
             method = HttpMethod.Get
             headers {
@@ -42,10 +42,10 @@ object LanguageResourcesClient {
             .filterNotNull()
     }
 
-    suspend fun getResource(name: String): LanguageResources? {
+    suspend fun getResource(name: String): LearningResources? {
         val resourceUrl = "$baseUrl/${name}" // maybe not the most secure thing in the world, but it works
         return runCatching {
-            client.request<LanguageResources>(resourceUrl) {
+            client.request<LearningResources>(resourceUrl) {
                 method = HttpMethod.Get
                 headers {
                     @Suppress("EXPERIMENTAL_API_USAGE_FUTURE_ERROR")

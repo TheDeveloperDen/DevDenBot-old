@@ -1,4 +1,4 @@
-package net.developerden.devdenbot.languages
+package net.developerden.devdenbot.learning
 
 import com.google.inject.Inject
 import com.google.inject.Singleton
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.requests.restaction.CommandCreateAction
 
 @Used
 @Singleton
-class LanguageResourcesCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDenSlashCommand(
+class LearningResourcesCommand @Inject constructor(override val ddbConfig: DDBConfig) : DevDenSlashCommand(
     name = "learning",
     description = "Shows a list of resources for learning a specific programming topic"
 ), HasConfig {
@@ -26,7 +26,7 @@ class LanguageResourcesCommand @Inject constructor(override val ddbConfig: DDBCo
     override suspend fun load(action: CommandCreateAction) {
         val topicOption = OptionData(OptionType.STRING, "topic", "the name of the topic")
 
-        LanguageResourcesCache.all()
+        LearningResourcesCache.all()
             .map { it.name }
             .forEach {
                 topicOption.addChoices(Command.Choice(it, it))
@@ -45,7 +45,7 @@ class LanguageResourcesCommand @Inject constructor(override val ddbConfig: DDBCo
         }
         if (subcommandName == "get") {
             val topicName = getOption("topic")!!.asString
-            val topic = LanguageResourcesCache.get(topicName) ?: run {
+            val topic = LearningResourcesCache.get(topicName) ?: run {
                 reply("Unknown topic $topicName.").setEphemeral(true).await()
                 return
             }
@@ -69,14 +69,14 @@ class LanguageResourcesCommand @Inject constructor(override val ddbConfig: DDBCo
                 reply("No permission.").setEphemeral(true).await()
                 return
             }
-            LanguageResourcesCache.updateAll()
+            LearningResourcesCache.updateAll()
             reply("Updated cache").setEphemeral(true).await()
             register(jda)
         }
     }
 
     private suspend fun SlashCommandEvent.replyAllTopics() {
-        val topicNames = LanguageResourcesCache.all().joinToString(", ") { it.name }
+        val topicNames = LearningResourcesCache.all().joinToString(", ") { it.name }
         replyEmbeds(embedDefaults {
             author = "Topic List"
             description = topicNames

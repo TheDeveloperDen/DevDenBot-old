@@ -1,28 +1,28 @@
-package net.developerden.devdenbot.languages
+package net.developerden.devdenbot.learning
 
 import com.google.common.cache.CacheBuilder
 import net.developerden.devdenbot.util.getSuggestion
 import net.developerden.devdenbot.util.log
 import java.time.Duration
 
-object LanguageResourcesCache {
-    private val logger by log<LanguageResourcesCache>()
+object LearningResourcesCache {
+    private val logger by log<LearningResourcesCache>()
     private val cache = CacheBuilder.newBuilder()
         .expireAfterWrite(Duration.ofMinutes(5))
-        .build<String, LanguageResources>()
+        .build<String, LearningResources>()
 
 
-    suspend fun get(name: String): LanguageResources? = cache.getIfPresent(name)
-        ?: LanguageResourcesClient.getResource("$name.json")?.apply(this::update)
+    suspend fun get(name: String): LearningResources? = cache.getIfPresent(name)
+        ?: LearningResourcesClient.getResource("$name.json")?.apply(this::update)
         ?: getSuggestion(name, cache.asMap().keys)?.let { cache.getIfPresent(it)!! }
 
     fun all() = cache.asMap().values.toSet()
-    private fun update(languageResources: LanguageResources) =
+    private fun update(languageResources: LearningResources) =
         cache.put(languageResources.name, languageResources)
 
     suspend fun updateAll() {
         logger.info { "Updating all LanguageResources from remote" }
-        LanguageResourcesClient.getAll().forEach {
+        LearningResourcesClient.getAll().forEach {
             cache.put(it.name, it)
             logger.info { "Updated LanguageResource ${it.name}" }
         }

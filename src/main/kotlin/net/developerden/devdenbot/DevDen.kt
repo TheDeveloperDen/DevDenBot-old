@@ -18,7 +18,7 @@ import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.faq.FAQs
 import net.developerden.devdenbot.graphics.GraphicsContext
 import net.developerden.devdenbot.inject.DevDenModule
-import net.developerden.devdenbot.languages.LanguageResourcesCache
+import net.developerden.devdenbot.learning.LearningResourcesCache
 import net.developerden.devdenbot.leaderboard.Leaderboards
 import net.developerden.devdenbot.listener.ListenersModule
 import net.developerden.devdenbot.listener.RoleChangeListener
@@ -111,7 +111,7 @@ class DevDen {
             SchemaUtils.create(Users, FAQs, *EventsTables)
         }
 
-        LanguageResourcesCache.updateAll()
+        LearningResourcesCache.updateAll()
     }
 
     private fun startTasks(jda: JDA) {
