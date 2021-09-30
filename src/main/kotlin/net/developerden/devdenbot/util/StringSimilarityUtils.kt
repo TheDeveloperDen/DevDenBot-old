@@ -12,7 +12,7 @@ private val similarity = SorensenDice(k)::similarity
 
 fun getSuggestion(
     input: String,
-    allowedValues: List<String>,
+    allowedValues: Iterable<String>,
     threshold: Double = SUGGESTION_THRESHOLD,
 ): String? {
     if (input.length <= k) {

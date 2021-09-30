@@ -18,6 +18,7 @@ import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.faq.FAQs
 import net.developerden.devdenbot.graphics.GraphicsContext
 import net.developerden.devdenbot.inject.DevDenModule
+import net.developerden.devdenbot.learning.LearningResourcesCache
 import net.developerden.devdenbot.leaderboard.Leaderboards
 import net.developerden.devdenbot.listener.ListenersModule
 import net.developerden.devdenbot.listener.RoleChangeListener
@@ -109,6 +110,8 @@ class DevDen {
         newSuspendedTransaction {
             SchemaUtils.create(Users, FAQs, *EventsTables)
         }
+
+        LearningResourcesCache.updateAll()
     }
 
     private fun startTasks(jda: JDA) {
