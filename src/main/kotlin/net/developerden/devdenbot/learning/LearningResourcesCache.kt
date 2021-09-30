@@ -13,7 +13,7 @@ object LearningResourcesCache {
 
 
     suspend fun get(name: String): LearningResources? = cache.getIfPresent(name)
-        ?: LearningResourcesClient.getResource("$name.json")?.apply(this::update)
+        ?: LearningResourcesClient.getResource("${name.lowercase()}.json")?.apply(this::update)
         ?: getSuggestion(name, cache.asMap().keys)?.let { cache.getIfPresent(it)!! }
 
     fun all() = cache.asMap().values.toSet()
