@@ -12,7 +12,7 @@ private val log = KotlinLogging.logger("Levelling")
 
 suspend fun processLevelUp(user: Member, level: Int) {
     val channel = user.jda.getGuildChannelById(BOT_COMMANDS_CHANNEL_ID) as? TextChannel ?: return
-    val pingMsg = if(user.canBePinged()) "\"Don't want to be pinged? `ddrole No Ping`\"" else ""
+    val pingMsg = if(user.canBePinged()) "Don't want to be pinged? `ddrole No Ping`" else ""
     channel.sendMessage(
         """
             ${user.getPing()}, you levelled up to level **$level**!
