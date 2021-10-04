@@ -35,7 +35,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
     implementation("io.ktor:ktor-client-core:1.6.4")
     implementation("io.ktor:ktor-client-cio:1.6.3")
-    implementation("io.ktor:ktor-client-serialization:1.6.3")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
 
     implementation("ch.qos.logback:logback-core:1.3.0-alpha10")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha10")
