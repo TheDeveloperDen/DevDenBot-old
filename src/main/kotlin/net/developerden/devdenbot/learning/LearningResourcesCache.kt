@@ -8,7 +8,6 @@ import java.time.Duration
 object LearningResourcesCache {
     private val logger by log<LearningResourcesCache>()
     private val cache = CacheBuilder.newBuilder()
-        .expireAfterWrite(Duration.ofMinutes(5))
         .build<String, LearningResources>()
 
 
