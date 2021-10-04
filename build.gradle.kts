@@ -33,7 +33,7 @@ dependencies {
 
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
-    implementation("io.ktor:ktor-client-core:1.6.3")
+    implementation("io.ktor:ktor-client-core:1.6.4")
     implementation("io.ktor:ktor-client-cio:1.6.3")
     implementation("io.ktor:ktor-client-serialization:1.6.3")
 
