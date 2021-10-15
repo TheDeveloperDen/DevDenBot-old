@@ -28,7 +28,7 @@ dependencies {
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.3.0_331")
+    implementation("net.dv8tion:JDA:4.3.0_334")
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
@@ -42,13 +42,13 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
-    implementation("io.github.classgraph:classgraph:4.8.117")
+    implementation("io.github.classgraph:classgraph:4.8.128")
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.2.0")
+    implementation("io.sentry:sentry:5.2.2")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
