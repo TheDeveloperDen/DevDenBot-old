@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
     application
-    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 group = "net.developerden"
@@ -66,42 +65,32 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
+application {
+    // Define the main class for the application.
+    mainClass.set("net.developerden.devdenbot.AppKt")
+    applicationName = "DevDenBot"
+}
 
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
         kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
+
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
 
-    test {
-        useJUnit()
-    }
-
-    application {
-        // Define the main class for the application.
-        mainClass.set("net.developerden.devdenbot.AppKt")
-        applicationName = "DevDenBot"
-    }
-
-    shadowJar {
-        isZip64 = true
-    }
-
-    jar {
-        enabled = false
+    processResources {
+        inputs.property("version", project.version)
+        filesMatching("version.txt") { expand("version" to project.version) }
     }
 
     test {
         useJUnitPlatform()
     }
 
-    processResources {
-        from("${project.rootDir}/src/main/resources/version.txt") {
-            expand("version" to project.version)
-        }
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
+    // gradle shut up thank you
+    compileJava { options.release.set(8) }
+    compileTestJava { options.release.set(8) }
 }
