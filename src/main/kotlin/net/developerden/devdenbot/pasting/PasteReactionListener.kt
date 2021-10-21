@@ -36,7 +36,7 @@ class PasteReactionListener : EventListener {
             return
         }
 
-        if (!reactionMember.hasRoleOrAbove(SUPPORT_ROLE_ID)) {
+        if (!reactionMember.hasRoleOrAbove(STAFF_ROLE_ID)) {
             log.debug { "User ${reactionMember.user.name} has insufficient permissions to perform paste reactions." }
             return
         }
