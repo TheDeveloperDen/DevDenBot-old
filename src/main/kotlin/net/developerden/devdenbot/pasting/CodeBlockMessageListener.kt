@@ -5,8 +5,12 @@ import kotlinx.coroutines.awaitAll
 import net.developerden.devdenbot.discord.BOT_COMMANDS_CHANNEL_ID
 import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.extensions.commands.KotlinEmbedBuilder
+import net.developerden.devdenbot.extensions.commands.embed
+import net.developerden.devdenbot.extensions.commands.embedDefaults
+import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.listener.EventListener
 import net.developerden.devdenbot.serialization.DDBConfig
+import net.developerden.devdenbot.trait.HasConfig
 import net.developerden.devdenbot.util.*
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
@@ -17,9 +21,10 @@ import java.awt.Color
 import java.time.Instant
 import javax.inject.Inject
 
+@Used
 class CodeBlockMessageListener @Inject constructor(
-    private val ddbConfig: DDBConfig,
-) : EventListener {
+    override val ddbConfig: DDBConfig,
+) : EventListener, HasConfig {
 
     companion object {
         private val log by log()
@@ -33,14 +38,11 @@ class CodeBlockMessageListener @Inject constructor(
         if (event.author.isBot) {
             return
         }
-        if (event.channel.idLong == BOT_COMMANDS_CHANNEL_ID) {
-            return
-        }
         val rawText = event.message.contentRaw
-        if (rawText.startsWith("${ddbConfig.prefix}keep")) {
+        if (event.channel.idLong == BOT_COMMANDS_CHANNEL_ID || rawText.startsWith("/run")) { // for the /run command
             return
         }
-        if (rawText.startsWith("/run")){
+        if (rawText.startsWith("${ddbConfig.prefix}keep")) {
             return
         }
         if (!rawText.contains(codeBlock)) {
@@ -63,7 +65,7 @@ class CodeBlockMessageListener @Inject constructor(
         var index = 0
         val urls = codeBlock.findAll(message.contentRaw)
             .map { it.groups.last()?.value }
-            .filter { it?.lines()?.size ?: 0 >= MIN_ROWS_FOR_CONVERSION }
+            .filter { (it?.lines()?.size ?: 0) >= MIN_ROWS_FOR_CONVERSION }
             .filterNotNull()
             .map { scope.async { HasteClient.postCode(it) } }
             .toList()
@@ -74,7 +76,7 @@ class CodeBlockMessageListener @Inject constructor(
         }
 
         val dc = codeBlock.replace(message.contentRaw) {
-            if (it.groups.last()?.value?.lines()?.size ?: 0 >= MIN_ROWS_FOR_CONVERSION) {
+            if ((it.groups.last()?.value?.lines()?.size ?: 0) >= MIN_ROWS_FOR_CONVERSION) {
                 urls[index].also { index++ }
             } else {
                 it.value
@@ -83,20 +85,14 @@ class CodeBlockMessageListener @Inject constructor(
             .removePrefix("${ddbConfig.prefix}convert")
             .trim()
 
-        val embedBuilder = KotlinEmbedBuilder().apply {
+        return embedDefaults {
             author = member.effectiveName
             authorImage = member.user.effectiveAvatarUrl
-            color = Color(ddbConfig.colour)
             description = dc
-            setTimestamp(Instant.now())
 
             setFooter("This message was converted automatically to keep the channels clean from large code blocks.")
 
         }
-
-        return embedBuilder.build()
-
-
     }
 
 

@@ -1,6 +1,9 @@
 package net.developerden.devdenbot.pasting
 
-import net.developerden.devdenbot.discord.*
+import net.developerden.devdenbot.discord.PASTE_EMOJI_ID
+import net.developerden.devdenbot.discord.STAFF_ROLE_ID
+import net.developerden.devdenbot.discord.fetchMember
+import net.developerden.devdenbot.discord.getPing
 import net.developerden.devdenbot.extensions.await
 import net.developerden.devdenbot.inject.Used
 import net.developerden.devdenbot.listener.EventListener
@@ -42,11 +45,11 @@ class PasteReactionListener : EventListener {
         }
 
         val message = event.retrieveMessage().await()
-        val mention = message.fetchMember().getPing()
         val pasteUrl = HasteClient.postCode(message.contentStripped)
 
         message.delete().queue()
 
+        val mention = message.fetchMember().getPing()
         val pasteMessage = "$mention, your code is available at $pasteUrl"
         event.channel.sendMessage(pasteMessage).queue()
     }
