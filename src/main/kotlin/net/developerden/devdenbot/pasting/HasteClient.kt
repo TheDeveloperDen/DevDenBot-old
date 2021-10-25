@@ -40,7 +40,7 @@ object HasteClient {
 
         val future = client.sendAsync(req, HttpResponse.BodyHandlers.ofString())
         val body = future.await().body()
-        json.decodeFromString<HasteResponse>(body).key
+        baseUrl + json.decodeFromString<HasteResponse>(body).key
     }
 
     suspend fun postCode(codeBlock: String) = postCode(codeBlock.byteInputStream())

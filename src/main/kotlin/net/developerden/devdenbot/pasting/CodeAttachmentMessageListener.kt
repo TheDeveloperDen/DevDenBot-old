@@ -88,9 +88,7 @@ class CodeAttachmentMessageListener @Inject constructor(
             title = "Your Code"
             description = "We converted your code files to paste links for nicer formatting"
 
-            attachments.forEach { (t, u) ->
-                field(t, HasteClient.baseUrl + u)
-            }
+            attachments.forEach(this::field)
 
             setFooter("This message was converted automatically to keep the channels clean from large code blocks.")
 
