@@ -16,7 +16,8 @@ class VoiceChatXPTask(val jda: JDA) : TimerTask() {
 
     private val log by log()
 
-    @FlowPreview
+
+    @OptIn(FlowPreview::class)
     override fun run() {
         scope.launch {
             jda.guilds.asFlow()

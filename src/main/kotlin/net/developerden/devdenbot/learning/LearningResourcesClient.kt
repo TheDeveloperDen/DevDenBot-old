@@ -18,7 +18,6 @@ object LearningResourcesClient {
         HttpClient {
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
-
             }
         }
     }
@@ -27,7 +26,7 @@ object LearningResourcesClient {
     data class IndexEntry(val name: String, val type: String, val mtime: String, val size: Int)
 
     suspend fun getAll(): List<LearningResources> {
-        val resources = client.request<List<IndexEntry>>(baseUrl) {
+        val resources = client.request<List<IndexEntry>>(Url(baseUrl)) {
             method = HttpMethod.Get
             headers {
                 @Suppress("EXPERIMENTAL_API_USAGE_FUTURE_ERROR")

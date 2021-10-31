@@ -1,11 +1,6 @@
 package net.developerden.devdenbot.extensions.commands
 
 import com.jagrosh.jdautilities.command.CommandEvent
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.mapNotNull
-import net.developerden.devdenbot.commands.arguments.Argument
-import net.developerden.devdenbot.commands.arguments.arguments
 import net.developerden.devdenbot.discord.awaitThenDelete
 import net.developerden.devdenbot.extensions.await
 import net.dv8tion.jda.api.entities.Message
@@ -35,12 +30,12 @@ inline fun CommandEvent.prepareReply(function: (KotlinEmbedBuilder).() -> Unit):
     return event.channel.sendMessageEmbeds(builder.build())
 }
 
-@OptIn(ExperimentalTime::class)
+@ExperimentalTime
 suspend fun CommandEvent.tempReply(message: String, cooldown: Duration = Duration.seconds(5)) =
     channel.sendMessage(message)
         .awaitThenDelete(cooldown)
 
-@OptIn(ExperimentalTime::class)
+@ExperimentalTime
 suspend fun CommandEvent.tempReply(message: MessageEmbed, cooldown: Duration = Duration.seconds(5)) =
     channel.sendMessageEmbeds(message)
         .awaitThenDelete(cooldown)
