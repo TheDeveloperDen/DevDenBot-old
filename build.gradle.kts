@@ -35,7 +35,7 @@ dependencies {
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
     implementation("io.ktor:ktor-client-core:1.6.4")
-    implementation("io.ktor:ktor-client-cio:1.6.4")
+    implementation("io.ktor:ktor-client-cio:1.6.5")
     implementation("io.ktor:ktor-client-serialization:1.6.4")
 
     implementation("ch.qos.logback:logback-core:1.3.0-alpha10")
@@ -56,7 +56,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-dao", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-java-time", "0.31.1")
-    implementation("mysql:mysql-connector-java:8.0.26")
+    implementation("mysql:mysql-connector-java:8.0.27")
     implementation("com.h2database:h2:1.4.200")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.0-M1")
