@@ -21,6 +21,6 @@ class SlashCommandHandler @Inject constructor(val commands: Set<DevDenSlashComma
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<SlashCommandEvent>().handleEachIn(scope, this::handle)
+        jda.listenFlow<SlashCommandEvent>().handleEachIn(this::handle)
     }
 }

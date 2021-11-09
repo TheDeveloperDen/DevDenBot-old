@@ -50,8 +50,8 @@ class RoleChangeListener : EventListener {
     private suspend fun onRoleRemove(event: GuildMemberRoleRemoveEvent) = update(event.member)
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMemberUpdateEvent>().handleEachIn(scope, this::onUpdate)
-        jda.listenFlow<GuildMemberRoleAddEvent>().handleEachIn(scope, this::onRoleAdd)
-        jda.listenFlow<GuildMemberRoleRemoveEvent>().handleEachIn(scope, this::onRoleRemove)
+        jda.listenFlow<GuildMemberUpdateEvent>().handleEachIn(this::onUpdate)
+        jda.listenFlow<GuildMemberRoleAddEvent>().handleEachIn(this::onRoleAdd)
+        jda.listenFlow<GuildMemberRoleRemoveEvent>().handleEachIn(this::onRoleRemove)
     }
 }
