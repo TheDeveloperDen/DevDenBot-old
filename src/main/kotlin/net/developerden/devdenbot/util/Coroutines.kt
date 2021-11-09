@@ -18,7 +18,7 @@ inline fun <reified T : GenericEvent> JDA.listenFlow() = on<T>().asFlow()
 
 inline fun <T> Flow<T>.handleEachIn(scope: CoroutineScope, crossinline run: suspend (T) -> Unit) = scope.launch {
     collect {
-        scope.launch {
+        launch {
             try {
                 run(it)
             } catch (e: Exception) {

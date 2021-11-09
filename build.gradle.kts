@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.5.30"
-    kotlin("plugin.serialization") version "1.5.30"
+    kotlin("jvm") version "1.6.0-M1"
+    kotlin("plugin.serialization") version "1.5.31"
     application
-    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 group = "net.developerden"
@@ -21,87 +20,78 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2-native-mt")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0-M1")
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.3.0_324")
+    implementation("net.dv8tion:JDA:4.3.0_335")
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
-    implementation("io.ktor:ktor-client-core:1.6.3")
-    implementation("io.ktor:ktor-client-cio:1.6.3")
-    implementation("io.ktor:ktor-client-serialization:1.6.3")
+    implementation("io.ktor:ktor-client-core:1.6.4")
+    implementation("io.ktor:ktor-client-cio:1.6.4")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
 
     implementation("ch.qos.logback:logback-core:1.3.0-alpha10")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha10")
 
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
-    implementation("io.github.classgraph:classgraph:4.8.116")
+    implementation("io.github.classgraph:classgraph:4.8.128")
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.1.2")
+    implementation("io.sentry:sentry:5.2.4")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-java-time", "0.31.1")
-    implementation("mysql:mysql-connector-java:8.0.26")
+    implementation("mysql:mysql-connector-java:8.0.27")
     implementation("com.h2database:h2:1.4.200")
 
-    testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.0-M1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
-    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
 
+application {
+    // Define the main class for the application.
+    mainClass.set("net.developerden.devdenbot.AppKt")
+    applicationName = "DevDenBot"
+}
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "16"
         kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
+
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "16"
     }
 
-    test {
-        useJUnit()
-    }
-
-    application {
-        // Define the main class for the application.
-        mainClass.set("net.developerden.devdenbot.AppKt")
-        applicationName = "DevDenBot"
-    }
-
-    shadowJar {
-        isZip64 = true
-    }
-
-    jar {
-        enabled = false
+    processResources {
+        inputs.property("version", project.version)
+        filesMatching("version.txt") { expand("version" to project.version) }
     }
 
     test {
         useJUnitPlatform()
     }
 
-    processResources {
-        from("${project.rootDir}/src/main/resources/version.txt") {
-            expand("version" to project.version)
-        }
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
+    // gradle shut up thank you
+    compileJava { options.release.set(16) }
+    compileTestJava { options.release.set(16) }
 }
