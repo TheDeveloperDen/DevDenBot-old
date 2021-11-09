@@ -50,7 +50,7 @@ class ShowcaseMessageListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
-        jda.listenFlow<GuildMessageReactionAddEvent>().handleEachIn(scope, this::onGuildMessageReactionAdd)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(this::onGuildMessageReceived)
+        jda.listenFlow<GuildMessageReactionAddEvent>().handleEachIn(this::onGuildMessageReactionAdd)
     }
 }

@@ -15,15 +15,15 @@ val scope = CoroutineScope(Dispatchers.Default)
 
 inline fun <reified T : GenericEvent> JDA.listenFlow() = on<T>().asFlow()
 
-
-inline fun <T> Flow<T>.handleEachIn(scope: CoroutineScope, crossinline run: suspend (T) -> Unit) = scope.launch {
-    collect {
-        launch {
-            try {
-                run(it)
-            } catch (e: Exception) {
-                Sentry.captureException(e)
+inline fun <T> Flow<T>.handleEachIn(crossinline run: suspend (T) -> Unit, coroutineScope: CoroutineScope = scope) =
+    coroutineScope.launch {
+        collect {
+            coroutineScope.launch {
+                try {
+                    run(it)
+                } catch (e: Exception) {
+                    Sentry.captureException(e)
+                }
             }
         }
     }
-}

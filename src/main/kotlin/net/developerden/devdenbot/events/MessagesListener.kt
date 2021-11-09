@@ -61,12 +61,12 @@ class MessagesListener : EventListener {
 
     override fun register(jda: JDA) {
         jda.listenFlow<GuildMessageReceivedEvent>()
-            .handleEachIn(scope, this::onGuildMessageReceived)
+            .handleEachIn(this::onGuildMessageReceived)
 
         jda.listenFlow<GuildMessageUpdateEvent>()
-            .handleEachIn(scope, this::onGuildMessageEdit)
+            .handleEachIn(this::onGuildMessageEdit)
 
         jda.listenFlow<GuildMessageDeleteEvent>()
-            .handleEachIn(scope, this::onGuildMessageDelete)
+            .handleEachIn(this::onGuildMessageDelete)
     }
 }

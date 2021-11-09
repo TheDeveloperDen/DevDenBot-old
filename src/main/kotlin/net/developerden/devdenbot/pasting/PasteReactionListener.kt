@@ -55,6 +55,6 @@ class PasteReactionListener : EventListener {
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<MessageReactionAddEvent>().handleEachIn(scope, this::onReactionAdd)
+        jda.listenFlow<MessageReactionAddEvent>().handleEachIn(this::onReactionAdd)
     }
 }

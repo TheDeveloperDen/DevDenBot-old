@@ -53,6 +53,6 @@ class PingingListener @Inject constructor(override val ddbConfig: DDBConfig) : E
     }
 
     override fun register(jda: JDA) {
-        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(scope, this::onGuildMessageReceived)
+        jda.listenFlow<GuildMessageReceivedEvent>().handleEachIn(this::onGuildMessageReceived)
     }
 }
