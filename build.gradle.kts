@@ -43,13 +43,13 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
-    implementation("io.github.classgraph:classgraph:4.8.128")
+    implementation("io.github.classgraph:classgraph:4.8.132")
     implementation("com.google.inject:guice:5.0.1")
     implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.5.0")
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.2.4")
+    implementation("io.sentry:sentry:5.4.0")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
