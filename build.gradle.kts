@@ -29,7 +29,7 @@ dependencies {
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.3.0_335")
+    implementation("net.dv8tion:JDA:4.4.0_351")
     implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
 
     implementation("org.apache.commons:commons-text:1.9")
@@ -57,7 +57,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.31.1")
     implementation("org.jetbrains.exposed", "exposed-java-time", "0.31.1")
     implementation("mysql:mysql-connector-java:8.0.27")
-    implementation("com.h2database:h2:1.4.200")
+    implementation("com.h2database:h2:2.0.202")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.0-M1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
