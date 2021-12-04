@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.0-M1"
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("plugin.serialization") version "1.6.0"
     application
 }
 
@@ -20,7 +20,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2-native-mt")
@@ -59,7 +59,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.27")
     implementation("com.h2database:h2:2.0.202")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.0-M1")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.255-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
