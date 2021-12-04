@@ -30,7 +30,7 @@ dependencies {
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
     implementation("net.dv8tion:JDA:4.4.0_351")
-    implementation("com.github.MinnDevelopment:jda-reactor:1.3.0")
+    implementation("com.github.MinnDevelopment:jda-reactor:1.5.0")
 
     implementation("org.apache.commons:commons-text:1.9")
     implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
@@ -61,7 +61,7 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.0-M1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
