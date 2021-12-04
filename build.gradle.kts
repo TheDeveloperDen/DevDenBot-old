@@ -60,7 +60,7 @@ dependencies {
     implementation("com.h2database:h2:2.0.202")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.255-SNAPSHOT")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
