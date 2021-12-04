@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.0-M1"
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("plugin.serialization") version "1.6.0"
     application
 }
 
@@ -49,7 +49,7 @@ dependencies {
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.4.0")
+    implementation("io.sentry:sentry:5.4.3")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
