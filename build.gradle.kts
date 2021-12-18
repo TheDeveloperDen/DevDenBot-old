@@ -41,7 +41,7 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.3.0-alpha10")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha10")
 
-    implementation("io.github.microutils:kotlin-logging:2.1.15")
+    implementation("io.github.microutils:kotlin-logging:2.1.20")
 
     implementation("io.github.classgraph:classgraph:4.8.137")
     implementation("com.google.inject:guice:5.0.1")
@@ -49,7 +49,7 @@ dependencies {
 
     implementation("info.debatty:java-string-similarity:2.0.0")
 
-    implementation("io.sentry:sentry:5.4.3")
+    implementation("io.sentry:sentry:5.5.1")
 
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("org.jetbrains.exposed", "exposed-core", "0.31.1")
