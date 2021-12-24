@@ -11,6 +11,7 @@ repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io")
+    maven("https://m2.chew.pro/releases")
 }
 
 dependencies {
@@ -24,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2-native-mt")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2-native-mt")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.255-SNAPSHOT")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
@@ -58,7 +59,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.27")
     implementation("com.h2database:h2:2.0.202")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.255-SNAPSHOT")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.10")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
