@@ -11,7 +11,6 @@ repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io")
-    maven("https://maven.scijava.org/content/groups/public/")
 }
 
 dependencies {
