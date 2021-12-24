@@ -29,7 +29,7 @@ dependencies {
 
 
     implementation("com.jagrosh:jda-utilities:3.0.5")
-    implementation("net.dv8tion:JDA:4.4.0_351")
+    implementation("net.dv8tion:JDA:4.4.0_352")
     implementation("com.github.MinnDevelopment:jda-reactor:1.5.0")
 
     implementation("org.apache.commons:commons-text:1.9")
