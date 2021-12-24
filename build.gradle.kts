@@ -11,7 +11,7 @@ repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io")
-    maven("https://m2.chew.pro/releases")
+    maven("http://jcenter.bintray.com/")
 }
 
 dependencies {
